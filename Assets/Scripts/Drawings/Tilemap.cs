@@ -9,26 +9,31 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     [SerializeField] protected Image TilePrefab;
 
-    protected SparseGrid<SpriteDrawing> Sprites
-        = new SparseGrid<SpriteDrawing>(Size);
+    protected SparseGrid<IDrawing> Sprites
+        = new SparseGrid<IDrawing>(Size);
 
-    protected Tileset Tileset;
+	protected SparseGrid<Image> Images
+		= new SparseGrid<Image>(Size);
+	
+    protected SparseGrid<Tileset.Tile> Tiles
+        = new SparseGrid<Tileset.Tile>(Size);
 
-    protected void NewTile(Point cell, SpriteDrawing drawing)
+	public Tileset Tileset;
+
+    protected Image NewTile(Point cell)
     {
-        Sprites.Set(cell, drawing);
-        
         //var block = new GameObject("Image Block");
         //var renderer = block.AddComponent<SpriteRenderer>();
         var renderer = Instantiate<Image>(TilePrefab);
         var block = renderer.gameObject;
         
-        renderer.sprite = drawing.Sprite;
-        renderer.SetNativeSize();
+		Images.Set(cell, renderer);
         
         block.transform.SetParent(transform, false);
         block.transform.localPosition = new Vector2(cell.x * Size, 
                                                     cell.y * Size);
+
+		return renderer;
     }
 
     public void Awake()
@@ -43,16 +48,16 @@ public class Tilemap : MonoBehaviour, IDrawing
         {
             for (int x = 0; x < 32; ++x)
             {
-                SpriteDrawing drawing = Tileset.Tiles[Random.Range(0, Tileset.Tiles.Count)];
+                Tileset.Tile tile = Tileset.Tiles[Random.Range(0, Tileset.Tiles.Count)];
 
-                NewTile(new Point(x, y), drawing);
+				Set(new Point(x, y), tile);
             }
         }
     }
 
     public void Point(Point pixel, Color color)
     {
-        SpriteDrawing drawing;
+        IDrawing drawing;
         Point grid, offset;
         
         Sprites.Coords(pixel, out grid, out offset);
@@ -87,9 +92,6 @@ public class Tilemap : MonoBehaviour, IDrawing
         int bw = (int) image.rect.width;
         int bh = (int) image.rect.height;
 
-        int iw = Mathf.Max(0, gw - 2);
-        int ih = Mathf.Max(0, gh - 2);
-
         int ch = 0;
 
         for (int y = 0; y < gh; ++y)
@@ -104,9 +106,9 @@ public class Tilemap : MonoBehaviour, IDrawing
 
             for (int x = 0; x < gw; ++x)
             {
-                SpriteDrawing drawing;
-
-                int sx = x == 0 ? 0 : Size - offset.x;
+				IDrawing drawing;
+				
+				int sx = x == 0 ? 0 : Size - offset.x;
                 int sw = Size;
 
                 if (x == 0) sw = Mathf.Min(sw, Size - offset.x);
@@ -134,7 +136,7 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     public void Fill(Point pixel, Color color)
     {
-        SpriteDrawing drawing;
+		IDrawing drawing;
         Point grid, offset;
         
         Sprites.Coords(pixel, out grid, out offset);
@@ -147,7 +149,7 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     public bool Sample(Point pixel, out Color color)
     {
-        SpriteDrawing drawing;
+		IDrawing drawing;
         Point grid, offset;
 
         Sprites.Coords(pixel, out grid, out offset);
@@ -165,5 +167,31 @@ public class Tilemap : MonoBehaviour, IDrawing
     public void Apply()
     {
         Tileset.Apply();
+    }
+
+    public bool Get(Point cell, out Tileset.Tile tile)
+    {
+        return Tiles.Get(cell, out tile);
+    }
+
+	public void Set(Point cell, Tileset.Tile tile)
+	{
+		Image image;
+
+		Images.GetDefault(cell, out image, NewTile);
+
+		image.sprite = tile.Drawing().Sprite;
+
+		Sprites.Set(cell, tile.Drawing());
+
+        if (Tiles.Set(cell, tile))
+        {
+            GetComponent<AudioSource>().Play();
+        }
+    }
+
+    public void Unset(Point cell)
+    {
+        Tiles.Unset(cell);
     }
 }

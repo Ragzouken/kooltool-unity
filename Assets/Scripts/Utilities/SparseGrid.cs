@@ -38,10 +38,26 @@ public class SparseGrid<T>
 
     public bool Set(Point cell, T item)
     {
-        bool exists = Items.ContainsKey(cell);
-        
+        T existing;
+
+        bool change = !(Get(cell, out existing) && Equals(existing, item));
+
         Items[cell] = item;
         
+        return change;
+    }
+
+    public bool Unset(Point cell)
+    {
+        T existing;
+        
+        bool exists = Get(cell, out existing);
+
+        if (exists)
+        {
+            Items.Remove(cell);
+        }
+
         return exists;
     }
 

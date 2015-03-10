@@ -9,172 +9,142 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 #endif
 
-public class Drawer : MonoBehaviour, IDragHandler, IPointerClickHandler
+public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [System.Serializable]
-    public enum ToolMode { Pencil, Eraser, Fill }
-
     [SerializeField] protected Tilemap Tilemap;
     [SerializeField] protected InfiniteDrawing Drawing;
     [SerializeField] protected Image ColorButton;
+	[SerializeField] protected RectTransform TileCursor;
 
-    public ToolMode Tool;
-    public Color Color = Color.red;
-    public int Thickness = 1;
+	public ITool ActiveTool;
 
-    public void SetSize(int value) { Thickness = value; }
+	public void SetSize(int value) { PixelTool.Thickness = value; }
+	public void SetPencil() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Pencil; }
+	public void SetEraser() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Eraser; }
+	public void SetFiller() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Fill;   }
+    public void SetTile(Tileset.Tile tile) { ActiveTool = TileTool; TileTool.PaintTile = tile; }
 
-    public void SetPencil() { Tool = ToolMode.Pencil; }
-    public void SetEraser() { Tool = ToolMode.Eraser; }
-    public void SetFiller() { Tool = ToolMode.Fill;   }
+	protected Vector2 LastCursor;
+	protected bool dragging;
+
+	public Color highlight;
+	public float hue;
+
+    public Pixel PixelTool;
+    public Tile TileTool;
+
+	public void Awake()
+	{
+		PixelTool = new Pixel(Tilemap);
+        TileTool = new Tile(Tilemap);
+
+        ActiveTool = PixelTool;
+
+		ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
+		
+		StartCoroutine(CycleHue());
+	}
+
+	public IEnumerator CycleHue()
+	{
+		while (true)
+		{
+			hue = (hue + Time.deltaTime) % 1f;
+
+			highlight = new Color(hue, hue, hue, hue);
+		
+			yield return new WaitForEndOfFrame();
+		}
+	}
 
     public void Randomise() 
     { 
-        Color = new Color(Random.value, Random.value, Random.value);
+        var color = new Color(Random.value, Random.value, Random.value);
 
-        ColorButton.color = Color;
+        ColorButton.color = color;
+		PixelTool.Color = color;
     }
 
 #if UNITY_EDITOR
     [MenuItem("Edit/Reset Playerprefs")] public static void DeletePlayerPrefs() { PlayerPrefs.DeleteAll(); }
 #endif
-
-    public void Awake()
-    {
-        Color = new Color(Random.value, Random.value, Random.value);
-
-        Thickness = 1;
-
-        ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
-    }
-
+	
     public void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Randomise();
         }
 
-        if (Input.GetKey(KeyCode.Alpha1)) Thickness = 1;
-        if (Input.GetKey(KeyCode.Alpha2)) Thickness = 2;
-        if (Input.GetKey(KeyCode.Alpha3)) Thickness = 3;
-        if (Input.GetKey(KeyCode.Alpha4)) Thickness = 4;
-        if (Input.GetKey(KeyCode.Alpha5)) Thickness = 5;
-        if (Input.GetKey(KeyCode.Alpha6)) Thickness = 6;
-        if (Input.GetKey(KeyCode.Alpha7)) Thickness = 7;
-        if (Input.GetKey(KeyCode.Alpha8)) Thickness = 8;
-        if (Input.GetKey(KeyCode.Alpha9)) Thickness = 9;
-    }
-
-    public void OnPointerClick(PointerEventData data)
-    {
-
-
-        Vector2 start;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-                                                                data.position,
-                                                                data.pressEventCamera,
-                                                                out start);
-
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.LeftAlt)
+         || Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Color sampled;
-
-            if (Tilemap.Sample(new Point(start), out sampled))
-            {
-                Color = sampled;
-
-                if (sampled.a == 0)
-                {
-                    Tool = ToolMode.Eraser;
-                }
-            }
+            PixelTool.Tool = Pixel.ToolMode.Picker;
         }
-        else if (Tool == ToolMode.Fill)
+
+        if (Input.GetKeyUp(KeyCode.LeftAlt)
+         || Input.GetKeyUp(KeyCode.LeftShift))
         {
-            Tilemap.Fill(new Point(start), Color);
-            Tilemap.Apply();
+            PixelTool.Tool = Pixel.ToolMode.Pencil;
         }
-    }
 
-    public Sprite LineBrush(Point start, Point end, Color color, int thickness)
-    {
-        int left = Mathf.FloorToInt(thickness / 2f);
-        int right = thickness - 1 - left;
+		if (Input.GetKey(KeyCode.Alpha1)) SetSize(1);
+		if (Input.GetKey(KeyCode.Alpha2)) SetSize(2);
+		if (Input.GetKey(KeyCode.Alpha3)) SetSize(3);
+		if (Input.GetKey(KeyCode.Alpha4)) SetSize(4);
+		if (Input.GetKey(KeyCode.Alpha5)) SetSize(5);
+		if (Input.GetKey(KeyCode.Alpha6)) SetSize(6);
+		if (Input.GetKey(KeyCode.Alpha7)) SetSize(7);
+		if (Input.GetKey(KeyCode.Alpha8)) SetSize(8);
+		if (Input.GetKey(KeyCode.Alpha9)) SetSize(9);
 
-        Point size = (end - start).Size + new Point(thickness, thickness);
+		TileCursor.GetComponent<Image>().color = highlight;
 
-        Texture2D brush = BlankTexture.New(size.x, size.y, 
-                                           new Color32(0, 0, 0, 0));
+		Vector2 cursor;
 
-        Sprite sprite = Sprite.Create(brush, 
-                                      new Rect(0, 0, brush.width, brush.height), 
-                                      Vector2.zero);
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
+		                                                        Input.mousePosition,
+		                                                        null,
+		                                                        out cursor);
 
-        Bresenham.PlotFunction plot = delegate (int x, int y)
-        {
-            for (int cy = -left; cy <= right; ++cy)
-            {
-                for (int cx = -left; cx <= right; ++cx)
-                {
-                    brush.SetPixel(x + cx, y + cy, color);
-                }
-            }
+		var grid = new Point(Mathf.FloorToInt(cursor.x / 32f),
+		                     Mathf.FloorToInt(cursor.y / 32f));
 
-            return true;
-        };
+		TileCursor.anchoredPosition = new Vector2(grid.x * 32 + 16, grid.y * 32 + 16);
 
-        Bresenham.Line(start.x + left, start.y + left, end.x + left, end.y + left, plot);
+		if (dragging)
+		{
+			ActiveTool.ContinueStroke(LastCursor, cursor);
+		}
 
-        return sprite;
-    }
+		LastCursor = cursor;
+	}
+	
+	public void OnPointerDown(PointerEventData data)
+	{
+		Vector2 start;
+		
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
+		                                                        data.position,
+		                                                        data.pressEventCamera,
+		                                                        out start);
 
-    public void OnDrag(PointerEventData data)
-    {
-        Vector2 start, end;
+		ActiveTool.BeginStroke(start);
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-                                                                data.position - data.delta,
-                                                                data.pressEventCamera,
-                                                                out start);
+		dragging = true;
+	}
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-                                                                data.position,
-                                                                data.pressEventCamera,
-                                                                out end);
-        /*
-        Vector2 size = end - start;
+	public void OnPointerUp(PointerEventData data)
+	{
+		Vector2 end;
+		
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
+		                                                        data.position,
+		                                                        data.pressEventCamera,
+		                                                        out end);
 
-        int test = 16;
+		dragging = false;
 
-        var brush = BlankTexture.New(//test+1,
-                                     (int) Mathf.Abs(size.x) + 1,
-                                     (int) Mathf.Abs(size.y) + 1,
-                                     new Color32(0, 0, 0, 0));
-
-        var sprite = Sprite.Create(brush, new Rect(0, 0, brush.width, brush.height), Vector2.zero);
-        var drawing = new SpriteDrawing(sprite);
-
-        //drawing.Line(new Point(Vector2.zero), new Point(Vector2.right * test), Color);
-        drawing.Line(new Point(start - tl), new Point(end - tl), Color);
-        drawing.Apply();
-        */
-
-        if (Tool != ToolMode.Fill)
-        {
-            int left = Mathf.FloorToInt(Thickness / 2f);
-
-            var tl = new Vector2(Mathf.Min(start.x, end.x),
-                                 Mathf.Min(start.y, end.y));
-
-            var sprite = LineBrush(new Point(start - tl), 
-                                   new Point(end - tl), 
-                                   Color, Thickness);
-
-            //Tilemap.Line(new Point(start), new Point(end), Color);
-            Tilemap.Blit(new Point(tl) - new Point(left, left), sprite, Tool == ToolMode.Eraser);
-            Tilemap.Apply();
-        }
-    }
+		ActiveTool.EndStroke(end);
+	}
 }
