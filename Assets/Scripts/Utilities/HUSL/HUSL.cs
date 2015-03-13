@@ -434,7 +434,7 @@ public class HUSL
         return LCHToRGB(HUSLToLCH(tuple));
     }
 
-    public static IList<double> RGBtoHUSL(IList<double> tuple)
+    public static IList<double> RGBToHUSL(IList<double> tuple)
     {
         return LCHToHUSL(RGBToLCH(tuple));
     }
@@ -444,7 +444,7 @@ public class HUSL
         return LCHToRGB(HUSLPToLCH(tuple));
     }
     
-    public static IList<double> RGBtoHUSLP(IList<double> tuple)
+    public static IList<double> RGBToHUSLP(IList<double> tuple)
     {
         return LCHToHUSLP(RGBToLCH(tuple));
     }
