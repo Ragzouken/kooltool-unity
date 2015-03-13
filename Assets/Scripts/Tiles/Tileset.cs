@@ -46,6 +46,11 @@ public class Tileset
 
     public Tile AddTile()
     {
+        return AddTile(new Color(Random.value, Random.value, Random.value));
+    }
+
+    public Tile AddTile(Color color)
+    {
         int index = Tiles.Count;
 
         var sprite = Sprite.Create(Texture, 
@@ -53,6 +58,8 @@ public class Tileset
                                    Vector2.one * 0.5f, 100f);
 
         var drawing = new SpriteDrawing(sprite);
+        drawing.Fill(new Point(0, 0), color); // TODO: make efficient, don't use fill
+        drawing.Apply();
 
 		var tile = new Tile(this, drawing);
 

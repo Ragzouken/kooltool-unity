@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 8f95dcd553348554cb9119aae1db9efd
-timeCreated: 1426184559
+guid: 5cbb2103fd7fd094eb98ce208ce85379
+timeCreated: 1426232586
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: border
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -27,7 +26,7 @@ TextureImporter:
   cubemapConvolutionSteps: 8
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: 12
+  textureFormat: -1
   maxTextureSize: 32
   textureSettings:
     filterMode: 0
@@ -38,7 +37,7 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -46,20 +45,10 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 1
   alphaIsTransparency: 1
-  textureType: 5
+  textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites:
-    - name: border
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 3, y: 3, z: 3, w: 3}
+    sprites: []
   spritePackingTag: ui
   userData: 
   assetBundleName: 

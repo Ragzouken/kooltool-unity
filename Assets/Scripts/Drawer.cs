@@ -14,15 +14,19 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] protected Tilemap Tilemap;
     [SerializeField] protected InfiniteDrawing Drawing;
     [SerializeField] protected Image ColorButton;
-	[SerializeField] protected RectTransform TileCursor;
+
+    [Header("Cursors")]
+    [SerializeField] protected PixelCursor PixelCursor;
+	[SerializeField] protected TileCursor TileCursor;
 
 	public ITool ActiveTool;
 
 	public void SetSize(int value) { PixelTool.Thickness = value; }
-	public void SetPencil() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Pencil; }
-	public void SetEraser() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Eraser; }
-	public void SetFiller() { ActiveTool = PixelTool; PixelTool.Tool = Pixel.ToolMode.Fill;   }
-    public void SetTile(Tileset.Tile tile) { ActiveTool = TileTool; TileTool.PaintTile = tile; }
+    public void SetPencil()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Pencil; }
+    public void SetEraser()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Eraser; }
+    public void SetFiller()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Fill;   }
+    public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; }
+    public void NewTile() { Tilemap.Tileset.AddTile(); }
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
@@ -30,13 +34,40 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public Color highlight;
 	public float hue;
 
-    public Pixel PixelTool;
-    public Tile TileTool;
+    public PixelTool PixelTool;
+    public TileTool TileTool;
+
+    public void SwitchTool()
+    {
+        PixelCursor.gameObject.SetActive(false);
+        TileCursor.gameObject.SetActive(false);
+    }
+
+    public void SetPixelTool()
+    {
+        SwitchTool();
+
+        ActiveTool = PixelTool;
+
+        PixelCursor.gameObject.SetActive(true);
+    }
+
+    public void SetTileTool()
+    {
+        SwitchTool();
+
+        ActiveTool = TileTool;
+
+        TileCursor.gameObject.SetActive(true);
+    }
 
 	public void Awake()
 	{
-		PixelTool = new Pixel(Tilemap);
-        TileTool = new Tile(Tilemap);
+		PixelTool = new PixelTool(Tilemap);
+        TileTool = new TileTool(Tilemap);
+
+        PixelCursor.Tool = PixelTool;
+        TileCursor.Tool = TileTool;
 
         ActiveTool = PixelTool;
 
@@ -51,7 +82,9 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			hue = (hue + Time.deltaTime) % 1f;
 
-			highlight = new Color(hue, hue, hue, hue);
+            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
+
+			highlight = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);
 		
 			yield return new WaitForEndOfFrame();
 		}
@@ -79,13 +112,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Input.GetKeyDown(KeyCode.LeftAlt)
          || Input.GetKeyDown(KeyCode.LeftShift))
         {
-            PixelTool.Tool = Pixel.ToolMode.Picker;
+            PixelTool.Tool = PixelTool.ToolMode.Picker;
         }
 
         if (Input.GetKeyUp(KeyCode.LeftAlt)
          || Input.GetKeyUp(KeyCode.LeftShift))
         {
-            PixelTool.Tool = Pixel.ToolMode.Pencil;
+            PixelTool.Tool = PixelTool.ToolMode.Pencil;
         }
 
 		if (Input.GetKey(KeyCode.Alpha1)) SetSize(1);
@@ -98,8 +131,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (Input.GetKey(KeyCode.Alpha8)) SetSize(8);
 		if (Input.GetKey(KeyCode.Alpha9)) SetSize(9);
 
-		TileCursor.GetComponent<Image>().color = highlight;
-
 		Vector2 cursor;
 
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
@@ -110,7 +141,11 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		var grid = new Point(Mathf.FloorToInt(cursor.x / 32f),
 		                     Mathf.FloorToInt(cursor.y / 32f));
 
-		TileCursor.anchoredPosition = new Vector2(grid.x * 32 + 16, grid.y * 32 + 16);
+        float offset = (PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+
+        PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
+                                                                                 Mathf.FloorToInt(cursor.y) + offset);
+        TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(grid.x * 32 + 16, grid.y * 32 + 16);
 
 		if (dragging)
 		{
