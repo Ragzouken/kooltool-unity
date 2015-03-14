@@ -15,6 +15,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] protected InfiniteDrawing Drawing;
     [SerializeField] protected Image ColorButton;
 
+    [SerializeField] protected RectTransform World;
+
     [Header("Cursors")]
     [SerializeField] protected PixelCursor PixelCursor;
 	[SerializeField] protected TileCursor TileCursor;
@@ -32,6 +34,9 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
+    bool panning;
+    Vector2 pansite;
+    float zoom = 2f;
 
 	public Color highlight;
 	public float hue;
@@ -150,6 +155,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			ActiveTool.ContinueStroke(LastCursor, cursor);
 		}
+        else if (panning)
+        {
+            World.localPosition += (Vector3) (cursor - pansite);
+            World.localPosition = new Vector3(Mathf.Floor(World.localPosition.x),
+                                              Mathf.Floor(World.localPosition.y),
+                                              0f);
+        }
 
 		LastCursor = cursor;
 	}
@@ -163,9 +175,18 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        data.pressEventCamera,
 		                                                        out start);
 
-		ActiveTool.BeginStroke(start);
+        if (data.button == PointerEventData.InputButton.Left)
+        {
+    		ActiveTool.BeginStroke(start);
 
-		dragging = true;
+    		dragging = true;
+        }
+        else
+        {
+            panning = true;
+
+            pansite = start;
+        }
 	}
 
 	public void OnPointerUp(PointerEventData data)
@@ -178,6 +199,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        out end);
 
 		dragging = false;
+        panning = false;
 
 		ActiveTool.EndStroke(end);
 	}

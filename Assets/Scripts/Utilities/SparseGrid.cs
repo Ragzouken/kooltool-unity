@@ -74,8 +74,11 @@ public class SparseGrid<T>
         grid = new Point(Mathf.FloorToInt(point.x / (float) CellWidth),
                          Mathf.FloorToInt(point.y / (float) CellHeight));
 
-        offset = new Point(point.x % CellWidth,
-                           point.y % CellHeight);
+        int ox = point.x % CellWidth;
+        int oy = point.y % CellHeight;
+
+        offset = new Point(ox >= 0 ? ox : CellWidth  + ox,
+                           oy >= 0 ? oy : CellHeight + oy);
     }
 
     public IEnumerator<KeyValuePair<Point, T>> GetEnumerator()
