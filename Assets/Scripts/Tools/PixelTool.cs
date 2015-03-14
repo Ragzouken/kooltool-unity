@@ -19,24 +19,41 @@ public class PixelTool : ITool
     public int Thickness = 1;
     public Color Color = Color.red;
     public Tilemap Tilemap;
+    public InfiniteDrawing Drawing;
 
-    public PixelTool(Tilemap tilemap)
+    public IDrawing Target;
+    public MonoBehaviour CoroutineTarget;
+
+    public PixelTool(Tilemap tilemap, InfiniteDrawing drawing)
     {
         Tilemap = tilemap;
+        Drawing = drawing;
     }
 
     public void BeginStroke(Vector2 start)
     {
+        var cell = TileTool.Vector2Cell(start);
+        Tileset.Tile tile;
+
+        if (Tilemap.Get(cell, out tile))
+        {
+            Target = Tilemap;
+        }
+        else
+        {
+            Target = Drawing;
+        }
+
         if (Tool == ToolMode.Fill)
         {
-            Tilemap.Fill(new Point(start), Color);
-            Tilemap.Apply();
+            CoroutineTarget.StartCoroutine(Target.Fill(new Point(start), Color, 61 * 64));
+            Target.Apply();
         }
         else if (Tool == ToolMode.Picker)
         {
             Color sampled;
             
-            if (Tilemap.Sample(new Point(start), out sampled))
+            if (Target.Sample(new Point(start), out sampled))
             {
                 Color = sampled;
             }
@@ -58,8 +75,8 @@ public class PixelTool : ITool
                                    Color.a > 0 ? Color : Color.white, 
                                    Thickness);
 
-            Tilemap.Blit(new Point(tl) - new Point(left, left), sprite, Color.a == 0);
-            Tilemap.Apply();
+            Target.Blit(new Point(tl) - new Point(left, left), sprite, Color.a == 0);
+            Target.Apply();
         }
     }
 

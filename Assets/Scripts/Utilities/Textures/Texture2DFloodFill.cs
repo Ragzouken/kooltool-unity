@@ -235,4 +235,81 @@ public static class TextureExtension
 
         aTex.SetPixelRect(bounds, colors);
     }
+
+    public static IEnumerator FloodFillAreaCR(this Texture2D aTex, 
+                                              int aX, int aY, 
+                                              Color aFillColor,
+                                              Rect bounds,
+                                              int chunksize)
+    {
+        Color[] colors = aTex.GetPixelRect(bounds);
+        
+        int w = (int) bounds.width;
+        int h = (int) bounds.height;
+        
+        Color refCol = colors[aX + aY * w];
+        var nodes = new FastQueue<Point>();
+        nodes.Enqueue(new Point(aX, aY));
+
+        int done = 0;
+
+        while (nodes.Count > 0)
+        {
+            if (done >= chunksize)
+            {
+                done = 0;
+
+                aTex.SetPixelRect(bounds, colors);
+                aTex.Apply();
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            ++done;
+
+            Point current = nodes.Dequeue();
+            for (int i = current.x; i < w; i++)
+            {
+                Color C = colors[i + current.y * w];
+                if (C != refCol || C == aFillColor)
+                    break;
+                colors[i + current.y * w] = aFillColor;
+                if (current.y + 1 < h)
+                {
+                    C = colors[i + current.y * w + w];
+                    if (C == refCol && C != aFillColor)
+                        nodes.Enqueue(new Point(i, current.y + 1));
+                }
+                if (current.y - 1 >= 0)
+                {
+                    C = colors[i + current.y * w - w];
+                    if (C == refCol && C != aFillColor)
+                        nodes.Enqueue(new Point(i, current.y - 1));
+                }
+            }
+
+            for (int i = current.x - 1; i >= 0; i--)
+            {
+                Color C = colors[i + current.y * w];
+                if (C != refCol || C == aFillColor)
+                    break;
+                colors[i + current.y * w] = aFillColor;
+                if (current.y + 1 < h)
+                {
+                    C = colors[i + current.y * w + w];
+                    if (C == refCol && C != aFillColor)
+                        nodes.Enqueue(new Point(i, current.y + 1));
+                }
+                if (current.y - 1 >= 0)
+                {
+                    C = colors[i + current.y * w - w];
+                    if (C == refCol && C != aFillColor)
+                        nodes.Enqueue(new Point(i, current.y - 1));
+                }
+            }
+        }
+
+        aTex.SetPixelRect(bounds, colors);
+        aTex.Apply();
+    }
 }

@@ -22,11 +22,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public ITool ActiveTool;
 
 	public void SetSize(int value) { PixelTool.Thickness = value; }
-    public void SetPencil()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Pencil; }
-    public void SetEraser()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Eraser; }
-    public void SetFiller()                { SetTileTool(); PixelTool.Tool = PixelTool.ToolMode.Fill;   }
-    public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; }
+    public void SetPencil() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Pencil; }
+    public void SetEraser() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Eraser; PixelTool.Color = new Color(0, 0, 0, 0); }
+    public void SetFiller() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Fill;   }
+
+    public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; TileTool.Tool = TileTool.ToolMode.Pencil; }
     public void NewTile() { Tilemap.Tileset.AddTile(); }
+    public void SetTileErase() { SetTileTool(); TileTool.Tool = TileTool.ToolMode.Eraser; }
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
@@ -63,11 +65,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	public void Awake()
 	{
-		PixelTool = new PixelTool(Tilemap);
+		PixelTool = new PixelTool(Tilemap, Drawing);
         TileTool = new TileTool(Tilemap);
 
         PixelCursor.Tool = PixelTool;
         TileCursor.Tool = TileTool;
+
+        PixelTool.CoroutineTarget = this;
 
         ActiveTool = PixelTool;
 
@@ -113,12 +117,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
          || Input.GetKeyDown(KeyCode.LeftShift))
         {
             PixelTool.Tool = PixelTool.ToolMode.Picker;
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftAlt)
-         || Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            PixelTool.Tool = PixelTool.ToolMode.Pencil;
+            TileTool.Tool = TileTool.ToolMode.Picker;
         }
 
 		if (Input.GetKey(KeyCode.Alpha1)) SetSize(1);

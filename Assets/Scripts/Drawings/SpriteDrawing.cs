@@ -67,6 +67,14 @@ public struct SpriteDrawing : IDrawing
                                      Sprite.textureRect);
         */
     }
+
+    public IEnumerator Fill(Point pixel, Color color, int chunksize)
+    {
+        return Sprite.texture.FloodFillAreaCR(pixel.x, pixel.y, 
+                                              color, 
+                                              Sprite.textureRect, 
+                                              chunksize);
+    }
     
     public bool Sample(Point pixel, out Color color)
     {

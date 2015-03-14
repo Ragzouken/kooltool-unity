@@ -25,5 +25,9 @@ public class TileCursor : MonoBehaviour
         {
             Preview.sprite = PickerSprite;
         }
+        else if (Tool.Tool == TileTool.ToolMode.Eraser)
+        {
+            Preview.sprite = EraserSprite;
+        }
     }
 }

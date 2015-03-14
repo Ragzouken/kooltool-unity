@@ -42,6 +42,8 @@ public class Tileset
     public Tileset()
     {
         Texture = BlankTexture.New(1024, 1024, new Color(0, 0, 0, 0));
+
+        AddTile();
     }
 
     public Tile AddTile()

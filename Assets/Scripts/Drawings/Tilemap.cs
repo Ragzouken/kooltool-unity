@@ -39,20 +39,6 @@ public class Tilemap : MonoBehaviour, IDrawing
     public void Awake()
     {
         Tileset = new Tileset();
-
-        Tileset.AddTile();
-        Tileset.AddTile();
-        Tileset.AddTile();
-
-        for (int y = 0; y < 16; ++y)
-        {
-            for (int x = 0; x < 32; ++x)
-            {
-                Tileset.Tile tile = Tileset.Tiles[Random.Range(0, Tileset.Tiles.Count)];
-
-				Set(new Point(x, y), tile);
-            }
-        }
     }
 
     public void Point(Point pixel, Color color)
@@ -147,6 +133,21 @@ public class Tilemap : MonoBehaviour, IDrawing
         }
     }
 
+    public IEnumerator Fill(Point pixel, Color color, int chunksize)
+    {
+        IDrawing drawing;
+        Point grid, offset;
+        
+        Sprites.Coords(pixel, out grid, out offset);
+        
+        if (Sprites.Get(grid, out drawing))
+        {
+            IEnumerator e = drawing.Fill(offset, color, chunksize);
+
+            while (e.MoveNext()) yield return e.Current;
+        }
+    }
+
     public bool Sample(Point pixel, out Color color)
     {
 		IDrawing drawing;
@@ -192,6 +193,23 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     public void Unset(Point cell)
     {
-        Tiles.Unset(cell);
+        Tileset.Tile tile;
+        Image image;
+        IDrawing drawing;
+
+        if (Tiles.Unset(cell, out tile))
+        {
+            GetComponent<AudioSource>().Play();
+
+            Sprites.Unset(cell, out drawing);
+            Images.Unset(cell, out image);
+
+            Destroy(image.gameObject);
+        }
+    }
+
+    public IEnumerator<KeyValuePair<Point, Tileset.Tile>> GetEnumerator()
+    {
+        return Tiles.GetEnumerator();
     }
 }

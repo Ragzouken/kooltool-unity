@@ -47,10 +47,8 @@ public class SparseGrid<T>
         return change;
     }
 
-    public bool Unset(Point cell)
+    public bool Unset(Point cell, out T existing)
     {
-        T existing;
-        
         bool exists = Get(cell, out existing);
 
         if (exists)

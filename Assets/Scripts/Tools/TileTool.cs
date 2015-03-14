@@ -24,7 +24,7 @@ public class TileTool : ITool
         PaintTile = Tilemap.Tileset.Tiles[0];
     }
 
-    public Point Vector2Cell(Vector2 point)
+    public static Point Vector2Cell(Vector2 point)
     {
         Point cell, offset;
 
@@ -48,6 +48,8 @@ public class TileTool : ITool
             if (Tilemap.Get(Vector2Cell(start), out sampled))
             {
                 PaintTile = sampled;
+
+                Tool = ToolMode.Pencil;
             }
             else
             {
@@ -86,6 +88,19 @@ public class TileTool : ITool
             var e = Vector2Cell(end);
 
             Bresenham.Line(s.x, s.y, e.x, e.y, plot);
+        }
+        else if (Tool == ToolMode.Picker)
+        {
+            Tileset.Tile sampled;
+            
+            if (Tilemap.Get(Vector2Cell(end), out sampled))
+            {
+                PaintTile = sampled;
+            }
+            else
+            {
+                Tool = ToolMode.Eraser;
+            }
         }
     }
 

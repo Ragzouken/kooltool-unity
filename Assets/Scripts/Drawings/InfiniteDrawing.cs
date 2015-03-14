@@ -9,13 +9,13 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
 
     protected const int Size = 1024;
 
-    protected SparseGrid<SpriteDrawing> Sprites
-        = new SparseGrid<SpriteDrawing>(Size);
+    protected SparseGrid<IDrawing> Sprites
+        = new SparseGrid<IDrawing>(Size);
 
     protected SparseGrid<bool> Changed
         = new SparseGrid<bool>(Size);
 
-    protected SpriteDrawing NewCell(Point cell)
+    protected IDrawing NewCell(Point cell)
     {
         var texture = BlankTexture.New(Size, Size, new Color32(0, 0, 0, 0));
         
@@ -26,7 +26,7 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
                                     cell.x,
                                     cell.y);
 
-        SpriteDrawing drawing = new SpriteDrawing(sprite);
+        var drawing = new SpriteDrawing(sprite);
 
         Sprites.Set(cell, drawing);
         
@@ -37,7 +37,7 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
         
         renderer.sprite = sprite;
         renderer.SetNativeSize();
-        
+
         block.transform.SetParent(transform, false);
         block.transform.localPosition = new Vector2(cell.x * Size, 
                                                     cell.y * Size);
@@ -47,7 +47,7 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
 
     public void Point(Point pixel, Color color)
     {
-        SpriteDrawing drawing;
+        IDrawing drawing;
         Point grid, offset;
         
         Sprites.Coords(pixel, out grid, out offset);
@@ -69,14 +69,62 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
         Bresenham.Line(start.x, start.y, end.x, end.y, plot);
     }
 
-    public void Blit(Point offset, Sprite image, bool subtract)
+    public void Blit(Point pixel, Sprite image, bool subtract)
     {
+        Point grid, offset;
+        
+        Sprites.Coords(pixel, out grid, out offset);
+        
+        var gw = Mathf.CeilToInt((image.rect.width  + offset.x) / Size);
+        var gh = Mathf.CeilToInt((image.rect.height + offset.y) / Size);
+        
+        int bw = (int) image.rect.width;
+        int bh = (int) image.rect.height;
+        
+        int ch = 0;
+        
+        for (int y = 0; y < gh; ++y)
+        {
+            int sy = y == 0 ? 0 : Size - offset.y;
+            int sh = Size;
+            
+            if (y == 0) sh = Mathf.Min(sh, Size - offset.y);
+            if (y == gh - 1) sh = Mathf.Min(sh, bh - ch);
+            
+            int cw = 0;
+            
+            for (int x = 0; x < gw; ++x)
+            {
+                IDrawing drawing;
+                
+                int sx = x == 0 ? 0 : Size - offset.x;
+                int sw = Size;
+                
+                if (x == 0) sw = Mathf.Min(sw, Size - offset.x);
+                if (x == gw - 1) sw = Mathf.Min(sw, bw - cw);
+                
+                var rect = new Rect(sx, sy, sw, sh);
+                
+                var slice = Sprite.Create(image.texture, rect, Vector2.zero);
+                
+                Sprites.GetDefault(new Point(grid.x + x, grid.y + y), out drawing, NewCell);
 
+                drawing.Blit(new Point(x == 0 ? offset.x : 0, 
+                                       y == 0 ? offset.y : 0), 
+                             slice,
+                             subtract);
+                drawing.Apply();
+                
+                cw += sw;
+            }
+            
+            ch += sh;
+        }
     }
 
     public void Fill(Point pixel, Color color)
     {
-        SpriteDrawing drawing;
+        IDrawing drawing;
         Point grid, offset;
         
         Sprites.Coords(pixel, out grid, out offset);
@@ -86,9 +134,22 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
         drawing.Fill(pixel, color);
     }
 
+    public IEnumerator Fill(Point pixel, Color color, int chunksize)
+    {
+        IDrawing drawing;
+        Point grid, offset;
+        
+        Sprites.Coords(pixel, out grid, out offset);
+        Sprites.GetDefault(grid, out drawing, NewCell);
+        Changed.Set(grid, true);
+        
+        return drawing.Fill(pixel, color, chunksize);
+    }
+
+
     public bool Sample(Point pixel, out Color color)
     {
-        SpriteDrawing drawing;
+        IDrawing drawing;
         Point grid, offset;
 
         Sprites.Coords(pixel, out grid, out offset);
@@ -109,7 +170,7 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
     {
         foreach (var changed in Changed)
         {
-            SpriteDrawing drawing;
+            IDrawing drawing;
 
             if (changed.Value && Sprites.Get(changed.Key, out drawing))
             {
