@@ -175,6 +175,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        data.pressEventCamera,
 		                                                        out start);
 
+        Debug.Log("down");
+
         if (data.button == PointerEventData.InputButton.Left)
         {
     		ActiveTool.BeginStroke(start);

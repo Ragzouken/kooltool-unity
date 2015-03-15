@@ -45,30 +45,6 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
         return drawing;
     }
 
-    public void Point(Point pixel, Color color)
-    {
-        IDrawing drawing;
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        Sprites.GetDefault(grid, out drawing, NewCell);
-        Changed.Set(grid, true);
-
-        drawing.Point(pixel, color);
-    }
-
-    public void Line(Point start, Point end, Color color)
-    {
-        Bresenham.PlotFunction plot = delegate (int x, int y)
-        {
-            Point(new Point(x, y), color);
-            
-            return true;
-        };
-
-        Bresenham.Line(start.x, start.y, end.x, end.y, plot);
-    }
-
     public void Blit(Point pixel, Sprite image, bool subtract)
     {
         Point grid, offset;
