@@ -9,6 +9,8 @@ using UnityEngine.EventSystems;
 using UnityEditor;
 #endif
 
+using kooltool;
+
 public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] protected Tilemap Tilemap;
@@ -44,6 +46,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public PixelTool PixelTool;
     public TileTool TileTool;
 
+    public Project Project;
+
     public void SwitchTool()
     {
         PixelCursor.gameObject.SetActive(false);
@@ -70,6 +74,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	public void Awake()
 	{
+        Project = new Project(new Point(32, 32));
+
 		PixelTool = new PixelTool(Tilemap, Drawing);
         TileTool = new TileTool(Tilemap);
 
@@ -142,14 +148,16 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        null,
 		                                                        out cursor);
 
-		var grid = new Point(Mathf.FloorToInt(cursor.x / 32f),
-		                     Mathf.FloorToInt(cursor.y / 32f));
+        Point grid, dummy;
+
+        Project.Grid.Coords(new Point(cursor), out grid, out dummy);
 
         float offset = (PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
 
         PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
                                                                                  Mathf.FloorToInt(cursor.y) + offset);
-        TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(grid.x * 32 + 16, grid.y * 32 + 16);
+        TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth, 
+                                                                                (grid.y + 0.5f) * Project.Grid.CellHeight);
 
 		if (dragging)
 		{
@@ -174,8 +182,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        data.position,
 		                                                        data.pressEventCamera,
 		                                                        out start);
-
-        Debug.Log("down");
 
         if (data.button == PointerEventData.InputButton.Left)
         {

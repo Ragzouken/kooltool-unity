@@ -7,7 +7,8 @@ public class SparseGrid<T>
 	protected Dictionary<Point, T> Items
 		= new Dictionary<Point, T>();
 
-    protected int CellWidth, CellHeight;
+    public int CellWidth  { get; protected set; }
+    public int CellHeight { get; protected set; }
 
     public delegate T Constructor(Point cell);
 

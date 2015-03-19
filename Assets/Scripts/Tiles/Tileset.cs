@@ -35,7 +35,7 @@ public class Tileset
 		}
 	}
 
-    protected Texture2D Texture;
+    public Texture2D Texture { get; protected set; }
 
     public IList<Tile> Tiles = new List<Tile>();
 
