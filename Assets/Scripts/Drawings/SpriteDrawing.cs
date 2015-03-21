@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using PixelDraw;
+
 public struct SpriteDrawing : IDrawing
 {
     public Sprite Sprite;
@@ -21,7 +23,11 @@ public struct SpriteDrawing : IDrawing
         Assert.True(Sprite.textureRect.Contains(offset.Vector2()), "Offset out of bounds!");
         Assert.True(Sprite.textureRect.Contains(offset.Vector2() + image.rect.size - Vector2.one), "Image out of bounds!");
 
-        Sprite.texture.Blit(offset.x, offset.y, image, subtract);
+        Rect destRect = new Rect(offset.x, offset.y, image.rect.width, image.rect.height);
+        
+        Brush.Blend(Sprite.texture, destRect,
+                    image.texture, image.textureRect,
+                    subtract ? Brush.SubtractBlend : Brush.AlphaBlend);
     }
 
     public void Fill(Point pixel, Color color)
