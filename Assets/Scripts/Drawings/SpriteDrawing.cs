@@ -25,7 +25,7 @@ public struct SpriteDrawing : IDrawing
 
         Rect destRect = new Rect(offset.x, offset.y, image.rect.width, image.rect.height);
         
-        Brush.Blend(Sprite.texture, destRect,
+        Brush.Apply(Sprite.texture, destRect,
                     image.texture, image.textureRect,
                     subtract ? Brush.SubtractBlend : Brush.AlphaBlend);
     }

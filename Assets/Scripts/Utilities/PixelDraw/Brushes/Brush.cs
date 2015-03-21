@@ -66,7 +66,7 @@ namespace PixelDraw
             return canvas + brush;
         };
 
-        public static void Blend(Texture2D canvas, Rect canvasRect,
+        public static void Apply(Texture2D canvas, Rect canvasRect,
                                  Texture2D brush,  Rect brushRect,
                                  BlendFunction blend)
         {
@@ -84,7 +84,8 @@ namespace PixelDraw
         }
 
         public static void Apply(Sprite brush,  Point brushPosition,
-                                 Sprite canvas, Point canvasPosition)
+                                 Sprite canvas, Point canvasPosition,
+                                 BlendFunction blend)
         {
             var b_offset = brushPosition - brush.pivot;
             var c_offset = canvasPosition - canvas.pivot;
