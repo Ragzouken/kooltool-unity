@@ -63,7 +63,7 @@ public class TileTool : ITool
         if (Tool == ToolMode.Pencil
          || Tool == ToolMode.Eraser)
         {
-            Bresenham.PlotFunction plot;
+            PixelDraw.Bresenham.PlotFunction plot;
 
             if (Tool == ToolMode.Pencil)
             {
@@ -87,7 +87,7 @@ public class TileTool : ITool
             var s = Vector2Cell(start);
             var e = Vector2Cell(end);
 
-            Bresenham.Line(s.x, s.y, e.x, e.y, plot);
+            PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, plot);
         }
         else if (Tool == ToolMode.Picker)
         {

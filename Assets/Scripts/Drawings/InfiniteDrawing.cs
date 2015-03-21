@@ -47,6 +47,8 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
 
     public void Blit(Point pixel, Sprite image, bool subtract)
     {
+        pixel = pixel - new Point(image.pivot);
+
         Point grid, offset;
         
         Sprites.Coords(pixel, out grid, out offset);

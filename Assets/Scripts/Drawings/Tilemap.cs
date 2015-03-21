@@ -43,6 +43,8 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     public void Blit(Point pixel, Sprite image, bool subtract = false)
     {
+        pixel = pixel - new Point(image.pivot);
+
         Point grid, offset;
 
         Sprites.Coords(pixel, out grid, out offset);

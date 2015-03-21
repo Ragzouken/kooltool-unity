@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using PixelDraw;
+
 public class PixelTool : ITool
 {
     public enum ToolMode
@@ -65,54 +67,20 @@ public class PixelTool : ITool
         if (Tool == ToolMode.Pencil
          || Tool == ToolMode.Eraser)
         {
-            int left = Mathf.FloorToInt(Thickness / 2f);
-            
             var tl = new Vector2(Mathf.Min(start.x, end.x),
                                  Mathf.Min(start.y, end.y));
             
-            var sprite = LineBrush(new Point(start - tl), 
-                                   new Point(end - tl), 
-                                   Color.a > 0 ? Color : Color.white, 
-                                   Thickness);
+            var sprite = Brush.Line(new Point(start - tl), 
+                                    new Point(end - tl), 
+                                    Color.a > 0 ? Color : Color.white, 
+                                    Thickness);          
 
-            Target.Blit(new Point(tl) - new Point(left, left), sprite, Color.a == 0);
+            Target.Blit(new Point(start), sprite, Color.a == 0);
             Target.Apply();
         }
     }
 
     public void EndStroke(Vector2 end)
     {
-    }
-
-    public static Sprite LineBrush(Point start, Point end, Color color, int thickness)
-    {
-        int left = Mathf.FloorToInt(thickness / 2f);
-        int right = thickness - 1 - left;
-        
-        Point size = (end - start).Size + new Point(thickness, thickness);
-        
-        Texture2D brush = BlankTexture.New(size.x, size.y, 
-                                           new Color32(0, 0, 0, 0));
-        
-        Sprite sprite = Sprite.Create(brush, 
-                                      new Rect(0, 0, brush.width, brush.height), 
-                                      Vector2.zero);
-        
-        Bresenham.PlotFunction plot = delegate (int x, int y)
-        {
-            for (int cy = -left; cy <= right; ++cy)
-            {
-                for (int cx = -left; cx <= right; ++cx)
-                {
-                    brush.SetPixel(x + cx, y + cy, color);
-                }
-            }
-            
-            return true;
-        };
-        
-        Bresenham.Line(start.x + left, start.y + left, end.x + left, end.y + left, plot);
-        
-        return sprite;
     }
 }

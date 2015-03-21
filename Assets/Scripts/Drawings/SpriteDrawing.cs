@@ -12,36 +12,10 @@ public struct SpriteDrawing : IDrawing
         Sprite = sprite;
     }
 
-    public void Point(Point pixel, Color color)
-    {
-        pixel = pixel.Offset(Sprite.textureRect.position);
-        Assert.True(Sprite.textureRect.Contains(pixel.Vector2()), "Point out of bounds!");
-
-        Sprite.texture.SetPixel(pixel.x, pixel.y, color);
-    }
-
-    public void Line(Point start, Point end, Color color)
-    {
-        start = start.Offset(Sprite.textureRect.position);
-        end = end.Offset(Sprite.textureRect.position);
-
-        Assert.True(Sprite.textureRect.Contains(start.Vector2()), "Line starts out of bounds!");
-        Assert.True(Sprite.textureRect.Contains(end.Vector2()), "Line ends out of bounds!");
-
-        Texture2D texture = Sprite.texture;
-
-        Bresenham.PlotFunction plot = delegate (int x, int y)
-        {
-            texture.SetPixel(x, y, color);
-            
-            return true;
-        };
-        
-        Bresenham.Line(start.x, start.y, end.x, end.y, plot);
-    }
-
     public void Blit(Point offset, Sprite image, bool subtract = false)
     {
+        offset = offset - new Point(image.pivot);
+
         offset = offset.Offset(Sprite.textureRect.position);
 
         Assert.True(Sprite.textureRect.Contains(offset.Vector2()), "Offset out of bounds!");
