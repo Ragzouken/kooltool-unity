@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using PixelDraw;
+
 public class Tileset
 {
 	public enum Tiling { Single, Auto5, Auto16 }

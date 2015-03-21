@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using PixelDraw;
+
 public class Tilemap : MonoBehaviour, IDrawing
 {
     protected const int Size = 32;
@@ -20,11 +22,11 @@ public class Tilemap : MonoBehaviour, IDrawing
 
 	public Tileset Tileset;
 
-    protected Image NewTile(Point cell)
+    protected bool NewTile(Point cell, out Image renderer)
     {
         //var block = new GameObject("Image Block");
         //var renderer = block.AddComponent<SpriteRenderer>();
-        var renderer = Instantiate<Image>(TilePrefab);
+        renderer = Instantiate<Image>(TilePrefab);
         var block = renderer.gameObject;
         
 		Images.Set(cell, renderer);
@@ -33,7 +35,7 @@ public class Tilemap : MonoBehaviour, IDrawing
         block.transform.localPosition = new Vector2(cell.x * Size, 
                                                     cell.y * Size);
 
-		return renderer;
+		return true;
     }
 
     public void Awake()
@@ -41,7 +43,7 @@ public class Tilemap : MonoBehaviour, IDrawing
         Tileset = new Tileset();
     }
 
-    public void Blit(Point pixel, Sprite image, bool subtract = false)
+    public void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
     {
         pixel = pixel - new Point(image.pivot);
 
@@ -84,10 +86,10 @@ public class Tilemap : MonoBehaviour, IDrawing
                 if (Sprites.Get(new Point(grid.x + x,
                                           grid.y + y), out drawing))
                 {
-                    drawing.Blit(new Point(x == 0 ? offset.x : 0, 
+                    drawing.Brush(new Point(x == 0 ? offset.x : 0, 
                                            y == 0 ? offset.y : 0), 
                                  slice,
-                                 subtract);
+                                 blend);
                 }
 
                 cw += sw;
@@ -107,21 +109,6 @@ public class Tilemap : MonoBehaviour, IDrawing
         if (Sprites.Get(grid, out drawing))
         {
             drawing.Fill(offset, color);
-        }
-    }
-
-    public IEnumerator Fill(Point pixel, Color color, int chunksize)
-    {
-        IDrawing drawing;
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        
-        if (Sprites.Get(grid, out drawing))
-        {
-            IEnumerator e = drawing.Fill(offset, color, chunksize);
-
-            while (e.MoveNext()) yield return e.Current;
         }
     }
 

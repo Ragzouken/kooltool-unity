@@ -10,7 +10,7 @@ public class SparseGrid<T>
     public int CellWidth  { get; protected set; }
     public int CellHeight { get; protected set; }
 
-    public delegate T Constructor(Point cell);
+    public delegate bool Constructor(Point cell, out T item);
 
 	public SparseGrid()
 	{
@@ -60,14 +60,11 @@ public class SparseGrid<T>
         return exists;
     }
 
-    public void GetDefault(Point cell, 
+    public bool GetDefault(Point cell, 
                            out T item,
                            Constructor constructor)
     {
-        if (!Get(cell, out item))
-        {
-            item = constructor(cell);
-        }
+        return Get(cell, out item) || constructor(cell, out item);
     }
 
     public void Coords(Point point, out Point grid, out Point offset)

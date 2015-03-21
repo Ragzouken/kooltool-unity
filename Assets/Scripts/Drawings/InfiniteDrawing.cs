@@ -1,21 +1,24 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+
+using PixelDraw;
 
 public class InfiniteDrawing : MonoBehaviour, IDrawing
 {
     [SerializeField] protected Image ImageBlockPrefab;
 
+    protected TiledDrawing Tiled; 
+
     protected const int Size = 1024;
 
-    protected SparseGrid<IDrawing> Sprites
-        = new SparseGrid<IDrawing>(Size);
+    protected void Awake()
+    {
+        Tiled = new TiledDrawing(new Point(Size, Size), NewCell);
+    }
 
-    protected SparseGrid<bool> Changed
-        = new SparseGrid<bool>(Size);
-
-    protected IDrawing NewCell(Point cell)
+    protected bool NewCell(Point cell, out IDrawing drawing)
     {
         var texture = BlankTexture.New(Size, Size, new Color32(0, 0, 0, 0));
         
@@ -26,12 +29,10 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
                                     cell.x,
                                     cell.y);
 
-        var drawing = new SpriteDrawing(sprite);
+        drawing = new SpriteDrawing(sprite);
 
-        Sprites.Set(cell, drawing);
-        
-        //var block = new GameObject("Image Block");
-        //var renderer = block.AddComponent<SpriteRenderer>();
+        Tiled.Cells.Set(cell, drawing);
+
         var renderer = Instantiate<Image>(ImageBlockPrefab);
         var block = renderer.gameObject;
         
@@ -42,120 +43,26 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
         block.transform.localPosition = new Vector2(cell.x * Size, 
                                                     cell.y * Size);
         
-        return drawing;
+        return true;
     }
 
-    public void Blit(Point pixel, Sprite image, bool subtract)
+    public void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
     {
-        pixel = pixel - new Point(image.pivot);
-
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        
-        var gw = Mathf.CeilToInt((image.rect.width  + offset.x) / Size);
-        var gh = Mathf.CeilToInt((image.rect.height + offset.y) / Size);
-        
-        int bw = (int) image.rect.width;
-        int bh = (int) image.rect.height;
-        
-        int ch = 0;
-        
-        for (int y = 0; y < gh; ++y)
-        {
-            int sy = y == 0 ? 0 : Size - offset.y;
-            int sh = Size;
-            
-            if (y == 0) sh = Mathf.Min(sh, Size - offset.y);
-            if (y == gh - 1) sh = Mathf.Min(sh, bh - ch);
-            
-            int cw = 0;
-            
-            for (int x = 0; x < gw; ++x)
-            {
-                IDrawing drawing;
-                
-                int sx = x == 0 ? 0 : Size - offset.x;
-                int sw = Size;
-                
-                if (x == 0) sw = Mathf.Min(sw, Size - offset.x);
-                if (x == gw - 1) sw = Mathf.Min(sw, bw - cw);
-                
-                var rect = new Rect(sx, sy, sw, sh);
-                
-                var slice = Sprite.Create(image.texture, rect, Vector2.zero);
-                
-                Sprites.GetDefault(new Point(grid.x + x, grid.y + y), out drawing, NewCell);
-
-                drawing.Blit(new Point(x == 0 ? offset.x : 0, 
-                                       y == 0 ? offset.y : 0), 
-                             slice,
-                             subtract);
-                drawing.Apply();
-                
-                cw += sw;
-            }
-            
-            ch += sh;
-        }
+        Tiled.Brush(pixel, image, blend);
     }
 
     public void Fill(Point pixel, Color color)
     {
-        IDrawing drawing;
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        Sprites.GetDefault(grid, out drawing, NewCell);
-        Changed.Set(grid, true);
-        
-        drawing.Fill(pixel, color);
+        Tiled.Fill(pixel, color);
     }
-
-    public IEnumerator Fill(Point pixel, Color color, int chunksize)
-    {
-        IDrawing drawing;
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        Sprites.GetDefault(grid, out drawing, NewCell);
-        Changed.Set(grid, true);
-        
-        return drawing.Fill(pixel, color, chunksize);
-    }
-
 
     public bool Sample(Point pixel, out Color color)
     {
-        IDrawing drawing;
-        Point grid, offset;
-
-        Sprites.Coords(pixel, out grid, out offset);
-
-        if (Sprites.Get(grid, out drawing))
-        {
-            return drawing.Sample(offset, out color);
-        }
-        else
-        {
-            color = Color.black;
-
-            return false;
-        }
+        return Tiled.Sample(pixel, out color);
     }
 
     public void Apply()
     {
-        foreach (var changed in Changed)
-        {
-            IDrawing drawing;
-
-            if (changed.Value && Sprites.Get(changed.Key, out drawing))
-            {
-                drawing.Apply();
-            }
-        }
-
-        Changed.Clear();
+        Tiled.Apply();
     }
 }

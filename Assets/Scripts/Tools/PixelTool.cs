@@ -48,7 +48,7 @@ public class PixelTool : ITool
 
         if (Tool == ToolMode.Fill)
         {
-            CoroutineTarget.StartCoroutine(Target.Fill(new Point(start), Color, 61 * 64));
+            Target.Fill(new Point(start), Color);
             Target.Apply();
         }
         else if (Tool == ToolMode.Picker)
@@ -75,7 +75,9 @@ public class PixelTool : ITool
                                     Color.a > 0 ? Color : Color.white, 
                                     Thickness);          
 
-            Target.Blit(new Point(start), sprite, Color.a == 0);
+            Debug.Log(start);
+
+            Target.Brush(new Point(start), sprite, Color.a == 0 ? Blend.Subtract : Blend.Alpha);
             Target.Apply();
         }
     }
