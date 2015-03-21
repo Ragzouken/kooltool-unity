@@ -54,6 +54,35 @@ namespace PixelDraw
                                    Mathf.Min(a.max.y, b.max.y));
         }
 
+        public delegate Color BlendFunction(Color canvas, Color brush);
+
+        public static BlendFunction AlphaBlend = delegate(Color canvas, Color brush)
+        {
+            return canvas * (1 - brush.a) + brush * brush.a;
+        };
+
+        public static BlendFunction SubtractBlend = delegate(Color canvas, Color brush)
+        {
+            return canvas + brush;
+        };
+
+        public static void Blend(Texture2D canvas, Rect canvasRect,
+                                 Texture2D brush,  Rect brushRect,
+                                 BlendFunction blend)
+        {
+            Color[] canvasColors = canvas.GetPixelRect(canvasRect);
+            Color[] brushColors  = brush.GetPixelRect(brushRect);
+
+            Assert.True(canvasColors.Length == brushColors.Length, "Mismatched texture rects!");
+
+            for (int i = 0; i < canvasColors.Length; ++i)
+            {
+                canvasColors[i] = blend(canvasColors[i], brushColors[i]);
+            }
+
+            canvas.SetPixelRect(canvasRect, canvasColors);
+        }
+
         public static void Apply(Sprite brush,  Point brushPosition,
                                  Sprite canvas, Point canvasPosition)
         {
