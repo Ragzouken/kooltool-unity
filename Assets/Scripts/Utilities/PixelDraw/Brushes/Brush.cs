@@ -45,5 +45,32 @@ namespace PixelDraw
             
             return sprite;
         }
+
+        public static Rect Intersect(Rect a, Rect b)
+        {
+            return Rect.MinMaxRect(Mathf.Max(a.min.x, b.min.x),
+                                   Mathf.Max(a.min.y, b.min.y),
+                                   Mathf.Min(a.max.x, b.max.x),
+                                   Mathf.Min(a.max.y, b.max.y));
+        }
+
+        public static void Apply(Sprite brush,  Point brushPosition,
+                                 Sprite canvas, Point canvasPosition)
+        {
+            var b_offset = brushPosition - brush.pivot;
+            var c_offset = canvasPosition - canvas.pivot;
+
+            var world_rect_brush = new Rect(b_offset.x,
+                                            b_offset.y,
+                                            brush.rect.width,
+                                            brush.rect.height);
+
+            var world_rect_canvas = new Rect(c_offset.x,
+                                             c_offset.y,
+                                             canvas.rect.width,
+                                             canvas.rect.height);
+
+            var activeRect = Intersect(world_rect_brush, world_rect_canvas);
+        }
     }
 }

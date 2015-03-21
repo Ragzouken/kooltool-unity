@@ -11,10 +11,14 @@ public struct Point
         this.y = y;
     }
 
-    public Point(Vector2 point)
+    public Point(float x, float y)
+        : this((int) x, (int) y)
     {
-        x = (int) point.x;
-        y = (int) point.y;
+    }
+
+    public Point(Vector2 point)
+        : this(point.x, point.y)
+    {
     }
 
     public Point Offset(Vector2 offset)
@@ -67,6 +71,16 @@ public struct Point
     }
 
     public static Point operator -(Point a, Point b)
+    {
+        return new Point(a.x - b.x, a.y - b.y);
+    }
+
+    public static Point operator +(Point a, Vector2 b)
+    {
+        return new Point(a.x + b.x, a.y + b.y);
+    }
+    
+    public static Point operator -(Point a, Vector2 b)
     {
         return new Point(a.x - b.x, a.y - b.y);
     }
