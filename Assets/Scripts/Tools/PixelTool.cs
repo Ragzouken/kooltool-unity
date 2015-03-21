@@ -75,8 +75,6 @@ public class PixelTool : ITool
                                     Color.a > 0 ? Color : Color.white, 
                                     Thickness);          
 
-            Debug.Log(start);
-
             Target.Brush(new Point(start), sprite, Color.a == 0 ? Blend.Subtract : Blend.Alpha);
             Target.Apply();
         }

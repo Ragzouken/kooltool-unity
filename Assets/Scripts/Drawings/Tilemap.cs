@@ -11,8 +11,7 @@ public class Tilemap : MonoBehaviour, IDrawing
 
     [SerializeField] protected Image TilePrefab;
 
-    protected SparseGrid<IDrawing> Sprites
-        = new SparseGrid<IDrawing>(Size);
+    protected TiledDrawing Tiled;
 
 	protected SparseGrid<Image> Images
 		= new SparseGrid<Image>(Size);
@@ -41,92 +40,22 @@ public class Tilemap : MonoBehaviour, IDrawing
     public void Awake()
     {
         Tileset = new Tileset();
+        Tiled = new TiledDrawing(new Point(Size, Size));
     }
 
     public void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
     {
-        pixel = pixel - new Point(image.pivot);
-
-        Point grid, offset;
-
-        Sprites.Coords(pixel, out grid, out offset);
-
-        var gw = Mathf.CeilToInt((image.rect.width  + offset.x) / Size);
-        var gh = Mathf.CeilToInt((image.rect.height + offset.y) / Size);
-
-        int bw = (int) image.rect.width;
-        int bh = (int) image.rect.height;
-
-        int ch = 0;
-
-        for (int y = 0; y < gh; ++y)
-        {
-            int sy = y == 0 ? 0 : Size - offset.y;
-            int sh = Size;
-
-            if (y == 0) sh = Mathf.Min(sh, Size - offset.y);
-            if (y == gh - 1) sh = Mathf.Min(sh, bh - ch);
-
-            int cw = 0;
-
-            for (int x = 0; x < gw; ++x)
-            {
-				IDrawing drawing;
-				
-				int sx = x == 0 ? 0 : Size - offset.x;
-                int sw = Size;
-
-                if (x == 0) sw = Mathf.Min(sw, Size - offset.x);
-                if (x == gw - 1) sw = Mathf.Min(sw, bw - cw);
-
-                var rect = new Rect(sx, sy, sw, sh);
-
-                var slice = Sprite.Create(image.texture, rect, Vector2.zero);
-
-                if (Sprites.Get(new Point(grid.x + x,
-                                          grid.y + y), out drawing))
-                {
-                    drawing.Brush(new Point(x == 0 ? offset.x : 0, 
-                                           y == 0 ? offset.y : 0), 
-                                 slice,
-                                 blend);
-                }
-
-                cw += sw;
-            }
-
-            ch += sh;
-        }
+        Tiled.Brush(pixel, image, blend);
     }
 
     public void Fill(Point pixel, Color color)
     {
-		IDrawing drawing;
-        Point grid, offset;
-        
-        Sprites.Coords(pixel, out grid, out offset);
-        
-        if (Sprites.Get(grid, out drawing))
-        {
-            drawing.Fill(offset, color);
-        }
+        Tiled.Fill(pixel, color);
     }
 
     public bool Sample(Point pixel, out Color color)
     {
-		IDrawing drawing;
-        Point grid, offset;
-
-        Sprites.Coords(pixel, out grid, out offset);
-
-        if (Sprites.Get(grid, out drawing))
-        {
-            return drawing.Sample(offset, out color);
-        }
-
-        color = Color.black;
-
-        return false;
+        return Tiled.Sample(pixel, out color);
     }
 
     public void Apply()
@@ -147,7 +76,7 @@ public class Tilemap : MonoBehaviour, IDrawing
 
 		image.sprite = tile.Drawing().Sprite;
 
-		Sprites.Set(cell, tile.Drawing());
+		Tiled.Cells.Set(cell, tile.Drawing());
 
         if (Tiles.Set(cell, tile))
         {
@@ -165,7 +94,7 @@ public class Tilemap : MonoBehaviour, IDrawing
         {
             GetComponent<AudioSource>().Play();
 
-            Sprites.Unset(cell, out drawing);
+            Tiled.Cells.Unset(cell, out drawing);
             Images.Unset(cell, out image);
 
             Destroy(image.gameObject);

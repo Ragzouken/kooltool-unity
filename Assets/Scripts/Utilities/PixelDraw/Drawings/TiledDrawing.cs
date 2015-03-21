@@ -12,18 +12,20 @@ namespace PixelDraw
 
         SparseGrid<IDrawing>.Constructor NewCell;
 
+        protected bool NullCell(Point coords, out IDrawing drawing)
+        {
+            drawing = null;
+
+            return false;
+        }
+
         public TiledDrawing(Point cellsize, 
                             SparseGrid<IDrawing>.Constructor newCell = null)
         {
             Cells = new SparseGrid<IDrawing>(cellsize.x, cellsize.y);
             Changed = new SparseGrid<bool>(cellsize.x, cellsize.y);
 
-            NewCell = newCell ?? delegate (Point coords, out IDrawing drawing)
-            {
-                drawing = null;
-
-                return false;
-            };
+            NewCell = newCell ?? NullCell;
         }
 
         public virtual void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
@@ -65,14 +67,18 @@ namespace PixelDraw
                     var rect = new Rect(sx, sy, sw, sh);
                     
                     var slice = Sprite.Create(image.texture, rect, Vector2.zero);
-                    
-                    Cells.GetDefault(new Point(grid.x + x, grid.y + y), out drawing, NewCell);
-                    
-                    drawing.Brush(new Point(x == 0 ? offset.x : 0, 
-                                            y == 0 ? offset.y : 0), 
-                                  slice,
-                                  blend);
-                    drawing.Apply();
+
+                    Point cell = new Point(grid.x + x, grid.y + y);
+
+                    if (Cells.GetDefault(cell, out drawing, NewCell))
+                    {
+                        drawing.Brush(new Point(x == 0 ? offset.x : 0, 
+                                                y == 0 ? offset.y : 0), 
+                                      slice,
+                                      blend);
+
+                        Changed.Set(cell, true);
+                    }
                     
                     cw += sw;
                 }
