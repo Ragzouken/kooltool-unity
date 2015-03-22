@@ -86,6 +86,20 @@ namespace PixelDraw
                                              canvas.rect.height);
 
             var activeRect = Intersect(world_rect_brush, world_rect_canvas);
+
+            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x,
+                                            activeRect.y - world_rect_brush.y,
+                                            activeRect.width,
+                                            activeRect.height);
+
+            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x,
+                                             activeRect.y - world_rect_canvas.y,
+                                             activeRect.width,
+                                             activeRect.height);
+
+            Apply(canvas.texture, local_rect_canvas,
+                  brush.texture,  local_rect_brush,
+                  blend);
         }
     }
 }

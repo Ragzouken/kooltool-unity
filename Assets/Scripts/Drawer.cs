@@ -23,6 +23,10 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] protected PixelCursor PixelCursor;
 	[SerializeField] protected TileCursor TileCursor;
 
+    public Image test_a;
+    public Image test_b;
+    public Image test_c;
+
 	public ITool ActiveTool;
 
 	public void SetSize(int value) { PixelTool.Thickness = value; }
@@ -89,6 +93,25 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
 		
 		StartCoroutine(CycleHue());
+
+        var brush1 = PixelDraw.Brush.Line(new Point(0, 0), new Point(50, 50), Color.blue, 3);
+        brush1.texture.Apply();
+
+        var brush2 = PixelDraw.Brush.Line(new Point(0, 50), new Point(50, 0), Color.green, 3);
+        brush2.texture.Apply();
+
+        test_a.sprite = brush1;
+        test_a.SetNativeSize();
+        
+        test_b.sprite = brush2;
+        test_b.SetNativeSize();
+
+        PixelDraw.Brush.Apply(brush1, new Point(  0, -25),
+                              brush2, new Point(  0,  25),
+                              PixelDraw.Blend.Alpha);
+
+        brush1.texture.Apply();
+        brush2.texture.Apply();
 	}
 
 	public IEnumerator CycleHue()
