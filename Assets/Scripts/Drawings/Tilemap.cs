@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using PixelDraw;
 
-public class Tilemap : MonoBehaviour, IDrawing
+public class Tilemap : MonoDrawing
 {
     protected const int Size = 32;
 
@@ -41,24 +41,10 @@ public class Tilemap : MonoBehaviour, IDrawing
     {
         Tileset = new Tileset();
         Tiled = new TiledDrawing(new Point(Size, Size));
+        Drawing = Tiled; 
     }
 
-    public void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
-    {
-        Tiled.Brush(pixel, image, blend);
-    }
-
-    public void Fill(Point pixel, Color color)
-    {
-        Tiled.Fill(pixel, color);
-    }
-
-    public bool Sample(Point pixel, out Color color)
-    {
-        return Tiled.Sample(pixel, out color);
-    }
-
-    public void Apply()
+    public override void Apply()
     {
         Tileset.Apply();
     }

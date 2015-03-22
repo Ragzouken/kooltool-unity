@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using PixelDraw;
 
-public class InfiniteDrawing : MonoBehaviour, IDrawing
+public class InfiniteDrawing : MonoDrawing
 {
     [SerializeField] protected Image ImageBlockPrefab;
 
@@ -16,6 +16,7 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
     protected void Awake()
     {
         Tiled = new TiledDrawing(new Point(Size, Size), NewCell);
+        Drawing = Tiled;
     }
 
     protected bool NewCell(Point cell, out IDrawing drawing)
@@ -44,25 +45,5 @@ public class InfiniteDrawing : MonoBehaviour, IDrawing
                                                     cell.y * Size);
         
         return true;
-    }
-
-    public void Brush(Point pixel, Sprite image, Blend.BlendFunction blend)
-    {
-        Tiled.Brush(pixel, image, blend);
-    }
-
-    public void Fill(Point pixel, Color color)
-    {
-        Tiled.Fill(pixel, color);
-    }
-
-    public bool Sample(Point pixel, out Color color)
-    {
-        return Tiled.Sample(pixel, out color);
-    }
-
-    public void Apply()
-    {
-        Tiled.Apply();
     }
 }
