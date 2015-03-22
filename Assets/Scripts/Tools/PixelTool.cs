@@ -67,15 +67,10 @@ public class PixelTool : ITool
         if (Tool == ToolMode.Pencil
          || Tool == ToolMode.Eraser)
         {
-            var tl = new Vector2(Mathf.Min(start.x, end.x),
-                                 Mathf.Min(start.y, end.y));
-            
-            var sprite = Brush.Line(new Point(start - tl), 
-                                    new Point(end - tl), 
-                                    Color.a > 0 ? Color : Color.white, 
-                                    Thickness);          
+            Color color = Color.a > 0 ? Color : Color.white;
+            Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
 
-            Target.Brush(new Point(start), sprite, Color.a == 0 ? Blend.Subtract : Blend.Alpha);
+            Target.DrawLine(start, end, Thickness, color, blend);
             Target.Apply();
         }
     }
