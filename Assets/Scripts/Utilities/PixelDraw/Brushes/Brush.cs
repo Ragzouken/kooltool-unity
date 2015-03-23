@@ -87,13 +87,13 @@ namespace PixelDraw
 
             var activeRect = Intersect(world_rect_brush, world_rect_canvas);
 
-            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x,
-                                            activeRect.y - world_rect_brush.y,
+            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x + brush.textureRectOffset.x,
+                                            activeRect.y - world_rect_brush.y + brush.textureRectOffset.y,
                                             activeRect.width,
                                             activeRect.height);
 
-            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x,
-                                             activeRect.y - world_rect_canvas.y,
+            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x + brush.textureRectOffset.x,
+                                             activeRect.y - world_rect_canvas.y + brush.textureRectOffset.y,
                                              activeRect.width,
                                              activeRect.height);
 

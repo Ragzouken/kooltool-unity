@@ -65,16 +65,16 @@ namespace PixelDraw
                     var rect = new Rect(sx, sy, sw, sh);
                     
                     var slice = Sprite.Create(image.texture, rect, Vector2.zero);
-
+                    
                     Point cell = new Point(grid.x + x, grid.y + y);
-
+                    
                     if (Cells.GetDefault(cell, out drawing, NewCell))
                     {
                         drawing.Brush(new Point(x == 0 ? offset.x : 0, 
                                                 y == 0 ? offset.y : 0), 
                                       slice,
                                       blend);
-
+                        
                         Changed.Set(cell, true);
                     }
                     
