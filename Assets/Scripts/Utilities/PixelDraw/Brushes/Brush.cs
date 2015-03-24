@@ -58,7 +58,8 @@ namespace PixelDraw
                                          new Rect(0, 0, diameter, diameter),
                                          Vector2.one * 0.5f);
 
-            int radius = diameter / 2;
+            int radius = (diameter - 1) / 2;
+            int offset = (diameter % 2 == 0) ? 1 : 0;
 
             int x0 = radius;
             int y0 = radius;
@@ -69,22 +70,25 @@ namespace PixelDraw
             
             while(x >= y)
             {
-                for (int i = -x + x0; i <= x + x0; ++i)
+                int yoff = (y > 0 ? 1 : 0) * offset;
+                int xoff = (x > 0 ? 1 : 0) * offset;
+
+                for (int i = -x + x0; i <= x + x0 + offset; ++i)
                 {
-                    image.SetPixel(i,  y + y0, color);
+                    image.SetPixel(i,  y + y0 + yoff, color);
                 }
 
-                for (int i = -x + x0; i <= x + x0; ++i)
+                for (int i = -x + x0; i <= x + x0 + offset; ++i)
                 {
                     image.SetPixel(i, -y + y0, color);
                 }
 
-                for (int i = -y + y0; i <= y + y0; ++i)
+                for (int i = -y + y0; i <= y + y0 + offset; ++i)
                 {
-                    image.SetPixel(i,  x + y0, color);
+                    image.SetPixel(i,  x + y0 + xoff, color);
                 }
 
-                for (int i = -y + y0; i <= y + y0; ++i)
+                for (int i = -y + y0; i <= y + y0 + offset; ++i)
                 {
                     image.SetPixel(i, -x + y0, color);
                 }
@@ -99,6 +103,11 @@ namespace PixelDraw
                     x--;
                     radiusError += 2 * (y - x) + 1;
                 }
+            }
+
+            for (int i = 0; i < diameter; ++i)
+            {
+                image.SetPixel(i, y0 + 1, color);
             }
 
             return brush;
