@@ -87,13 +87,20 @@ namespace PixelDraw
 
             var activeRect = Intersect(world_rect_brush, world_rect_canvas);
 
-            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x + brush.textureRectOffset.x,
-                                            activeRect.y - world_rect_brush.y + brush.textureRectOffset.y,
+            if (activeRect.width < 1 || activeRect.height < 1)
+            {
+                Debug.Log(string.Format("No overlap between {0} and {1}.", world_rect_canvas, world_rect_brush));
+
+                return;
+            }
+
+            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x + brush.textureRect.x,
+                                            activeRect.y - world_rect_brush.y + brush.textureRect.y,
                                             activeRect.width,
                                             activeRect.height);
 
-            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x + brush.textureRectOffset.x,
-                                             activeRect.y - world_rect_canvas.y + brush.textureRectOffset.y,
+            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x + canvas.textureRect.x,
+                                             activeRect.y - world_rect_canvas.y + canvas.textureRect.y,
                                              activeRect.width,
                                              activeRect.height);
 

@@ -183,6 +183,11 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        data.pressEventCamera,
 		                                                        out start);
 
+
+        var go = data.pointerCurrentRaycast.gameObject;
+
+        Debug.Log("clicked " + go.name, go);
+
         if (data.button == PointerEventData.InputButton.Left)
         {
     		ActiveTool.BeginStroke(start);

@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using PixelDraw;
+
 public class MapGenerator : MonoBehaviour
 {
     private class Turtle
@@ -146,6 +148,36 @@ public class MapGenerator : MonoBehaviour
             }
 
             done++;
+        }
+
+        StartCoroutine(DrawTiles());
+    }
+
+    public IEnumerator DrawTiles()
+    {
+        Tileset.Tile tile = Tilemap.Tileset.Tiles[0];
+        IDrawing drawing = tile.Drawing();
+        drawing = Tilemap.Drawing;
+
+        Vector2 prev = new Vector2(256, 256);
+        Vector2 point = new Vector2(256, 256);
+
+        for (int i = 0; i < 20; ++i)
+        {
+            float angle = Random.value * Mathf.PI;
+            float radius = Random.Range(8, 32);
+
+            point = point + new Vector2(Mathf.Cos(angle) * radius, 
+                                        Mathf.Sin(angle) * radius);
+
+            var color = new Color(Random.value, Random.value, Random.value);
+
+            drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
+            drawing.Apply();
+
+            prev = point;
+
+            yield return new WaitForSeconds(0.10f);
         }
     }
 }

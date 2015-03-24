@@ -59,7 +59,7 @@ public class Tileset
 
         var sprite = Sprite.Create(Texture, 
                                    new Rect(index * 32, 0, 32, 32),
-                                   Vector2.one * 0.5f, 100f);
+                                   Vector2.zero, 100f);
 
         var drawing = new SpriteDrawing(sprite);
         drawing.Fill(new Point(0, 0), color); // TODO: make efficient, don't use fill

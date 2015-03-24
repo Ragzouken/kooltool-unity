@@ -25,7 +25,7 @@ public class InfiniteDrawing : MonoDrawing
         
         Sprite sprite = Sprite.Create(texture, 
                                       Rect.MinMaxRect(0, 0, Size, Size), 
-                                      Vector2.one * 0.5f, 100f);
+                                      Vector2.zero, 100f);
         sprite.name = string.Format("InfiniteDrawing({0}, {1})",
                                     cell.x,
                                     cell.y);

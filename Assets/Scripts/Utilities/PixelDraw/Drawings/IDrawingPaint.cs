@@ -16,12 +16,12 @@ namespace PixelDraw
         {
             var tl = new Vector2(Mathf.Min(start.x, end.x),
                                  Mathf.Min(start.y, end.y));
-            
+
             var brush = Brush.Line(new Point(start - tl), 
                                    new Point(end - tl), 
                                    color, 
                                    thickness);          
-            
+
             drawing.Brush(new Point(start), brush, blend);
         }
     }

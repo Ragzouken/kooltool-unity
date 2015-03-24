@@ -36,52 +36,24 @@ namespace PixelDraw
             
             var gw = Mathf.CeilToInt((image.rect.width  + offset.x) / Cells.CellWidth);
             var gh = Mathf.CeilToInt((image.rect.height + offset.y) / Cells.CellHeight);
-            
-            int bw = (int) image.rect.width;
-            int bh = (int) image.rect.height;
-            
-            int ch = 0;
-            
+
             for (int y = 0; y < gh; ++y)
             {
-                int sy = y == 0 ? 0 : Cells.CellHeight - offset.y;
-                int sh = Cells.CellHeight;
-                
-                if (y == 0) sh = Mathf.Min(sh, Cells.CellHeight - offset.y);
-                if (y == gh - 1) sh = Mathf.Min(sh, bh - ch);
-                
-                int cw = 0;
-                
                 for (int x = 0; x < gw; ++x)
                 {
                     IDrawing drawing;
-                    
-                    int sx = x == 0 ? 0 : Cells.CellWidth - offset.x;
-                    int sw = Cells.CellWidth;
-                    
-                    if (x == 0) sw = Mathf.Min(sw, Cells.CellWidth - offset.x);
-                    if (x == gw - 1) sw = Mathf.Min(sw, bw - cw);
-                    
-                    var rect = new Rect(sx, sy, sw, sh);
-                    
-                    var slice = Sprite.Create(image.texture, rect, Vector2.zero);
-                    
+
                     Point cell = new Point(grid.x + x, grid.y + y);
                     
                     if (Cells.GetDefault(cell, out drawing, NewCell))
                     {
-                        drawing.Brush(new Point(x == 0 ? offset.x : 0, 
-                                                y == 0 ? offset.y : 0), 
-                                      slice,
-                                      blend);
-                        
+                        var point = new Point(x * Cells.CellWidth, y * Cells.CellHeight);
+
+                        drawing.Brush(offset - point + image.pivot, image, blend);
+
                         Changed.Set(cell, true);
                     }
-                    
-                    cw += sw;
                 }
-                
-                ch += sh;
             }
         }
 
