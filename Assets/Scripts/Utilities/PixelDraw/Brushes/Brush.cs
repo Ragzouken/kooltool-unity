@@ -18,7 +18,6 @@ namespace PixelDraw
 
             Texture2D image = BlankTexture.New(size.x, size.y, Color.clear);
             Sprite brush = Sprite.Create(image, rect, anchor);
-            Sprite square = Rectangle(thickness, thickness, color, left, left);
             Sprite circle = Circle(thickness, color);
 
             Bresenham.PlotFunction plot = delegate (int x, int y)
@@ -52,11 +51,14 @@ namespace PixelDraw
 
         public static Sprite Circle(int diameter, Color color)
         {
+            int left = Mathf.FloorToInt(diameter / 2f);
+            float piv = left / (float) diameter;
+
             Texture2D image = BlankTexture.New(diameter, diameter, Color.clear);
 
             Sprite brush = Sprite.Create(image, 
                                          new Rect(0, 0, diameter, diameter),
-                                         Vector2.one * 0.5f);
+                                         Vector2.one * piv);
 
             int radius = (diameter - 1) / 2;
             int offset = (diameter % 2 == 0) ? 1 : 0;
