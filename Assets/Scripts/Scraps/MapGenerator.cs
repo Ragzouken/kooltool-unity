@@ -172,7 +172,19 @@ public class MapGenerator : MonoBehaviour
 
             var color = new Color(Random.value, Random.value, Random.value);
 
-            drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
+            //if (Random.value > 0.3)
+            {
+                //drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
+            }
+            //else if (Random.value > 0.5)
+            {
+                //drawing.DrawRect(point, Vector2.one * Random.Range(4, 16), color, Blend.Alpha);
+            }
+            //else
+            {
+                drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
+            }
+
             drawing.Apply();
 
             prev = point;

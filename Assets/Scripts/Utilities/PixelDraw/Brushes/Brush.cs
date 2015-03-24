@@ -10,37 +10,98 @@ namespace PixelDraw
                                   int thickness)
         {
             int left = Mathf.FloorToInt(thickness / 2f);
-            int right = thickness - 1 - left;
-            
+
             Point size = (end - start).Size + new Point(thickness, thickness);
-            
-            Texture2D brush = BlankTexture.New(size.x, size.y, 
-                                               new Color32(0, 0, 0, 0));
+            var pivot  = start.Vector2() + Vector2.one * left;
+            var anchor = new Vector2(pivot.x / size.x, pivot.y / size.y);
+            var rect   = new Rect(0, 0, size.x, size.y);
 
-            var pivot = start.Vector2() + Vector2.one * left;
-
-            Sprite sprite = Sprite.Create(brush, 
-                                          new Rect(0, 0, brush.width, brush.height), 
-                                          new Vector2(pivot.x / brush.width, pivot.y / brush.height));
+            Texture2D image = BlankTexture.New(size.x, size.y, Color.clear);
+            Sprite brush = Sprite.Create(image, rect, anchor);
+            Sprite square = Rectangle(thickness, thickness, color, left, left);
+            Sprite circle = Circle(thickness, color);
 
             Bresenham.PlotFunction plot = delegate (int x, int y)
             {
-                for (int cy = -left; cy <= right; ++cy)
-                {
-                    for (int cx = -left; cx <= right; ++cx)
-                    {
-                        brush.SetPixel(x + cx, y + cy, color);
-                    }
-                }
+                Apply(circle, new Point(x, y),
+                      brush,  new Point(pivot),
+                      Blend.Alpha);
                 
                 return true;
             };
-            
+
             Bresenham.Line(start.x + left, start.y + left, 
                            end.x   + left, end.y   + left, 
                            plot);
             
-            return sprite;
+            return brush;
+        }
+
+        public static Sprite Rectangle(int width, int height,
+                                       Color color,
+                                       float px = 0, float py = 0)
+        {
+            Texture2D image = BlankTexture.New(width, height, color);
+
+            Sprite brush = Sprite.Create(image, 
+                                          new Rect(0, 0, width, height),
+                                          new Vector2(px / width, py / height));
+
+            return brush;
+        }
+
+        public static Sprite Circle(int diameter, Color color)
+        {
+            Texture2D image = BlankTexture.New(diameter, diameter, Color.clear);
+
+            Sprite brush = Sprite.Create(image, 
+                                         new Rect(0, 0, diameter, diameter),
+                                         Vector2.one * 0.5f);
+
+            int radius = diameter / 2;
+
+            int x0 = radius;
+            int y0 = radius;
+
+            int x = radius;
+            int y = 0;
+            int radiusError = 1-x;
+            
+            while(x >= y)
+            {
+                for (int i = -x + x0; i <= x + x0; ++i)
+                {
+                    image.SetPixel(i,  y + y0, color);
+                }
+
+                for (int i = -x + x0; i <= x + x0; ++i)
+                {
+                    image.SetPixel(i, -y + y0, color);
+                }
+
+                for (int i = -y + y0; i <= y + y0; ++i)
+                {
+                    image.SetPixel(i,  x + y0, color);
+                }
+
+                for (int i = -y + y0; i <= y + y0; ++i)
+                {
+                    image.SetPixel(i, -x + y0, color);
+                }
+
+                y++;
+                if (radiusError<0)
+                {
+                    radiusError += 2 * y + 1;
+                }
+                else
+                {
+                    x--;
+                    radiusError += 2 * (y - x) + 1;
+                }
+            }
+
+            return brush;
         }
 
         public static Rect Intersect(Rect a, Rect b)

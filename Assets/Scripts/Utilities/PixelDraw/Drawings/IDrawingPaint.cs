@@ -24,5 +24,27 @@ namespace PixelDraw
 
             drawing.Brush(new Point(start), brush, blend);
         }
+
+        public static void DrawRect(this IDrawing drawing,
+                                    Vector2 start, 
+                                    Vector2 size,
+                                    Color color,
+                                    Blend.BlendFunction blend)
+        {
+            var brush = Brush.Rectangle((int) size.x, (int) size.y, color);          
+            
+            drawing.Brush(new Point(start), brush, blend);
+        }
+
+        public static void DrawCircle(this IDrawing drawing,
+                                      Vector2 center,
+                                      int radius,
+                                      Color color,
+                                      Blend.BlendFunction blend)
+        {
+            var brush = Brush.Circle(radius, color);
+
+            drawing.Brush(new Point(center), brush, blend);
+        }
     }
 }
