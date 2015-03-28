@@ -120,32 +120,20 @@ namespace PixelDraw
         {
             public Point yMin;
             public Point yMax;
-
-            public float inc;
             public float scanX;
+
+            protected float inc;
 
             public Edge(Point a, Point b)
             {
                 Edge edge;
-                
-                if (a.y < b.y)
-                {
-                    yMin = a;
-                    yMax = b;
-                }
-                else
-                {
-                    yMin = b;
-                    yMax = a;
-                }
+
+                yMin = a.y < b.y ? a : b;
+                yMax = a.y < b.y ? b : a;
 
                 if (a.x == b.x) 
                 {
                     inc = 0;
-                }
-                else if (a.y == b.y)
-                {
-                    inc = float.NaN;
                 }
                 else
                 {
@@ -166,10 +154,8 @@ namespace PixelDraw
                 {
                     return a.yMin.x - b.yMin.x;
                 }
-                else
-                {
-                    return a.yMin.y - b.yMin.y;
-                }
+
+                return a.yMin.y - b.yMin.y;
             }
 
             public override string ToString()
@@ -199,9 +185,10 @@ namespace PixelDraw
                 bottom = Mathf.Min(bottom, points[i].y);
                 top    = Mathf.Max(top,    points[i].y);
 
-                var edge = new Edge(points[prev], points[i]);
-
-                if (!float.IsNaN(edge.inc)) edges.Add(edge);
+                if (points[prev].y != points[i].y)
+                {
+                    edges.Add(new Edge(points[prev], points[i]));
+                }
             }
 
             var image = BlankTexture.New(right - left + 1, top - bottom + 1, Color.clear);
@@ -221,7 +208,6 @@ namespace PixelDraw
                     }
                 }
 
-                // add active edges
                 foreach (Edge edge in edges)
                 {
                     if (edge.yMin.y == y)
@@ -232,7 +218,7 @@ namespace PixelDraw
 
                 active.Sort(Edge.Compare);
 
-                // line
+                // scanline
                 for (int i = 0; i < active.Count; i += 2)
                 {
                     Edge start = active[i];
