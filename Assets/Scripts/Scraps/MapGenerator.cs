@@ -162,6 +162,21 @@ public class MapGenerator : MonoBehaviour
         Vector2 prev = new Vector2(256, 256);
         Vector2 point = new Vector2(256, 256);
 
+        var points2 = new Point[]
+        {
+            new Point(-16, -16) + point,
+            new Point( 16, -16) + point,
+            new Point( 16,  16) + point,
+            new Point(  0,   0) + point,
+            new Point(-16,  16) + point,
+        };
+        
+        drawing.DrawPolygon(point, points2, Color.red, Blend.Alpha);
+        
+        drawing.Apply();
+
+        if (true) return true;
+
         for (int i = 0; i < 20; ++i)
         {
             float angle = Random.value * Mathf.PI;
@@ -172,17 +187,19 @@ public class MapGenerator : MonoBehaviour
 
             var color = new Color(Random.value, Random.value, Random.value);
 
-            drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
-            drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
+            //drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
+            //drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
 
             var points = new Point[]
             {
-                new Point(-8, -8),
-                new Point( 8, -8),
-                new Point( 0,  8),
+                new Point(-16, -16),
+                new Point( 16, -16),
+                new Point( 16,  16),
+                new Point(  0,   0),
+                new Point(-16,  16),
             };
 
-            //drawing.DrawPolygon(point, points, color, Blend.Alpha);
+            drawing.DrawPolygon(point, points, color, Blend.Alpha);
 
             drawing.Apply();
 

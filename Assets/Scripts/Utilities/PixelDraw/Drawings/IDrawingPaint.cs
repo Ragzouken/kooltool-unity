@@ -55,7 +55,7 @@ namespace PixelDraw
         {
             var brush = Brush.Polygon(points, color);
 
-            drawing.Brush(new Point(offset), brush, blend);
+            drawing.Brush(new Point(-brush.pivot), brush, blend);
         }
     }
 }
