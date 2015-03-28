@@ -175,6 +175,15 @@ public class MapGenerator : MonoBehaviour
             drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
             drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
 
+            var points = new Point[]
+            {
+                new Point(-8, -8),
+                new Point( 8, -8),
+                new Point( 0,  8),
+            };
+
+            //drawing.DrawPolygon(point, points, color, Blend.Alpha);
+
             drawing.Apply();
 
             prev = point;

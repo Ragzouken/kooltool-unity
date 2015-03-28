@@ -46,5 +46,16 @@ namespace PixelDraw
 
             drawing.Brush(new Point(center), brush, blend);
         }
+
+        public static void DrawPolygon(this IDrawing drawing,
+                                       Vector2 offset,
+                                       IList<Point> points,
+                                       Color color,
+                                       Blend.BlendFunction blend)
+        {
+            var brush = Brush.Polygon(points, color);
+
+            drawing.Brush(new Point(offset), brush, blend);
+        }
     }
 }

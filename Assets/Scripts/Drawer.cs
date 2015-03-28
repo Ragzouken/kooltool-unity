@@ -19,6 +19,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     [SerializeField] protected RectTransform World;
 
+    [SerializeField] protected Image test;
+
     [Header("Cursors")]
     [SerializeField] protected PixelCursor PixelCursor;
 	[SerializeField] protected TileCursor TileCursor;
@@ -88,6 +90,20 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
 		
+        var points = new Point[]
+        {
+            new Point(-16, -16),
+            new Point( 16, -16),
+            new Point(  8,  8),
+            new Point( -8,  4),
+        };
+
+        var polygon = PixelDraw.Brush.Polygon(points, Color.cyan);
+
+        polygon.texture.Apply();
+        test.sprite = polygon;
+        test.SetNativeSize();
+
 		StartCoroutine(CycleHue());
 	}
 

@@ -13,21 +13,6 @@ namespace PixelDraw
 
         public void Brush(Point offset, Sprite image, Blend.BlendFunction blend)
         {
-            //offset = offset - new Point(image.pivot);
-
-            //offset = offset.Offset(Sprite.textureRect.position);
-
-            //Assert.True(Sprite.textureRect.Contains(offset.Vector2()), "Offset out of bounds!");
-            //Assert.True(Sprite.textureRect.Contains(offset.Vector2() + image.rect.size - Vector2.one), "Image out of bounds!");
-
-            Rect destRect = new Rect(offset.x, offset.y, image.rect.width, image.rect.height);
-
-            /*
-            PixelDraw.Brush.Apply(Sprite.texture, destRect,
-                                  image.texture, image.textureRect,
-                                  blend);
-            */
-
             PixelDraw.Brush.Apply(image,  offset,
                                   Sprite, new Point(0, 0),
                                   blend);

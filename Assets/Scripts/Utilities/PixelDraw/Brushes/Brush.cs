@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace PixelDraw
 {
@@ -110,6 +111,166 @@ namespace PixelDraw
             for (int i = 0; i < diameter; ++i)
             {
                 image.SetPixel(i, y0 + 1, color);
+            }
+
+            return brush;
+        }
+
+        private class Edge
+        {
+            public Point yMin;
+            public Point yMax;
+
+            public float inc;
+            public float scanX;
+
+            public Edge(Point a, Point b)
+            {
+                Edge edge;
+                
+                if (a.y < b.y)
+                {
+                    yMin = a;
+                    yMax = b;
+                }
+                else
+                {
+                    yMin = b;
+                    yMax = a;
+                }
+
+                if (a.x == b.x) 
+                {
+                    inc = 0;
+                }
+                else if (a.y == b.y)
+                {
+                    inc = float.NaN;
+                }
+                else
+                {
+                    inc = ((float) a.x - b.x) / ((float) a.y - b.y);
+                }
+
+                scanX = yMin.x;
+            }
+
+            public void Advance()
+            {
+                scanX += inc;
+            }
+
+            public static int Compare(Edge a, Edge b)
+            {
+                if (a.yMin.y == b.yMin.y)
+                {
+                    return a.yMin.x - b.yMin.x;
+                }
+                else
+                {
+                    return a.yMin.y - b.yMin.y;
+                }
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{0}, {1} -> {2}, {3}", yMin.x, yMin.y, yMax.x, yMax.y);
+            }
+        }
+
+        public static Sprite Polygon(IList<Point> points, Color color)
+        {
+            int left   = points[0].x;
+            int right  = points[0].x;
+            int top    = points[0].y;
+            int bottom = points[0].y;
+
+            var edges = new List<Edge>();
+            var active = new List<Edge>();
+
+            // build edge table
+            for (int i = 0; i < points.Count; ++i)
+            {
+                int prev = i == 0 ? points.Count - 1 : i - 1;
+
+                left  = Mathf.Min(left,  points[i].x);
+                right = Mathf.Max(right, points[i].x);
+
+                bottom = Mathf.Min(bottom, points[i].y);
+                top    = Mathf.Max(top,    points[i].y);
+
+                var edge = new Edge(points[prev], points[i]);
+
+                if (!float.IsNaN(edge.inc)) edges.Add(edge);
+            }
+
+            var image = BlankTexture.New(right - left + 1, top - bottom + 1, Color.clear);
+            var brush = Sprite.Create(image,
+                                      new Rect(0, 0, image.width, image.height),
+                                      Vector2.zero);//new Vector2(-left, -bottom));
+
+            /*
+            Bresenham.PlotFunction plot = delegate (int x, int y)
+            {
+                image.SetPixel(x, y, color);
+                
+                return true;
+            };
+
+            foreach (Edge edge in edges)
+            {
+                int x = edge.yMin.x -left;
+                int y = edge.yMin.y -bottom;
+
+                Bresenham.Line(edge.yMin.x - left, edge.yMin.y - bottom,
+                               edge.yMax.x - left, edge.yMax.y - bottom, plot);
+            }
+
+            image.FloodFillAreaNPO2(8, 8, color, brush.textureRect);
+            */
+
+            for (int y = bottom; y < top; ++y)
+            {
+                // remove inactive edges
+                foreach (Edge edge in new List<Edge>(active))
+                {
+                    if (edge.yMin.y >  y
+                     || edge.yMax.y <= y)
+                    {
+                        active.Remove(edge);
+                    }
+                }
+
+                // add active edges
+                foreach (Edge edge in edges)
+                {
+                    if (edge.yMin.y == y)
+                    {
+                        active.Add(edge);
+                    }
+                }
+
+                active.Sort(Edge.Compare);
+
+                // line
+                for (int i = 0; i < active.Count; i += 2)
+                {
+                    Edge start = active[i];
+                    Edge end   = active[i+1];
+
+                    int l = (int) start.scanX;
+                    int r = (int)   end.scanX;
+
+                    for (int x = l; x < r; ++x)
+                    {
+                        image.SetPixel(x - left, y - bottom, color);
+                    }
+                }
+
+                foreach (Edge edge in active)
+                {
+                    edge.Advance();
+                }
             }
 
             return brush;
