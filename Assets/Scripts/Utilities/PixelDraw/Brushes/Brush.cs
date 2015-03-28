@@ -223,15 +223,11 @@ namespace PixelDraw
                     }
                 }
 
-                //foreach (Edge edge in active) Debug.Log(edge);
-
                 // scanline
                 for (int i = 0; i < active.Count; i += 2)
                 {
                     int l = (int) active[i  ].scanX;
                     int r = (int) active[i+1].scanX;
-
-                    //Debug.Log(l + "->" + r);
 
                     for (int x = l; x < r; ++x)
                     {
