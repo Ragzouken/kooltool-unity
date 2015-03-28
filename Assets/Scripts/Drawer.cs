@@ -94,8 +94,9 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             new Point(-16, -16),
             new Point( 16, -16),
-            new Point(  8,  8),
-            new Point( -8,  4),
+            new Point( 16,  16),
+            new Point(  0,   0),
+            new Point(-16,  16),
         };
 
         var polygon = PixelDraw.Brush.Polygon(points, Color.cyan);

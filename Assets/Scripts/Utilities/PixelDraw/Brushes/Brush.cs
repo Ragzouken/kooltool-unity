@@ -158,6 +158,11 @@ namespace PixelDraw
                 return a.yMin.y - b.yMin.y;
             }
 
+            public static int CompareScan(Edge a, Edge b)
+            {
+                return (int) (a.scanX - b.scanX);
+            }
+
             public override string ToString()
             {
                 return string.Format("{0}, {1} -> {2}, {3}", yMin.x, yMin.y, yMax.x, yMax.y);
@@ -191,10 +196,12 @@ namespace PixelDraw
                 }
             }
 
-            var image = BlankTexture.New(right - left + 1, top - bottom + 1, Color.clear);
+            var image = BlankTexture.New(right - left, top - bottom, Color.clear);
             var brush = Sprite.Create(image,
                                       new Rect(0, 0, image.width, image.height),
                                       Vector2.zero);//new Vector2(-left, -bottom));
+
+            edges.Sort(Edge.Compare);
 
             for (int y = bottom; y < top; ++y)
             {
@@ -216,16 +223,15 @@ namespace PixelDraw
                     }
                 }
 
-                active.Sort(Edge.Compare);
+                //foreach (Edge edge in active) Debug.Log(edge);
 
                 // scanline
                 for (int i = 0; i < active.Count; i += 2)
                 {
-                    Edge start = active[i];
-                    Edge end   = active[i+1];
+                    int l = (int) active[i  ].scanX;
+                    int r = (int) active[i+1].scanX;
 
-                    int l = (int) start.scanX;
-                    int r = (int)   end.scanX;
+                    //Debug.Log(l + "->" + r);
 
                     for (int x = l; x < r; ++x)
                     {
@@ -237,6 +243,8 @@ namespace PixelDraw
                 {
                     edge.Advance();
                 }
+
+                active.Sort(Edge.CompareScan);
             }
 
             return brush;
