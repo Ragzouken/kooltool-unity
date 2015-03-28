@@ -71,6 +71,7 @@ public class PixelTool : ITool
             Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
 
             Target.DrawLine(start, end, Thickness, color, blend);
+
             Target.Apply();
         }
     }

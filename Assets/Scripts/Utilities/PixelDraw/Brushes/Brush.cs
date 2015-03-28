@@ -199,8 +199,8 @@ namespace PixelDraw
             var image = BlankTexture.New(right - left, top - bottom, Color.clear);
             var brush = Sprite.Create(image,
                                       new Rect(0, 0, image.width, image.height),
-                                      new Vector2(-left   / (float) image.width, 
-                                                  -bottom / (float) image.height));
+                                      new Vector2(-left   / (float) image.width / 2f, 
+                                                  -bottom / (float) image.height/ 2f));
 
             edges.Sort(Edge.Compare);
 
