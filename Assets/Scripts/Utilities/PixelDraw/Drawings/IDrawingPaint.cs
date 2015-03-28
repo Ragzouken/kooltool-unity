@@ -48,7 +48,6 @@ namespace PixelDraw
         }
 
         public static void DrawPolygon(this IDrawing drawing,
-                                       Vector2 offset,
                                        IList<Point> points,
                                        Color color,
                                        Blend.BlendFunction blend)
