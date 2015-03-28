@@ -209,26 +209,6 @@ namespace PixelDraw
                                       new Rect(0, 0, image.width, image.height),
                                       Vector2.zero);//new Vector2(-left, -bottom));
 
-            /*
-            Bresenham.PlotFunction plot = delegate (int x, int y)
-            {
-                image.SetPixel(x, y, color);
-                
-                return true;
-            };
-
-            foreach (Edge edge in edges)
-            {
-                int x = edge.yMin.x -left;
-                int y = edge.yMin.y -bottom;
-
-                Bresenham.Line(edge.yMin.x - left, edge.yMin.y - bottom,
-                               edge.yMax.x - left, edge.yMax.y - bottom, plot);
-            }
-
-            image.FloodFillAreaNPO2(8, 8, color, brush.textureRect);
-            */
-
             for (int y = bottom; y < top; ++y)
             {
                 // remove inactive edges
