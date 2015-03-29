@@ -17,6 +17,8 @@ public class PixelCursor : MonoBehaviour
     {
         var rtrans = transform as RectTransform;
 
+        Line.enabled = Tool.dragging && Tool.Tool == PixelTool.ToolMode.Line;
+
         if (Tool.Tool == PixelTool.ToolMode.Line && Tool.dragging)
         {
             var ltrans = Line.transform as RectTransform;
@@ -42,6 +44,13 @@ public class PixelCursor : MonoBehaviour
 
             ltrans.pivot = pivot;
             ltrans.anchoredPosition = start;
+        }
+        else
+        {
+            var preview = Brush.Circle(Tool.Thickness, Tool.Color);
+            preview.texture.Apply();
+
+            Preview.sprite = preview;
         }
 
         Preview.color = Tool.Color;
