@@ -29,6 +29,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void SetPencil() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Pencil; }
     public void SetEraser() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Eraser; PixelTool.Color = new Color(0, 0, 0, 0); }
     public void SetFiller() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Fill;   }
+    public void SetLine()   { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Line;   }
 
     public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; TileTool.Tool = TileTool.ToolMode.Pencil; }
     public void NewTile() { Tilemap.Tileset.AddTile(); }

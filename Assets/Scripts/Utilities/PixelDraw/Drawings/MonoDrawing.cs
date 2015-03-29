@@ -18,7 +18,7 @@ namespace PixelDraw
         {
             Drawing.Fill(pixel, color);
         }
-        
+
         public virtual bool Sample(Point pixel, out Color color)
         {
             return Drawing.Sample(pixel, out color);

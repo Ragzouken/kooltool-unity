@@ -24,7 +24,7 @@ namespace PixelDraw
                                              color, 
                                              Sprite.textureRect);
         }
-        
+
         public bool Sample(Point pixel, out Color color)
         {
             pixel = pixel.Offset(Sprite.textureRect.position);

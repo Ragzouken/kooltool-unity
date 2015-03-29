@@ -13,6 +13,7 @@ public class PixelTool : ITool
         Fill,
         Eraser,
         Picker,
+        Line,
     }
 
     public ToolMode Tool;
@@ -25,6 +26,9 @@ public class PixelTool : ITool
 
     public IDrawing Target;
     public MonoBehaviour CoroutineTarget;
+
+    public bool dragging;
+    public Vector2 start;
 
     public PixelTool(Tilemap tilemap, InfiniteDrawing drawing)
     {
@@ -60,6 +64,12 @@ public class PixelTool : ITool
                 Color = sampled;
             }
         }
+        else if (Tool == ToolMode.Line)
+        {
+            this.start = start;
+        }
+
+        dragging = true;
     }
 
     public void ContinueStroke(Vector2 start, Vector2 end)
@@ -78,5 +88,16 @@ public class PixelTool : ITool
 
     public void EndStroke(Vector2 end)
     {
+        if (Tool == ToolMode.Line)
+        {
+            Color color = Color.a > 0 ? Color : Color.white;
+            Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
+            
+            Target.DrawLine(this.start, end, Thickness, color, blend);
+            
+            Target.Apply();
+        }
+
+        dragging = false;
     }
 }

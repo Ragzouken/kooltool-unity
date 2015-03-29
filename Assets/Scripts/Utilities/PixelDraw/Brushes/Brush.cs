@@ -18,7 +18,7 @@ namespace PixelDraw
             var rect   = new Rect(0, 0, size.x, size.y);
 
             Texture2D image = BlankTexture.New(size.x, size.y, Color.clear);
-            Sprite brush = Sprite.Create(image, rect, anchor);
+            Sprite brush = Sprite.Create(image, rect, anchor, 1);
             Sprite circle = Circle(thickness, color);
 
             Bresenham.PlotFunction plot = delegate (int x, int y)
