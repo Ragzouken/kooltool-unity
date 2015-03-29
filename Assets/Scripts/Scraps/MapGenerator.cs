@@ -167,8 +167,10 @@ public class MapGenerator : MonoBehaviour
             float angle = Random.value * Mathf.PI;
             float radius = Random.Range(8, 32);
 
+            /*
             point = point + new Vector2(Mathf.Cos(angle) * radius, 
                                         Mathf.Sin(angle) * radius);
+            */
 
             var color = new Color(Random.value, Random.value, Random.value);
 
@@ -177,18 +179,31 @@ public class MapGenerator : MonoBehaviour
 
             var points = new Point[]
             {
-                new Point(-16, -16) + point,
-                new Point( 16, -16) + point,
-                new Point( 16,  16) + point,
-                new Point(  0,   0) + point,
-                new Point(-16,  16) + point,
+                new Point(-4, -4),
+                new Point( 4, -4),
+                new Point( 4,  4),
+                new Point(  0,   0),
+                new Point(-4,  4),
             };
 
             //drawing.DrawPolygon(points, color, Blend.Alpha);
 
-            var stencil = Brush.Circle(17, Color.white);
-            var brush = Brush.Polygon(points, color);
+            var stencil = Brush.Polygon(points, Color.white);
 
+            var brush = Brush.Circle(32, Color.white);
+
+            ///*
+            Brush.Texture(brush,   new Point(0, 0),
+                          stencil, new Point(0, 0));
+            //*/
+
+            /*
+            Brush.Apply(stencil, new Point(point) + Vector2.up * 16,
+                        brush,   new Point(point),
+                        Blend.Multiply);
+            */
+
+            /*
             Point offset;
 
             Brush.StencilKeep(brush,   new Point(-brush.pivot),
@@ -196,6 +211,9 @@ public class MapGenerator : MonoBehaviour
                               out brush, out offset);
 
             drawing.Brush(offset, brush, Blend.Alpha);
+            */
+
+            drawing.Brush(new Point(-brush.pivot + point), brush, Blend.Alpha);
 
             drawing.Apply();
 

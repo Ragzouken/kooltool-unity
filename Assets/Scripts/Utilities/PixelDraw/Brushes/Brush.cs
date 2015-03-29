@@ -126,8 +126,6 @@ namespace PixelDraw
 
             public Edge(Point a, Point b)
             {
-                Edge edge;
-
                 yMin = a.y < b.y ? a : b;
                 yMax = a.y < b.y ? b : a;
 
@@ -289,6 +287,8 @@ namespace PixelDraw
                                              canvas.rect.width,
                                              canvas.rect.height);
 
+            //Debug.Log(world_rect_brush + " / " + world_rect_canvas);
+
             var activeRect = Intersect(world_rect_brush, world_rect_canvas);
 
             if (activeRect.width < 1 || activeRect.height < 1)
@@ -335,6 +335,20 @@ namespace PixelDraw
 
             brush = canvas;
             brushPostion = canvasPosition;
+        }
+
+        public static void Texture(Sprite canvas,  Point canvasPosition,
+                                   Sprite texture, Point textureOffset)
+        {
+            for (int y = 0; y < (int) canvas.rect.height; y += (int) texture.rect.height)
+            {
+                for (int x = 0; x < (int) canvas.rect.width; x += (int) texture.rect.width)
+                {
+                    Apply(texture, new Point(x, y),
+                          canvas,  new Point(canvas.pivot),
+                          Blend.Multiply);
+                }
+            }
         }
     }
 }
