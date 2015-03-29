@@ -312,5 +312,29 @@ namespace PixelDraw
                   brush.texture,  local_rect_brush,
                   blend);
         }
+
+        public static void StencilKeep(Sprite canvas,  Point canvasPosition,
+                                       Sprite stencil, Point stencilPosition,
+                                       out Sprite brush, out Point brushPostion)
+        {
+            Apply(canvas,  canvasPosition,
+                  stencil, stencilPosition,
+                  Blend.StencilKeep);
+
+            brush = stencil;
+            brushPostion = stencilPosition;
+        }
+
+        public static void StencilCut(Sprite canvas,  Point canvasPosition,
+                                      Sprite stencil, Point stencilPosition,
+                                      out Sprite brush, out Point brushPostion)
+        {
+            Apply(stencil, stencilPosition,
+                  canvas,  canvasPosition,
+                  Blend.StencilCut);
+
+            brush = canvas;
+            brushPostion = canvasPosition;
+        }
     }
 }

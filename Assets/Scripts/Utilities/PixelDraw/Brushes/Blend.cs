@@ -30,5 +30,15 @@ namespace PixelDraw
         {
             return brush;
         };
+
+        public static Color StencilKeep(Color canvas, Color stencil)
+        {
+            return canvas * stencil.a;
+        }
+
+        public static Color StencilCut(Color canvas, Color stencil)
+        {
+            return canvas * (1f - stencil.a);
+        }
     }
 }

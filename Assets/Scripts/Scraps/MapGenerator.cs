@@ -162,7 +162,7 @@ public class MapGenerator : MonoBehaviour
         Vector2 prev = new Vector2(256, 256);
         Vector2 point = new Vector2(256, 256);
 
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < 1; ++i)
         {
             float angle = Random.value * Mathf.PI;
             float radius = Random.Range(8, 32);
@@ -172,8 +172,8 @@ public class MapGenerator : MonoBehaviour
 
             var color = new Color(Random.value, Random.value, Random.value);
 
-            drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
-            drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
+            //drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
+            //drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
 
             var points = new Point[]
             {
@@ -184,7 +184,18 @@ public class MapGenerator : MonoBehaviour
                 new Point(-16,  16) + point,
             };
 
-            drawing.DrawPolygon(points, color, Blend.Alpha);
+            //drawing.DrawPolygon(points, color, Blend.Alpha);
+
+            var stencil = Brush.Circle(17, Color.white);
+            var brush = Brush.Polygon(points, color);
+
+            Point offset;
+
+            Brush.StencilKeep(brush,   new Point(-brush.pivot),
+                              stencil, new Point(point + Vector2.right * 4),
+                              out brush, out offset);
+
+            drawing.Brush(offset, brush, Blend.Alpha);
 
             drawing.Apply();
 
