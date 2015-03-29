@@ -38,6 +38,9 @@ public class PixelTool : ITool
 
     public void BeginStroke(Vector2 start)
     {
+        start = new Vector2(Mathf.Floor(start.x),
+                            Mathf.Floor(start.y));
+
         var cell = TileTool.Vector2Cell(start);
         Tileset.Tile tile;
 
@@ -67,6 +70,8 @@ public class PixelTool : ITool
         else if (Tool == ToolMode.Line)
         {
             this.start = start;
+
+            Debug.Log(start);
         }
 
         dragging = true;
@@ -94,7 +99,9 @@ public class PixelTool : ITool
             Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
             
             Target.DrawLine(this.start, end, Thickness, color, blend);
-            
+
+            Debug.Log(end);
+
             Target.Apply();
         }
 

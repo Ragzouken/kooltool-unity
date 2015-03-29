@@ -155,6 +155,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         float offset = (PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
 
+        PixelCursor.end = Floor(cursor);
         PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
                                                                                  Mathf.FloorToInt(cursor.y) + offset);
         TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth, 
@@ -180,7 +181,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		Vector2 start;
 		
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-		                                                        data.position,
+                                                                data.position,
 		                                                        data.pressEventCamera,
 		                                                        out start);
 
@@ -191,7 +192,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (data.button == PointerEventData.InputButton.Left)
         {
-    		ActiveTool.BeginStroke(start);
+    		ActiveTool.BeginStroke(Floor(start));
 
     		dragging = true;
         }
@@ -202,6 +203,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             pansite = start;
         }
 	}
+
+    
+    public Vector2 Floor(this Vector2 vector)
+    {
+        return new Vector2(Mathf.Floor(vector.x),
+                           Mathf.Floor(vector.y));
+    }
 
 	public void OnPointerUp(PointerEventData data)
 	{
@@ -215,6 +223,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		dragging = false;
         panning = false;
 
-		ActiveTool.EndStroke(end);
+        PixelCursor.end = Floor(end);
+        PixelCursor.Update();
+		ActiveTool.EndStroke(Floor(end));
 	}
 }
