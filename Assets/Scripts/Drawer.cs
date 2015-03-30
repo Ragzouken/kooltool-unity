@@ -41,9 +41,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     Vector2 pansite;
     float zoom = 2f;
 
-	public Color highlight;
-	protected float hue;
-
     public PixelTool PixelTool;
     public TileTool TileTool;
 
@@ -88,22 +85,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         ActiveTool = PixelTool;
 
 		ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
-
-		StartCoroutine(CycleHue());
-	}
-
-	public IEnumerator CycleHue()
-	{
-		while (true)
-		{
-			hue = (hue + Time.deltaTime) % 1f;
-
-            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
-
-			highlight = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);
-		
-			yield return new WaitForEndOfFrame();
-		}
 	}
 
     public void Randomise() 

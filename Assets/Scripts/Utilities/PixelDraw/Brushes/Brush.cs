@@ -79,20 +79,12 @@ namespace PixelDraw
                 for (int i = -x + x0; i <= x + x0 + offset; ++i)
                 {
                     image.SetPixel(i,  y + y0 + yoff, color);
-                }
-
-                for (int i = -x + x0; i <= x + x0 + offset; ++i)
-                {
                     image.SetPixel(i, -y + y0, color);
                 }
 
                 for (int i = -y + y0; i <= y + y0 + offset; ++i)
                 {
                     image.SetPixel(i,  x + y0 + xoff, color);
-                }
-
-                for (int i = -y + y0; i <= y + y0 + offset; ++i)
-                {
                     image.SetPixel(i, -x + y0, color);
                 }
 
@@ -108,9 +100,12 @@ namespace PixelDraw
                 }
             }
 
-            for (int i = 0; i < diameter; ++i)
+            if (offset > 0)
             {
-                image.SetPixel(i, y0 + 1, color);
+                for (int i = 0; i < diameter; ++i)
+                {
+                    image.SetPixel(i, y0 + 1, color);
+                }
             }
 
             return brush;

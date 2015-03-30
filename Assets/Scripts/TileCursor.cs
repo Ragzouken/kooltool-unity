@@ -15,8 +15,6 @@ public class TileCursor : MonoBehaviour
 
     public void Update()
     {
-        Border.color = GetComponentInParent<Drawer>().highlight;
-
         if (Tool.Tool == TileTool.ToolMode.Pencil)
         {
             Preview.sprite = Tool.PaintTile.Thumbnail;

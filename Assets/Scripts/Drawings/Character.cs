@@ -7,13 +7,7 @@ using PixelDraw;
 
 namespace kooltool
 {
-    public class Character : MonoBehaviour
+    public class Character : MonoDrawing
     {
-        protected IDrawing drawing;
-
-        protected void Awake()
-        {
-
-        }
     }
 }

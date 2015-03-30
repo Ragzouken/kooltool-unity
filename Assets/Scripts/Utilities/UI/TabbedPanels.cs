@@ -21,9 +21,9 @@ public class TabbedPanels : MonoBehaviour
 		foreach (Transform tab in TabContainer)
 		{
 			var panel = Panels[tab.name];
-			var button = tab.GetComponent<Button>();
+			var toggle = tab.GetComponent<Toggle>();
 
-			button.onClick.AddListener(() => SetTab(panel.name));
+			toggle.onValueChanged.AddListener((bool on) => panel.SetActive(on));
 		}
 	}
 
