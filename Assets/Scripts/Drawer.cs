@@ -10,6 +10,7 @@ using UnityEditor;
 #endif
 
 using kooltool;
+using kooltool.Editor;
 
 public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -26,10 +27,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public ITool ActiveTool;
 
 	public void SetSize(int value) { PixelTool.Thickness = value; }
-    public void SetPencil() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Pencil; }
-    public void SetEraser() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Eraser; PixelTool.Color = new Color(0, 0, 0, 0); }
-    public void SetFiller() { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Fill;   }
-    public void SetLine()   { SetPixelTool(); PixelTool.Tool = PixelTool.ToolMode.Line;   }
+
+    [SerializeField] protected PixelTab pixeltab;
 
     public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; TileTool.Tool = TileTool.ToolMode.Pencil; }
     public void NewTile() { Tilemap.Tileset.AddTile(); }
@@ -77,6 +76,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		PixelTool = new PixelTool(Tilemap, Drawing);
         TileTool = new TileTool(Tilemap);
 
+        pixeltab.SetPixelTool(PixelTool);
+
         PixelCursor.Tool = PixelTool;
         TileCursor.Tool = TileTool;
 
@@ -101,11 +102,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Randomise();
-        }
-
         if (Input.GetKeyDown(KeyCode.LeftAlt)
          || Input.GetKeyDown(KeyCode.LeftShift))
         {

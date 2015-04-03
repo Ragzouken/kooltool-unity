@@ -11,7 +11,6 @@ public class PixelTool : ITool
     {
         Pencil,
         Fill,
-        Eraser,
         Picker,
         Line,
     }
@@ -34,6 +33,11 @@ public class PixelTool : ITool
     {
         Tilemap = tilemap;
         Drawing = drawing;
+    }
+
+    public void SetErase()
+    {
+        Color = Color.clear;
     }
 
     public void BeginStroke(Vector2 start)
@@ -70,8 +74,6 @@ public class PixelTool : ITool
         else if (Tool == ToolMode.Line)
         {
             this.start = start;
-
-            Debug.Log(start);
         }
 
         dragging = true;
@@ -79,11 +81,10 @@ public class PixelTool : ITool
 
     public void ContinueStroke(Vector2 start, Vector2 end)
     {
-        if (Tool == ToolMode.Pencil
-         || Tool == ToolMode.Eraser)
+        if (Tool == ToolMode.Pencil)
         {
             Color color = Color.a > 0 ? Color : Color.white;
-            Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
+            var blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
 
             Target.DrawLine(start, end, Thickness, color, blend);
 
@@ -96,11 +97,9 @@ public class PixelTool : ITool
         if (Tool == ToolMode.Line)
         {
             Color color = Color.a > 0 ? Color : Color.white;
-            Blend.BlendFunction blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
+            var blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
             
             Target.DrawLine(this.start, end, Thickness, color, blend);
-
-            Debug.Log(end);
 
             Target.Apply();
         }
