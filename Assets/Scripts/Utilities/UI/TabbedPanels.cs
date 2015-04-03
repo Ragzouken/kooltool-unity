@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class TabbedPanels : MonoBehaviour
 {
+    [SerializeField] protected ToggleGroup ToggleGroup;
 	[SerializeField] protected Transform TabContainer;
 	[SerializeField] protected Transform PanelContainer;
 
@@ -34,4 +35,9 @@ public class TabbedPanels : MonoBehaviour
 			pair.Value.SetActive(pair.Key == name);
 		}
 	}
+
+    protected void Refresh()
+    {
+
+    }
 }

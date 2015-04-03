@@ -15,6 +15,12 @@ public class PixelCursor : MonoBehaviour
 
     public void Update()
     {
+        float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
+        IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
+        var cursor = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);
+
+        Color previewColor = Tool.Color.a == 0 ? cursor : Tool.Color; 
+
         var rtrans = transform as RectTransform;
 
         Line.enabled = Tool.dragging && Tool.Tool == PixelTool.ToolMode.Line;
@@ -32,7 +38,7 @@ public class PixelCursor : MonoBehaviour
             
             var preview = Brush.Line(new Point(start - tl), 
                                      new Point(end - tl), 
-                                     Tool.Color, Tool.Thickness);
+                                     previewColor, Tool.Thickness);
 
             preview.texture.Apply();
 
@@ -47,7 +53,7 @@ public class PixelCursor : MonoBehaviour
         }
         else
         {
-            var preview = Brush.Circle(Tool.Thickness, Tool.Color);
+            var preview = Brush.Circle(Tool.Thickness, previewColor);
             preview.texture.Apply();
 
             Preview.sprite = preview;

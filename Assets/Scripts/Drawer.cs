@@ -85,16 +85,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         ActiveTool = PixelTool;
 
-		ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
+		//ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
 	}
-
-    public void Randomise() 
-    { 
-        var color = new Color(Random.value, Random.value, Random.value);
-
-        ColorButton.color = color;
-		PixelTool.Color = color;
-    }
 
 #if UNITY_EDITOR
     [MenuItem("Edit/Reset Playerprefs")] public static void DeletePlayerPrefs() { PlayerPrefs.DeleteAll(); }
@@ -180,7 +172,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
 	}
 
-    
     public Vector2 Floor(this Vector2 vector)
     {
         return new Vector2(Mathf.Floor(vector.x),
@@ -197,6 +188,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		                                                        out end);
 
 		dragging = false;
+
         panning = false;
 
         PixelCursor.end = Floor(end);

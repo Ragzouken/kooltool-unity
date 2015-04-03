@@ -12,7 +12,7 @@ namespace kooltool.Editor
         [SerializeField] protected Toggle FillToggle;
         [SerializeField] protected Toggle LineToggle;
 
-        [SerializeField] protected Toggle EraserToggle;
+        [SerializeField] protected ColorIndicator EraserColor;
 
         [Header("Size")]
         [Range(1, 32)]
@@ -21,15 +21,18 @@ namespace kooltool.Editor
         [SerializeField] protected RectTransform SizeContainer;
         [SerializeField] protected SizeIndicator SizePrefab;
 
+        [Header("Colour")]
+        [SerializeField] protected ToggleGroup ColorToggleGroup;
+        [SerializeField] protected RectTransform ColorContainer;
+        [SerializeField] protected ColorIndicator ColorPrefab;
+
         protected PixelTool Tool;
 
-        protected void Awake()
+        private void Awake()
         {
             PencilToggle.onValueChanged.AddListener(OnToggledPencil);
             FillToggle.onValueChanged.AddListener(OnToggledFill);
             LineToggle.onValueChanged.AddListener(OnToggledLine);
-
-            EraserToggle.onValueChanged.AddListener(OnToggledEraser);
 
             for (int size = 1; size < MaxSize; ++size)
             {
@@ -49,6 +52,31 @@ namespace kooltool.Editor
 
                 indicator.Toggle.onValueChanged.AddListener(toggled);
             }
+
+            EraserColor.Toggle.onValueChanged.AddListener(delegate(bool active)
+            {
+                if (active) Tool.Color = Color.clear;
+            });
+
+            for (int i = 0; i < 10; ++i)
+            {
+                var color = new Color(Random.value, Random.value, Random.value);
+
+                var indicator = Instantiate<ColorIndicator>(ColorPrefab);
+                indicator.transform.SetParent(ColorContainer, false);
+                indicator.Toggle.group = ColorToggleGroup;
+                indicator.SetColor(color);
+
+                indicator.Toggle.onValueChanged.AddListener(delegate(bool active)
+                {
+                    Tool.Color = color;
+                });
+            }
+        }
+
+        private void Update()
+        {
+            SizeContainer.gameObject.SetActive(Tool.Tool != PixelTool.ToolMode.Fill);
         }
 
         public void SetPixelTool(PixelTool tool)
@@ -69,11 +97,6 @@ namespace kooltool.Editor
         public void OnToggledLine(bool active)
         {
             if (active) Tool.Tool = PixelTool.ToolMode.Line;
-        }
-
-        public void OnToggledEraser(bool active)
-        {
-            if (active) Tool.SetErase();
         }
     }
 }
