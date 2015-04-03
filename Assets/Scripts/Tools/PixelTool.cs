@@ -11,7 +11,6 @@ public class PixelTool : ITool
     {
         Pencil,
         Fill,
-        Picker,
         Line,
     }
 
@@ -28,6 +27,8 @@ public class PixelTool : ITool
 
     public bool dragging;
     public Vector2 start;
+
+    public bool picking;
 
     public PixelTool(Tilemap tilemap, InfiniteDrawing drawing)
     {
@@ -57,12 +58,10 @@ public class PixelTool : ITool
             Target = Drawing;
         }
 
-        if (Tool == ToolMode.Fill)
-        {
-            Target.Fill(new Point(start), Color);
-            Target.Apply();
-        }
-        else if (Tool == ToolMode.Picker)
+        dragging = false;
+        picking = false;
+
+        if (Input.GetKey(KeyCode.LeftAlt))
         {
             Color sampled;
             
@@ -70,17 +69,29 @@ public class PixelTool : ITool
             {
                 Color = sampled;
             }
-        }
-        else if (Tool == ToolMode.Line)
-        {
-            this.start = start;
-        }
 
-        dragging = true;
+            picking = true;
+        }
+        else
+        {
+            if (Tool == ToolMode.Fill)
+            {
+                Target.Fill(new Point(start), Color);
+                Target.Apply();
+            }
+            else if (Tool == ToolMode.Line)
+            {
+                this.start = start;
+            }
+
+            dragging = true;
+        }
     }
 
     public void ContinueStroke(Vector2 start, Vector2 end)
     {
+        if (picking) return;
+
         if (Tool == ToolMode.Pencil)
         {
             Color color = Color.a > 0 ? Color : Color.white;
@@ -94,6 +105,13 @@ public class PixelTool : ITool
 
     public void EndStroke(Vector2 end)
     {
+        if (picking) 
+        {
+            picking = false;
+
+            return; 
+        }
+
         if (Tool == ToolMode.Line)
         {
             Color color = Color.a > 0 ? Color : Color.white;

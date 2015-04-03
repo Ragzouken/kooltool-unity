@@ -53,8 +53,6 @@ public class PixelCursor : MonoBehaviour
             Preview.sprite = preview;
         }
 
-        Preview.color = Tool.Color;
-
         rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Tool.Thickness);
         rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,   Tool.Thickness);
     }

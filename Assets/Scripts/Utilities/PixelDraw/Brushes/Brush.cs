@@ -59,7 +59,8 @@ namespace PixelDraw
 
             Sprite brush = Sprite.Create(image, 
                                          new Rect(0, 0, diameter, diameter),
-                                         Vector2.one * piv);
+                                         Vector2.one * piv,
+                                         1);
 
             int radius = (diameter - 1) / 2;
             int offset = (diameter % 2 == 0) ? 1 : 0;

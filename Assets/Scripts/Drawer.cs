@@ -105,7 +105,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Input.GetKeyDown(KeyCode.LeftAlt)
          || Input.GetKeyDown(KeyCode.LeftShift))
         {
-            PixelTool.Tool = PixelTool.ToolMode.Picker;
             TileTool.Tool = TileTool.ToolMode.Picker;
         }
 
