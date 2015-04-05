@@ -87,22 +87,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftAlt)
-         || Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
-        }
-        
-        if (Input.GetKey(KeyCode.Alpha1)) pixeltab.SetSize(1);
-        if (Input.GetKey(KeyCode.Alpha2)) pixeltab.SetSize(2);
-        if (Input.GetKey(KeyCode.Alpha3)) pixeltab.SetSize(3);
-        if (Input.GetKey(KeyCode.Alpha4)) pixeltab.SetSize(4);
-        if (Input.GetKey(KeyCode.Alpha5)) pixeltab.SetSize(5);
-        if (Input.GetKey(KeyCode.Alpha6)) pixeltab.SetSize(6);
-        if (Input.GetKey(KeyCode.Alpha7)) pixeltab.SetSize(7);
-        if (Input.GetKey(KeyCode.Alpha8)) pixeltab.SetSize(8);
-        if (Input.GetKey(KeyCode.Alpha9)) pixeltab.SetSize(9);
-
 		Vector2 cursor;
 
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 

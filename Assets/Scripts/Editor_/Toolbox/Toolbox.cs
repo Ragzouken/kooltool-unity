@@ -11,8 +11,8 @@ namespace kooltool.Editor
         [SerializeField] protected Toggle PixelTabToggle;
         [SerializeField] protected Toggle TileTabToggle;
 
-        [SerializeField] protected PixelTab PixelTab;
-        [SerializeField] protected TileTab TileTab;
+        public PixelTab PixelTab;
+        public TileTab TileTab;
 
         public PixelTool PixelTool;
         public TileTool TileTool;
