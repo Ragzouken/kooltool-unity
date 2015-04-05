@@ -11,10 +11,22 @@ namespace kooltool.Editor
         [SerializeField] protected Toggle PixelTabToggle;
         [SerializeField] protected Toggle TileTabToggle;
 
+        [SerializeField] protected PixelTab PixelTab;
+        [SerializeField] protected TileTab TileTab;
+
+        public PixelTool PixelTool;
+        public TileTool TileTool;
+
         private void Awake()
         {
             PixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);
             TileTabToggle.onValueChanged.AddListener(OnToggledTileTab);
+        }
+
+        public void SetProject(Project project)
+        {
+            PixelTab.SetProject(project);
+            TileTab.SetProject(project);
         }
 
         public void Show()

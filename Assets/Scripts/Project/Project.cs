@@ -9,19 +9,22 @@ namespace kooltool
 {
     public class Project
     {
+        // meta data
         public string Name = "kooltool project";
         public string Decription = "a new project";
-
         public SpriteDrawing Icon { get; protected set; }
-
         public SparseGrid<bool> Grid { get; protected set; }
 
+        // resources
+        public Tileset Tileset { get; protected set; }
         public ICollection<Sprite> Sprites
             = new HashSet<Sprite>();
 
         public Project(Point gridsize)
         {
             Grid = new SparseGrid<bool>(gridsize.x, gridsize.y);
+
+            Tileset = new Tileset();
         }
     }
 }

@@ -19,8 +19,6 @@ public class Tilemap : MonoDrawing
     protected SparseGrid<Tileset.Tile> Tiles
         = new SparseGrid<Tileset.Tile>(Size);
 
-	public Tileset Tileset;
-
     protected bool NewTile(Point cell, out Image renderer)
     {
         //var block = new GameObject("Image Block");
@@ -39,14 +37,13 @@ public class Tilemap : MonoDrawing
 
     public void Awake()
     {
-        Tileset = new Tileset();
         Tiled = new TiledDrawing(new Point(Size, Size));
         Drawing = Tiled; 
     }
 
     public override void Apply()
     {
-        Tileset.Apply();
+        Drawing.Apply();
     }
 
     public bool Get(Point cell, out Tileset.Tile tile)

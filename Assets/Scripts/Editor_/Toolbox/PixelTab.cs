@@ -26,6 +26,8 @@ namespace kooltool.Editor
         [SerializeField] protected RectTransform ColorContainer;
         [SerializeField] protected ColorIndicator ColorPrefab;
 
+        protected IList<SizeIndicator> SizeIndicators = new List<SizeIndicator>();
+
         protected PixelTool Tool;
 
         private void Awake()
@@ -51,6 +53,8 @@ namespace kooltool.Editor
                 };
 
                 indicator.Toggle.onValueChanged.AddListener(toggled);
+
+                SizeIndicators.Add(indicator);
             }
 
             EraserColor.Toggle.onValueChanged.AddListener(delegate(bool active)
@@ -77,6 +81,19 @@ namespace kooltool.Editor
         private void Update()
         {
             SizeContainer.gameObject.SetActive(Tool.Tool != PixelTool.ToolMode.Fill);
+        }
+
+        public void SetSize(int size)
+        {
+            if (size - 1 < SizeIndicators.Count)
+            {
+                SizeIndicators[size - 1].Toggle.isOn = true;
+            }
+        }
+
+        public void SetProject(Project project)
+        {
+
         }
 
         public void SetPixelTool(PixelTool tool)

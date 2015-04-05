@@ -52,14 +52,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    public Drawer Drawer;
     public Tilemap Tilemap;
 
     int turtles = 0;
     
     public void Start()
     {
-        Tilemap.Tileset.AddTile();
-        Tilemap.Tileset.AddTile();
+        Drawer.Project.Tileset.AddTile();
+        Drawer.Project.Tileset.AddTile();
 
         int agents = Random.Range(3, 8);
 
@@ -73,7 +74,7 @@ public class MapGenerator : MonoBehaviour
     {
         turtles += 1;
 
-        var turtle = new Turtle(Tilemap, Tilemap.Tileset.Tiles[0], new Point(8, 8), 0);
+        var turtle = new Turtle(Tilemap, Drawer.Project.Tileset.Tiles[0], new Point(8, 8), 0);
         int paths = Random.Range(5, 8);
 
         for (int y = 0; y < paths; ++y)
@@ -138,7 +139,7 @@ public class MapGenerator : MonoBehaviour
 
         foreach (var outline in outlines)
         {
-            Tilemap.Set(outline, Tilemap.Tileset.Tiles[1]);
+            Tilemap.Set(outline, Drawer.Project.Tileset.Tiles[1]);
 
             if (done > 16)
             {
@@ -155,7 +156,7 @@ public class MapGenerator : MonoBehaviour
 
     public IEnumerator DrawTiles()
     {
-        Tileset.Tile tile = Tilemap.Tileset.Tiles[0];
+        Tileset.Tile tile = Drawer.Project.Tileset.Tiles[0];
         IDrawing drawing = tile.Drawing();
         drawing = Tilemap.Drawing;
 

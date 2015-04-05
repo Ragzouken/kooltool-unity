@@ -16,7 +16,6 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] protected Tilemap Tilemap;
     [SerializeField] protected InfiniteDrawing Drawing;
-    [SerializeField] protected Image ColorButton;
 
     [SerializeField] protected RectTransform World;
 
@@ -26,22 +25,15 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	public ITool ActiveTool;
 
-	public void SetSize(int value) { PixelTool.Thickness = value; }
-
+    [SerializeField] protected Toolbox Toolbox;
     [SerializeField] protected PixelTab pixeltab;
-
-    public void SetTile(Tileset.Tile tile) { SetTileTool(); TileTool.PaintTile = tile; TileTool.Tool = TileTool.ToolMode.Pencil; }
-    public void NewTile() { Tilemap.Tileset.AddTile(); }
-    public void SetTileErase() { SetTileTool(); TileTool.Tool = TileTool.ToolMode.Eraser; }
+    [SerializeField] protected TileTab tiletab;
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
     bool panning;
     Vector2 pansite;
     float zoom = 2f;
-
-    public PixelTool PixelTool;
-    public TileTool TileTool;
 
     public Project Project;
 
@@ -55,7 +47,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         SwitchTool();
 
-        ActiveTool = PixelTool;
+        ActiveTool = Toolbox.PixelTool;
 
         PixelCursor.gameObject.SetActive(true);
     }
@@ -64,7 +56,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         SwitchTool();
 
-        ActiveTool = TileTool;
+        ActiveTool = Toolbox.TileTool;
 
         TileCursor.gameObject.SetActive(true);
     }
@@ -73,17 +65,18 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	{
         Project = new Project(new Point(32, 32));
 
-		PixelTool = new PixelTool(Tilemap, Drawing);
-        TileTool = new TileTool(Tilemap);
+		Toolbox.PixelTool = new PixelTool(Tilemap, Drawing);
+        Toolbox.TileTool = new TileTool(Tilemap, Project.Tileset);
 
-        pixeltab.SetPixelTool(PixelTool);
+        pixeltab.SetPixelTool(Toolbox.PixelTool);
+        tiletab.SetTileTool(Toolbox.TileTool);
 
-        PixelCursor.Tool = PixelTool;
-        TileCursor.Tool = TileTool;
+        PixelCursor.Tool = Toolbox.PixelTool;
+        TileCursor.Tool = Toolbox.TileTool;
 
-        PixelTool.CoroutineTarget = this;
+        Toolbox.PixelTool.CoroutineTarget = this;
 
-        ActiveTool = PixelTool;
+        ActiveTool = Toolbox.PixelTool;
 
 		//ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
 	}
@@ -97,18 +90,18 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Input.GetKeyDown(KeyCode.LeftAlt)
          || Input.GetKeyDown(KeyCode.LeftShift))
         {
-            TileTool.Tool = TileTool.ToolMode.Picker;
+            Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
         }
-
-		if (Input.GetKey(KeyCode.Alpha1)) SetSize(1);
-		if (Input.GetKey(KeyCode.Alpha2)) SetSize(2);
-		if (Input.GetKey(KeyCode.Alpha3)) SetSize(3);
-		if (Input.GetKey(KeyCode.Alpha4)) SetSize(4);
-		if (Input.GetKey(KeyCode.Alpha5)) SetSize(5);
-		if (Input.GetKey(KeyCode.Alpha6)) SetSize(6);
-		if (Input.GetKey(KeyCode.Alpha7)) SetSize(7);
-		if (Input.GetKey(KeyCode.Alpha8)) SetSize(8);
-		if (Input.GetKey(KeyCode.Alpha9)) SetSize(9);
+        
+        if (Input.GetKey(KeyCode.Alpha1)) pixeltab.SetSize(1);
+        if (Input.GetKey(KeyCode.Alpha2)) pixeltab.SetSize(2);
+        if (Input.GetKey(KeyCode.Alpha3)) pixeltab.SetSize(3);
+        if (Input.GetKey(KeyCode.Alpha4)) pixeltab.SetSize(4);
+        if (Input.GetKey(KeyCode.Alpha5)) pixeltab.SetSize(5);
+        if (Input.GetKey(KeyCode.Alpha6)) pixeltab.SetSize(6);
+        if (Input.GetKey(KeyCode.Alpha7)) pixeltab.SetSize(7);
+        if (Input.GetKey(KeyCode.Alpha8)) pixeltab.SetSize(8);
+        if (Input.GetKey(KeyCode.Alpha9)) pixeltab.SetSize(9);
 
 		Vector2 cursor;
 
@@ -121,7 +114,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         Project.Grid.Coords(new Point(cursor), out grid, out dummy);
 
-        float offset = (PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+        float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
 
         PixelCursor.end = Floor(cursor);
         PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,

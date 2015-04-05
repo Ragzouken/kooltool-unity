@@ -16,12 +16,14 @@ public class TileTool : ITool
     public ToolMode Tool;
 
     public Tilemap Tilemap;
+    public Tileset Tileset;
     public Tileset.Tile PaintTile;
 
-    public TileTool(Tilemap tilemap)
+    public TileTool(Tilemap tilemap, Tileset tileset)
     {
         Tilemap = tilemap;
-        PaintTile = Tilemap.Tileset.Tiles[0];
+        Tileset = tileset;
+        PaintTile = Tileset.Tiles[0];
     }
 
     public static Point Vector2Cell(Vector2 point)

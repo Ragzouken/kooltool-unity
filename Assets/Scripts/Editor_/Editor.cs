@@ -19,5 +19,10 @@ namespace kooltool.Editor
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
         }
+
+        public void SetProject(Project project)
+        {
+            Toolbox.SetProject(project);
+        }
     }
 }
