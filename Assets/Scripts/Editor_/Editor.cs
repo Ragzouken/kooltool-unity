@@ -9,13 +9,29 @@ namespace kooltool.Editor
     {
         [SerializeField] protected Toolbox Toolbox;
 
+        public Project Project { get; protected set; }
+
+        public MapGenerator generator;
+
+        protected void Awake()
+        {
+            Project = new Project(new Point(32, 32));
+        }
+
+
         protected void Start()
         {
+            SetProject(Project);
+
+            generator.Go(Project);
+
             Toolbox.Hide();
         }
 
         protected void Update()
         {
+            if (Project == null) return;
+
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
 
@@ -38,6 +54,8 @@ namespace kooltool.Editor
 
         public void SetProject(Project project)
         {
+            Project = project;
+
             Toolbox.SetProject(project);
         }
     }

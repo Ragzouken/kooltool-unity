@@ -17,8 +17,8 @@ namespace kooltool
 
         // resources
         public Tileset Tileset { get; protected set; }
-        public ICollection<Sprite> Sprites
-            = new HashSet<Sprite>();
+        public ICollection<Costume> Sprites
+            = new HashSet<Costume>();
 
         public Project(Point gridsize)
         {

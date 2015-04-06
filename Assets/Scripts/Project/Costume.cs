@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace kooltool
 {
-    public class Sprite
+    public class Costume
     {
 
     }

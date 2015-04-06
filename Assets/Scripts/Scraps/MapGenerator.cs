@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 using PixelDraw;
+using kooltool;
+using kooltool.Editor;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -52,29 +54,28 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public Drawer Drawer;
     public Tilemap Tilemap;
 
     int turtles = 0;
-    
-    public void Start()
+
+    public void Go(Project project)
     {
-        Drawer.Project.Tileset.AddTile();
-        Drawer.Project.Tileset.AddTile();
+        project.Tileset.AddTile();
+        project.Tileset.AddTile();
 
         int agents = Random.Range(3, 8);
 
         for (int i = 0; i < agents; ++i)
         {
-            StartCoroutine(Generate());
+            StartCoroutine(Generate(project));
         }
     }
 
-    public IEnumerator Generate()
+    public IEnumerator Generate(Project project)
     {
         turtles += 1;
 
-        var turtle = new Turtle(Tilemap, Drawer.Project.Tileset.Tiles[0], new Point(8, 8), 0);
+        var turtle = new Turtle(Tilemap, project.Tileset.Tiles[0], new Point(8, 8), 0);
         int paths = Random.Range(5, 8);
 
         for (int y = 0; y < paths; ++y)
@@ -102,18 +103,18 @@ public class MapGenerator : MonoBehaviour
 
         turtles -= 1;
 
-        CheckOutline();
+        CheckOutline(project);
     }
 
-    public void CheckOutline()
+    public void CheckOutline(Project project)
     {
         if (turtles == 0)
         {
-            StartCoroutine(Outline());
+            StartCoroutine(Outline(project));
         }
     }
 
-    public IEnumerator Outline()
+    public IEnumerator Outline(Project project)
     {
         var outlines = new Queue<Point>();
 
@@ -139,7 +140,7 @@ public class MapGenerator : MonoBehaviour
 
         foreach (var outline in outlines)
         {
-            Tilemap.Set(outline, Drawer.Project.Tileset.Tiles[1]);
+            Tilemap.Set(outline, project.Tileset.Tiles[1]);
 
             if (done > 16)
             {
@@ -151,12 +152,12 @@ public class MapGenerator : MonoBehaviour
             done++;
         }
 
-        StartCoroutine(DrawTiles());
+        StartCoroutine(DrawTiles(project));
     }
 
-    public IEnumerator DrawTiles()
+    public IEnumerator DrawTiles(Project project)
     {
-        Tileset.Tile tile = Drawer.Project.Tileset.Tiles[0];
+        Tileset.Tile tile = project.Tileset.Tiles[0];
         IDrawing drawing = tile.Drawing();
         drawing = Tilemap.Drawing;
 

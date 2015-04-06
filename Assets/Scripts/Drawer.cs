@@ -5,10 +5,6 @@ using System.Collections.Generic;
 
 using UnityEngine.EventSystems;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 using kooltool;
 using kooltool.Editor;
 
@@ -26,16 +22,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public ITool ActiveTool;
 
     [SerializeField] protected Toolbox Toolbox;
-    [SerializeField] protected PixelTab pixeltab;
-    [SerializeField] protected TileTab tiletab;
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
     bool panning;
     Vector2 pansite;
-    float zoom = 2f;
 
-    public Project Project;
+    public Editor Editor;
 
     public void SwitchTool()
     {
@@ -61,15 +54,13 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         TileCursor.gameObject.SetActive(true);
     }
 
-	public void Awake()
+	public void Start()
 	{
-        Project = new Project(new Point(32, 32));
-
 		Toolbox.PixelTool = new PixelTool(Tilemap, Drawing);
-        Toolbox.TileTool = new TileTool(Tilemap, Project.Tileset);
+        Toolbox.TileTool = new TileTool(Tilemap, Editor.Project.Tileset);
 
-        pixeltab.SetPixelTool(Toolbox.PixelTool);
-        tiletab.SetTileTool(Toolbox.TileTool);
+        Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
+        Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
 
         PixelCursor.Tool = Toolbox.PixelTool;
         TileCursor.Tool = Toolbox.TileTool;
@@ -77,13 +68,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Toolbox.PixelTool.CoroutineTarget = this;
 
         ActiveTool = Toolbox.PixelTool;
-
-		//ColorButton.GetComponent<Button>().onClick.AddListener(Randomise);
 	}
-
-#if UNITY_EDITOR
-    [MenuItem("Edit/Reset Playerprefs")] public static void DeletePlayerPrefs() { PlayerPrefs.DeleteAll(); }
-#endif
 	
     public void Update()
     {
@@ -96,15 +81,15 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         Point grid, dummy;
 
-        Project.Grid.Coords(new Point(cursor), out grid, out dummy);
+        Editor.Project.Grid.Coords(new Point(cursor), out grid, out dummy);
 
         float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
 
         PixelCursor.end = Floor(cursor);
         PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
                                                                                  Mathf.FloorToInt(cursor.y) + offset);
-        TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth, 
-                                                                                (grid.y + 0.5f) * Project.Grid.CellHeight);
+        TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Editor.Project.Grid.CellWidth, 
+                                                                                (grid.y + 0.5f) * Editor.Project.Grid.CellHeight);
 
 		if (dragging)
 		{
