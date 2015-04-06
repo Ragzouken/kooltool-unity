@@ -7,6 +7,7 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
+        [SerializeField] protected RectTransform World;
         [SerializeField] protected Toolbox Toolbox;
 
         public Project Project { get; protected set; }
@@ -57,6 +58,17 @@ namespace kooltool.Editor
             Project = project;
 
             Toolbox.SetProject(project);
+        }
+
+        public Vector2 ScreenToWorld(Vector2 screen)
+        {
+            Vector2 world;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(World, 
+                                                                    screen,
+                                                                    null,
+                                                                    out world);
+            return world;                                                   
         }
     }
 }

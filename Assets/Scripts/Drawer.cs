@@ -10,9 +10,7 @@ using kooltool.Editor;
 
 public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] protected Tilemap Tilemap;
-    [SerializeField] protected InfiniteDrawing Drawing;
-
+    [SerializeField] protected Layer Layer;
     [SerializeField] protected RectTransform World;
 
     [Header("Cursors")]
@@ -56,8 +54,8 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	public void Start()
 	{
-		Toolbox.PixelTool = new PixelTool(Tilemap, Drawing);
-        Toolbox.TileTool = new TileTool(Tilemap, Editor.Project.Tileset);
+		Toolbox.PixelTool = new PixelTool(Layer.Tilemap, Layer.Drawing);
+        Toolbox.TileTool = new TileTool(Layer.Tilemap, Editor.Project.Tileset);
 
         Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
         Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
@@ -72,12 +70,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
     public void Update()
     {
-		Vector2 cursor;
-
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-		                                                        Input.mousePosition,
-		                                                        null,
-		                                                        out cursor);
+        Vector2 cursor = Editor.ScreenToWorld(Input.mousePosition);
 
         Point grid, dummy;
 
@@ -108,17 +101,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
 	public void OnPointerDown(PointerEventData data)
 	{
-		Vector2 start;
-		
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-                                                                data.position,
-		                                                        data.pressEventCamera,
-		                                                        out start);
-
-
-        var go = data.pointerCurrentRaycast.gameObject;
-
-        Debug.Log("clicked " + go.name, go);
+        Vector2 start = Editor.ScreenToWorld(data.position);
 
         if (data.button == PointerEventData.InputButton.Left)
         {
@@ -142,12 +125,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	public void OnPointerUp(PointerEventData data)
 	{
-		Vector2 end;
-		
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(Tilemap.transform as RectTransform, 
-		                                                        data.position,
-		                                                        data.pressEventCamera,
-		                                                        out end);
+        Vector2 end = Editor.ScreenToWorld(data.position);
 
 		dragging = false;
 
