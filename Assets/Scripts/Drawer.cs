@@ -10,16 +10,11 @@ using kooltool.Editor;
 
 public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] protected Layer Layer;
-    [SerializeField] protected RectTransform World;
-
     [Header("Cursors")]
     [SerializeField] protected PixelCursor PixelCursor;
 	[SerializeField] protected TileCursor TileCursor;
 
 	public ITool ActiveTool;
-
-    [SerializeField] protected Toolbox Toolbox;
 
 	protected Vector2 LastCursor;
 	protected bool dragging;
@@ -38,7 +33,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         SwitchTool();
 
-        ActiveTool = Toolbox.PixelTool;
+        ActiveTool = Editor.Toolbox.PixelTool;
 
         PixelCursor.gameObject.SetActive(true);
     }
@@ -47,25 +42,17 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         SwitchTool();
 
-        ActiveTool = Toolbox.TileTool;
+        ActiveTool = Editor.Toolbox.TileTool;
 
         TileCursor.gameObject.SetActive(true);
     }
 
 	public void Start()
 	{
-		Toolbox.PixelTool = new PixelTool(Layer.Tilemap, Layer.Drawing);
-        Toolbox.TileTool = new TileTool(Layer.Tilemap, Editor.Project.Tileset);
+        PixelCursor.Tool = Editor.Toolbox.PixelTool;
+        TileCursor.Tool = Editor.Toolbox.TileTool;
 
-        Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
-        Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
-
-        PixelCursor.Tool = Toolbox.PixelTool;
-        TileCursor.Tool = Toolbox.TileTool;
-
-        Toolbox.PixelTool.CoroutineTarget = this;
-
-        ActiveTool = Toolbox.PixelTool;
+        ActiveTool = Editor.Toolbox.PixelTool;
 	}
 	
     public void Update()
@@ -76,7 +63,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         Editor.Project.Grid.Coords(new Point(cursor), out grid, out dummy);
 
-        float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+        float offset = (Editor.Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
 
         PixelCursor.end = Floor(cursor);
         PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
@@ -90,9 +77,9 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
         else if (panning)
         {
-            World.localPosition += (Vector3) (cursor - pansite);
-            World.localPosition = new Vector3(Mathf.Floor(World.localPosition.x),
-                                              Mathf.Floor(World.localPosition.y),
+            Editor.World.localPosition += (Vector3) (cursor - pansite);
+            Editor.World.localPosition = new Vector3(Mathf.Floor(Editor.World.localPosition.x),
+                                                     Mathf.Floor(Editor.World.localPosition.y),
                                               0f);
         }
 

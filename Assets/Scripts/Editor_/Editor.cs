@@ -7,16 +7,24 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
-        [SerializeField] protected RectTransform World;
-        [SerializeField] protected Toolbox Toolbox;
+        public RectTransform World;
+        public Toolbox Toolbox;
 
         public Project Project { get; protected set; }
 
         public MapGenerator generator;
 
+        public Layer Layer;
+
         protected void Awake()
         {
             Project = new Project(new Point(32, 32));
+
+            Toolbox.PixelTool = new PixelTool(Layer.Tilemap, Layer.Drawing);
+            Toolbox.TileTool = new TileTool(Layer.Tilemap, Project.Tileset);
+
+            Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
+            Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
         }
 
 

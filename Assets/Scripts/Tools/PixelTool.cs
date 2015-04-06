@@ -23,7 +23,6 @@ public class PixelTool : ITool
     public InfiniteDrawing Drawing;
 
     public IDrawing Target;
-    public MonoBehaviour CoroutineTarget;
 
     public bool dragging;
     public Vector2 start;
