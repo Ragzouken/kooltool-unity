@@ -20,8 +20,8 @@ namespace kooltool.Editor
         {
             Project = new Project(new Point(32, 32));
 
-            Toolbox.PixelTool = new PixelTool(Layer.Tilemap, Layer.Drawing);
-            Toolbox.TileTool = new TileTool(Layer.Tilemap, Project.Tileset);
+            Toolbox.PixelTool = new PixelTool(this);
+            Toolbox.TileTool = new TileTool(this);
 
             Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
             Toolbox.TileTab.SetTileTool(Toolbox.TileTool);

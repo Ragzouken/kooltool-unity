@@ -26,7 +26,6 @@ namespace kooltool.Editor
         public void SetProject(Project project)
         {
             PixelTab.SetProject(project);
-            TileTab.SetProject(project);
         }
 
         public void Show()

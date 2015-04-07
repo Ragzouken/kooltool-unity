@@ -3,110 +3,113 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TileTool : ITool
+namespace kooltool.Editor
 {
-    public enum ToolMode
+    public class TileTool : ITool
     {
-        Pencil,
-        Fill,
-        Eraser,
-        Picker,
-    }
-
-    public ToolMode Tool;
-
-    public Tilemap Tilemap;
-    public Tileset Tileset;
-    public Tileset.Tile PaintTile;
-
-    public TileTool(Tilemap tilemap, Tileset tileset)
-    {
-        Tilemap = tilemap;
-        Tileset = tileset;
-        PaintTile = Tileset.Tiles[0];
-    }
-
-    public static Point Vector2Cell(Vector2 point)
-    {
-        Point cell, offset;
-
-        var test = new SparseGrid<bool>(32);
-
-        test.Coords(new Point(point), out cell, out offset);
-
-        return cell;
-    }
-
-    public void BeginStroke(Vector2 start)
-    {
-        if (Tool == ToolMode.Fill)
+        public enum ToolMode
         {
-
+            Pencil,
+            Fill,
+            Eraser,
+            Picker,
         }
-        else if (Tool == ToolMode.Picker)
-        {
-            Tileset.Tile sampled;
-            
-            if (Tilemap.Get(Vector2Cell(start), out sampled))
-            {
-                PaintTile = sampled;
 
-                Tool = ToolMode.Pencil;
-            }
-            else
-            {
-                Tool = ToolMode.Eraser;
-            }
+        protected Editor Editor;
+
+        public ToolMode Tool;
+
+        public Tileset.Tile PaintTile;
+
+        public TileTool(Editor editor)
+        {
+            Editor = editor;
+
+            PaintTile = Editor.Project.Tileset.Tiles[0];
         }
-    }
 
-    public void ContinueStroke(Vector2 start, Vector2 end)
-    {
-        if (Tool == ToolMode.Pencil
-         || Tool == ToolMode.Eraser)
+        public static Point Vector2Cell(Vector2 point)
         {
-            PixelDraw.Bresenham.PlotFunction plot;
+            Point cell, offset;
 
-            if (Tool == ToolMode.Pencil)
+            var test = new SparseGrid<bool>(32);
+
+            test.Coords(new Point(point), out cell, out offset);
+
+            return cell;
+        }
+
+        public void BeginStroke(Vector2 start)
+        {
+            if (Tool == ToolMode.Fill)
             {
-                plot = delegate (int x, int y)
+
+            }
+            else if (Tool == ToolMode.Picker)
+            {
+                Tileset.Tile sampled;
+                
+                if (Editor.Layer.Tilemap.Get(Vector2Cell(start), out sampled))
                 {
-                    Tilemap.Set(new Point(x, y), PaintTile);
-                    
-                    return true;
-                };
-            }
-            else
-            {
-                plot = delegate (int x, int y)
+                    PaintTile = sampled;
+
+                    Tool = ToolMode.Pencil;
+                }
+                else
                 {
-                    Tilemap.Unset(new Point(x, y));
-                    
-                    return true;
-                };
+                    Tool = ToolMode.Eraser;
+                }
             }
-
-            var s = Vector2Cell(start);
-            var e = Vector2Cell(end);
-
-            PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, plot);
         }
-        else if (Tool == ToolMode.Picker)
+
+        public void ContinueStroke(Vector2 start, Vector2 end)
         {
-            Tileset.Tile sampled;
-            
-            if (Tilemap.Get(Vector2Cell(end), out sampled))
+            if (Tool == ToolMode.Pencil
+             || Tool == ToolMode.Eraser)
             {
-                PaintTile = sampled;
+                PixelDraw.Bresenham.PlotFunction plot;
+
+                if (Tool == ToolMode.Pencil)
+                {
+                    plot = delegate (int x, int y)
+                    {
+                        Editor.Layer.Tilemap.Set(new Point(x, y), PaintTile);
+                        
+                        return true;
+                    };
+                }
+                else
+                {
+                    plot = delegate (int x, int y)
+                    {
+                        Editor.Layer.Tilemap.Unset(new Point(x, y));
+                        
+                        return true;
+                    };
+                }
+
+                var s = Vector2Cell(start);
+                var e = Vector2Cell(end);
+
+                PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, plot);
             }
-            else
+            else if (Tool == ToolMode.Picker)
             {
-                Tool = ToolMode.Eraser;
+                Tileset.Tile sampled;
+                
+                if (Editor.Layer.Tilemap.Get(Vector2Cell(end), out sampled))
+                {
+                    PaintTile = sampled;
+                }
+                else
+                {
+                    Tool = ToolMode.Eraser;
+                }
             }
         }
-    }
 
-    public void EndStroke(Vector2 end)
-    {
+        public void EndStroke(Vector2 end)
+        {
+        }
     }
 }
