@@ -17,6 +17,11 @@ namespace kooltool.Editor
             Image.sprite = Brush.Circle(value, Color.white);
             Image.sprite.texture.Apply();
             Image.SetNativeSize();
+
+            if (value % 2 == 1)
+            {
+                Image.GetComponent<RectTransform>().anchoredPosition = Vector2.one * 0.5f;
+            }
         }
     }
 }

@@ -45,8 +45,8 @@ namespace kooltool.Editor
             pos.x = Mathf.Clamp(rtrans.localPosition.x, minPosition.x, maxPosition.x);
             pos.y = Mathf.Clamp(rtrans.localPosition.y, minPosition.y, maxPosition.y);
 
-            pos.x = Mathf.Floor(pos.x);
-            pos.y = Mathf.Floor(pos.y);
+            pos.x = Mathf.Floor(pos.x) + 0.5f;
+            pos.y = Mathf.Floor(pos.y) + 0.5f;
 
             rtrans.localPosition = pos;
 

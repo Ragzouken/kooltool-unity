@@ -45,17 +45,7 @@ namespace kooltool.Editor
             start = new Vector2(Mathf.Floor(start.x),
                                 Mathf.Floor(start.y));
 
-            var cell = TileTool.Vector2Cell(start);
-            Tileset.Tile tile;
-
-            if (Editor.Layer.Tilemap.Get(cell, out tile))
-            {
-                Target = Editor.Layer.Tilemap;
-            }
-            else
-            {
-                Target = Editor.Layer.Drawing;
-            }
+            Target = Editor.Layer.DrawingUnderPoint(new Point(start));
 
             dragging = false;
             picking = false;
