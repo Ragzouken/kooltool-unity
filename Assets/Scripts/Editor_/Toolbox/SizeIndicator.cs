@@ -14,14 +14,22 @@ namespace kooltool.Editor
 
         public void SetSize(int value)
         {
-            Image.sprite = Brush.Circle(value, Color.white);
-            Image.sprite.texture.Apply();
+            Sprite button = Brush.Rectangle(32, 32, Color.clear); 
+            Sprite brush = Brush.Circle(value, Color.white);
+            Brush.Apply(brush, Point.One * 16, 
+                        button, Point.Zero, 
+                        Blend.Alpha);
+
+            brush.texture.Apply();
+
+            Image.sprite = button;
             Image.SetNativeSize();
 
+            /*
             if (value % 2 == 1)
             {
                 Image.GetComponent<RectTransform>().anchoredPosition = Vector2.one * 0.5f;
-            }
+            }*/
         }
     }
 }

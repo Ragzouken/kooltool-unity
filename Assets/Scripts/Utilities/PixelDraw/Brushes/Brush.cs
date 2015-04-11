@@ -44,8 +44,9 @@ namespace PixelDraw
             Texture2D image = BlankTexture.New(width, height, color);
 
             Sprite brush = Sprite.Create(image, 
-                                          new Rect(0, 0, width, height),
-                                          new Vector2(px / width, py / height));
+                                         new Rect(0, 0, width, height),
+                                         new Vector2(px / width, py / height),
+                                         1);
 
             return brush;
         }
