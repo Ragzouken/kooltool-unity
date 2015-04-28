@@ -7,12 +7,18 @@ using PixelDraw;
 
 namespace kooltool.Editor
 {
-    public class Layer : MonoDrawing
+    public class Layer : MonoBehaviour
     {
         [SerializeField] protected Editor Editor;
+        [SerializeField] protected CharacterDrawing CharacterPrefab;
 
+        [Header("Objects")]
         public InfiniteDrawing Drawing;
         public Tilemap Tilemap;
+        public RectTransform CharacterContainer;
+
+        protected Dictionary<Character, CharacterDrawing> CharacterDrawings
+            = new Dictionary<Character, CharacterDrawing>();
 
         public IDrawing DrawingUnderPoint(Point point)
         {
@@ -30,6 +36,18 @@ namespace kooltool.Editor
             {
                 return Drawing;
             }
+        }
+
+        public CharacterDrawing AddCharacter(Character character)
+        {
+            var drawing = Instantiate<CharacterDrawing>(CharacterPrefab);
+            drawing.transform.SetParent(CharacterContainer);
+            drawing.SetCharacter(character);
+            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
+
+            CharacterDrawings.Add(character, drawing);
+
+            return drawing;
         }
     }
 }
