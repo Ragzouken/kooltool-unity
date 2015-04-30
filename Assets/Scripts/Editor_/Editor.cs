@@ -78,5 +78,12 @@ namespace kooltool.Editor
                                                                     out world);
             return world;                                                   
         }
+
+        public void MakeCharacter(Costume costume)
+        {
+            var character = new Character(Point.Zero, costume);
+
+            Layer.AddCharacter(character);
+        }
     }
 }

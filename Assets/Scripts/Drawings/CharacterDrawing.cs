@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using UnityEngine.EventSystems;
+
 using PixelDraw;
 
 namespace kooltool.Editor
@@ -10,6 +12,7 @@ namespace kooltool.Editor
     public class CharacterDrawing : MonoDrawing
     {
         [SerializeField] protected Image Image;
+        [SerializeField] protected GameObject Border;
 
         public Character Character { get; protected set; }
 
@@ -20,6 +23,7 @@ namespace kooltool.Editor
             Drawing = new SpriteDrawing(character.Costume.Sprite);
 
             Image.sprite = character.Costume.Sprite;
+            Image.SetNativeSize();
         }
     }
 }

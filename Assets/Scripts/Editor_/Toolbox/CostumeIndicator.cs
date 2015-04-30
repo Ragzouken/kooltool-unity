@@ -10,7 +10,7 @@ namespace kooltool.Editor
     public class CostumeIndicator : MonoBehaviour
     {
         [SerializeField] protected Image Image;
-        public Toggle Toggle;
+        public Button Button;
 
         public Costume Costume { get; protected set; }
 

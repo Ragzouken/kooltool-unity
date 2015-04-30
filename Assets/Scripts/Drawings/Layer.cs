@@ -27,7 +27,17 @@ namespace kooltool.Editor
             Editor.Project.Grid.Coords(point, out cell, out offset);
 
             Tileset.Tile tile;
-            
+
+            foreach (CharacterDrawing drawing in CharacterDrawings.Values)
+            {
+                var rtrans = drawing.transform as RectTransform;
+
+                if (rtrans.rect.Contains(point.Vector2()))
+                {
+                    return drawing;
+                }
+            }
+
             if (Tilemap.Get(cell, out tile))
             {
                 return Tilemap;
@@ -41,7 +51,7 @@ namespace kooltool.Editor
         public CharacterDrawing AddCharacter(Character character)
         {
             var drawing = Instantiate<CharacterDrawing>(CharacterPrefab);
-            drawing.transform.SetParent(CharacterContainer);
+            drawing.transform.SetParent(CharacterContainer, false);
             drawing.SetCharacter(character);
             drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
 

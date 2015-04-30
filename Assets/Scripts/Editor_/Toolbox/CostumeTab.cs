@@ -45,15 +45,10 @@ namespace kooltool.Editor
 
                 element.SetCostume(costume);
 
-                element.Toggle.group = CostumeToggleGroup;
-                //if (tile == Tool.PaintTile) element.Toggle.isOn = true;
-
-                var set = costume;
-               
-                element.Toggle.onValueChanged.RemoveAllListeners();
-                element.Toggle.onValueChanged.AddListener(delegate (bool active) 
+                element.Button.onClick.RemoveAllListeners();
+                element.Button.onClick.AddListener(delegate
                 {
-                    //if (active) Tool.PaintTile = set;
+                    Editor.MakeCharacter(element.Costume);
                 });
             }
         }
