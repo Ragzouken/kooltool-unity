@@ -99,7 +99,7 @@ namespace kooltool.Editor
         public IEnumerator SmoothZoomTo(float zoom, float duration)
         {
             float start = Zoom;
-            float end = Mathf.Clamp(zoom, 0, 2);
+            float end = zoom;
             float u = 0;
             float timer = 0;
 
@@ -128,7 +128,7 @@ namespace kooltool.Editor
 
         public void ZoomTo(float zoom, Vector2? focus = null)
         {
-            Zoom = Mathf.Clamp(zoom, 0f, 2f);
+            Zoom = Mathf.Clamp01(zoom);
 
             Vector2 screen = focus ?? Input.mousePosition;
 
