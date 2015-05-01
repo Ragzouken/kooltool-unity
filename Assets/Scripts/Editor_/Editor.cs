@@ -7,6 +7,8 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
+        [SerializeField] protected AnimationCurve ZoomCurve;
+
         public RectTransform World;
         public Toolbox Toolbox;
 
@@ -15,6 +17,10 @@ namespace kooltool.Editor
         public MapGenerator generator;
 
         public Layer Layer;
+
+        public float Zoom { get; protected set; }
+
+        protected Coroutine ZoomCoroutine;
 
         protected void Awake()
         {
@@ -25,6 +31,8 @@ namespace kooltool.Editor
 
             Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
             Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
+
+            ZoomTo(1f);
         }
 
 
@@ -64,7 +72,9 @@ namespace kooltool.Editor
 
             if (Mathf.Abs(scroll) > Mathf.Epsilon)
             {
-                Zoom(scroll);
+                if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
+
+                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 2, 0.125f));
             }
         }
 
@@ -86,12 +96,44 @@ namespace kooltool.Editor
             return world;                                                   
         }
 
-        public void Zoom(float delta)
+        public IEnumerator SmoothZoomTo(float zoom, float duration)
         {
-            Vector2 screen = Input.mousePosition;
+            float start = Zoom;
+            float end = Mathf.Clamp(zoom, 0, 2);
+            float u = 0;
+            float timer = 0;
+
+            Vector2 focus = new Vector2(Camera.main.pixelWidth  * 0.5f,
+                                        Camera.main.pixelHeight * 0.5f);
+
+
+            if (start > end)
+            {
+                focus = Input.mousePosition;
+            }
+
+            Vector2 worlda = ScreenToWorld(focus);
+
+            while (timer < duration)
+            {
+                yield return new WaitForEndOfFrame();
+
+                timer += Time.deltaTime;
+
+                ZoomTo(start + timer / duration * (end - start), focus);
+            }
+
+            ZoomTo(end, focus);
+        }
+
+        public void ZoomTo(float zoom, Vector2? focus = null)
+        {
+            Zoom = Mathf.Clamp(zoom, 0f, 2f);
+
+            Vector2 screen = focus ?? Input.mousePosition;
 
             Vector2 worlda = ScreenToWorld(screen);
-            World.localScale += (Vector3) (delta * Vector2.one);
+            World.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
             Vector2 worldb = ScreenToWorld(screen);
             
             Pan(worldb - worlda);
