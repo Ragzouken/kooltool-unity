@@ -16,6 +16,7 @@ public class TestPNG : MonoBehaviour
         string path = Application.persistentDataPath;
 
         #if UNITY_STANDALONE
+        /*
         if (Input.GetKeyDown(KeyCode.F5))
         {
             File.WriteAllBytes(path + "/tileset.png", Tilemap.Tileset.Texture.EncodeToPNG());
@@ -24,6 +25,7 @@ public class TestPNG : MonoBehaviour
         {
             Tilemap.Tileset.Texture.LoadImage(File.ReadAllBytes(path + "/tileset.png"));
         }
+        */
         #endif
     }
 }
