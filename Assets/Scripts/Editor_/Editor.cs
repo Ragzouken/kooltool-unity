@@ -94,17 +94,12 @@ namespace kooltool.Editor
             World.localScale += (Vector3) (delta * Vector2.one);
             Vector2 worldb = ScreenToWorld(screen);
             
-            Pan((worldb - worlda) * World.localScale.x);
-        }
-
-        public void PanTo(Vector2 position)
-        {
-            World.anchoredPosition = position;
+            Pan(worldb - worlda);
         }
 
         public void Pan(Vector2 delta)
         {
-            World.anchoredPosition += delta;
+            World.anchoredPosition += delta * World.localScale.x;
             /*
             World.localPosition = new Vector3(Mathf.Floor(World.localPosition.x),
                                               Mathf.Floor(World.localPosition.y),
