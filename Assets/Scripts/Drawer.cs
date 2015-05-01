@@ -77,10 +77,7 @@ public class Drawer : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
         else if (panning)
         {
-            Editor.World.localPosition += (Vector3) (cursor - pansite);
-            Editor.World.localPosition = new Vector3(Mathf.Floor(Editor.World.localPosition.x),
-                                                     Mathf.Floor(Editor.World.localPosition.y),
-                                              0f);
+            Editor.Pan(cursor - pansite);
         }
 
 		LastCursor = cursor;

@@ -59,6 +59,13 @@ namespace kooltool.Editor
             {
                 Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
             }
+
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+            if (Mathf.Abs(scroll) > Mathf.Epsilon)
+            {
+                Zoom(scroll);
+            }
         }
 
         public void SetProject(Project project)
@@ -77,6 +84,31 @@ namespace kooltool.Editor
                                                                     null,
                                                                     out world);
             return world;                                                   
+        }
+
+        public void Zoom(float delta)
+        {
+            Vector2 screen = Input.mousePosition;
+
+            Vector2 worlda = ScreenToWorld(screen);
+            World.localScale += (Vector3) (delta * Vector2.one);
+            Vector2 worldb = ScreenToWorld(screen);
+            
+            Pan((worldb - worlda) * World.localScale.x);
+        }
+
+        public void PanTo(Vector2 position)
+        {
+            World.anchoredPosition = position;
+        }
+
+        public void Pan(Vector2 delta)
+        {
+            World.anchoredPosition += delta;
+            /*
+            World.localPosition = new Vector3(Mathf.Floor(World.localPosition.x),
+                                              Mathf.Floor(World.localPosition.y),
+                                              0f);*/
         }
 
         public void MakeCharacter(Costume costume)
