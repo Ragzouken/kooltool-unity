@@ -75,7 +75,7 @@ public class MapGenerator : MonoBehaviour
     {
         turtles += 1;
 
-        var turtle = new Turtle(Tilemap, project.Tileset.Tiles[0], new Point(8, 8), 0);
+        var turtle = new Turtle(Tilemap, project.Tileset.Tiles[0], Point.Zero, 0);
         int paths = Random.Range(5, 8);
 
         for (int y = 0; y < paths; ++y)
@@ -161,8 +161,8 @@ public class MapGenerator : MonoBehaviour
         IDrawing drawing = tile.Drawing();
         drawing = Tilemap.Drawing;
 
-        Vector2 prev = new Vector2(256, 256);
-        Vector2 point = new Vector2(256, 256);
+        Vector2 prev = Vector2.zero;
+        Vector2 point = Vector2.zero;
 
         for (int i = 0; i < 20; ++i)
         {

@@ -42,6 +42,8 @@ namespace kooltool.Generators
                         sprite, new Point(0, 0),
                         Blend.Alpha);
 
+            texture.Apply();
+
             return new kooltool.Costume("Smiley", sprite);
         }
     }
