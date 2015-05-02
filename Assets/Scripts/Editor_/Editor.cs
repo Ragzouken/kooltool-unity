@@ -87,9 +87,57 @@ namespace kooltool.Editor
             Toolbox.Hide();
         }
 
+        protected void CheckNavigation()
+        {
+            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+
+            // panning
+            if (panning)
+            {
+                Pan(cursor - pansite);
+            }
+            
+            if (Input.GetMouseButtonUp(1))
+            {
+                panning = false;
+            }
+            
+            if (Input.GetMouseButtonDown(1))
+            {
+                pansite = cursor;
+                panning = true;
+            }
+
+            // zoom
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            
+            if (Mathf.Abs(scroll) > Mathf.Epsilon)
+            {
+                if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
+                
+                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 2, 0.125f));
+            }
+        }
+
+        protected void CheckKeyboardShortcuts()
+        {
+            if (Input.GetKey(KeyCode.Alpha1)) Toolbox.PixelTab.SetSize(1);
+            if (Input.GetKey(KeyCode.Alpha2)) Toolbox.PixelTab.SetSize(2);
+            if (Input.GetKey(KeyCode.Alpha3)) Toolbox.PixelTab.SetSize(3);
+            if (Input.GetKey(KeyCode.Alpha4)) Toolbox.PixelTab.SetSize(4);
+            if (Input.GetKey(KeyCode.Alpha5)) Toolbox.PixelTab.SetSize(5);
+            if (Input.GetKey(KeyCode.Alpha6)) Toolbox.PixelTab.SetSize(6);
+            if (Input.GetKey(KeyCode.Alpha7)) Toolbox.PixelTab.SetSize(7);
+            if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
+            if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
+        }
+
         protected void Update()
         {
             if (Project == null) return;
+
+            CheckNavigation();
+            CheckKeyboardShortcuts();
 
             Vector2 cursor = ScreenToWorld(Input.mousePosition);
 
@@ -128,48 +176,13 @@ namespace kooltool.Editor
                 ActiveTool.BeginStroke(cursor);
             }
 
-            if (panning)
-            {
-                Pan(cursor - pansite);
-            }
-
-            if (Input.GetMouseButtonUp(1))
-            {
-                panning = false;
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                pansite = cursor;
-                panning = true;
-            }
-
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
-
-            if (Input.GetKey(KeyCode.Alpha1)) Toolbox.PixelTab.SetSize(1);
-            if (Input.GetKey(KeyCode.Alpha2)) Toolbox.PixelTab.SetSize(2);
-            if (Input.GetKey(KeyCode.Alpha3)) Toolbox.PixelTab.SetSize(3);
-            if (Input.GetKey(KeyCode.Alpha4)) Toolbox.PixelTab.SetSize(4);
-            if (Input.GetKey(KeyCode.Alpha5)) Toolbox.PixelTab.SetSize(5);
-            if (Input.GetKey(KeyCode.Alpha6)) Toolbox.PixelTab.SetSize(6);
-            if (Input.GetKey(KeyCode.Alpha7)) Toolbox.PixelTab.SetSize(7);
-            if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
-            if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
 
             if (Input.GetKeyDown(KeyCode.LeftAlt)
              || Input.GetKeyDown(KeyCode.LeftShift))
             {
                 Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
-            }
-
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-            if (Mathf.Abs(scroll) > Mathf.Epsilon)
-            {
-                if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
-
-                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 2, 0.125f));
             }
         }
 
