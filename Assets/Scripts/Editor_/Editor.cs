@@ -7,6 +7,8 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
+        [SerializeField] protected RectTransform Zoomer;
+
         [Header("Cursors")]
         [SerializeField] protected PixelCursor PixelCursor;
         [SerializeField] protected TileCursor TileCursor;
@@ -30,9 +32,14 @@ namespace kooltool.Editor
         // poop
         public ITool ActiveTool;
         protected Vector2 LastCursor;
-        protected bool dragging;
-        bool panning;
         Vector2 pansite;
+
+        CharacterDrawing dragee;
+        Vector2 dragPivot;
+
+        protected bool Panning;
+        protected bool Drawing;
+        protected bool Dragging;
 
         public void SwitchTool()
         {
@@ -87,25 +94,34 @@ namespace kooltool.Editor
             Toolbox.Hide();
         }
 
+        protected void CancelActions(Vector2 world)
+        {
+            if (Panning) Panning = false;
+            if (Drawing) EndDraw(world);
+            if (Dragging) EndDrag(world);
+        }
+
         protected void CheckNavigation()
         {
             Vector2 cursor = ScreenToWorld(Input.mousePosition);
 
             // panning
-            if (panning)
+            if (Panning)
             {
                 Pan(cursor - pansite);
             }
             
             if (Input.GetMouseButtonUp(1))
             {
-                panning = false;
+                Panning = false;
             }
             
             if (Input.GetMouseButtonDown(1))
             {
+                CancelActions(cursor);
+
                 pansite = cursor;
-                panning = true;
+                Panning = true;
             }
 
             // zoom
@@ -132,49 +148,118 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
         }
 
+        protected void UpdateCursors()
+        {
+            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+
+            Point grid, dummy;
+
+            Project.Grid.Coords(new Point(cursor), out grid, out dummy);
+
+            float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+
+            PixelCursor.end = cursor;
+            PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
+                                                                                     Mathf.FloorToInt(cursor.y) + offset);
+            TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth,
+                                                                                    (grid.y + 0.5f) * Project.Grid.CellHeight);
+        }
+
+        protected void UpdateDrag(Vector2 world)
+        {
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                if (Input.GetMouseButtonDown(0)) StartDrag(world);
+                if (Input.GetMouseButtonUp(0))   EndDrag(world);
+                if (Dragging) ContinueDrag(world);
+            }
+        }
+
+        protected void StartDrag(Vector2 world)
+        {
+            CharacterDrawing character;
+
+            if (Layer.CharacterUnderPoint(new Point(world), out character))
+            {
+                Dragging = true;
+
+                dragPivot = world - (Vector2) character.transform.localPosition;
+                dragee = character;
+
+                Debug.Log(dragPivot);
+            }
+        }
+
+        protected void ContinueDrag(Vector2 world)
+        {
+            dragee.transform.localPosition = (world - dragPivot).Floor();
+        }
+
+        protected void EndDrag(Vector2 world)
+        {
+            Dragging = false;
+        }
+
+        protected void UpdateDraw()
+        {
+            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+
+            if (Input.GetMouseButtonUp(0))   EndDraw(cursor);
+            if (Input.GetMouseButtonDown(0)) BeginDraw(cursor);
+
+            if (Drawing) ContinueDraw(cursor);
+        }
+
+        protected void BeginDraw(Vector2 cursor)
+        {
+            CancelActions(cursor);
+
+            Drawing = true;
+
+            ActiveTool.BeginStroke(cursor);
+        }
+
+        protected void ContinueDraw(Vector2 world)
+        {
+            ActiveTool.ContinueStroke(LastCursor, world);
+        }
+
+        protected void EndDraw(Vector2 world)
+        {
+            ContinueDraw(world);
+
+            Drawing = false;
+
+            PixelCursor.end = world;
+            PixelCursor.Update();
+            ActiveTool.EndStroke(world);
+        }
+
         protected void Update()
         {
             if (Project == null) return;
 
+            Vector2 world = ScreenToWorld(Input.mousePosition);
+
             CheckNavigation();
             CheckKeyboardShortcuts();
 
-            Vector2 cursor = ScreenToWorld(Input.mousePosition);
-
-            Point grid, dummy;
-            
-            Project.Grid.Coords(new Point(cursor), out grid, out dummy);
-            
-            float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
-            
-            PixelCursor.end = cursor;
-            PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
-                                                                                     Mathf.FloorToInt(cursor.y) + offset);
-            TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth, 
-                                                                                    (grid.y + 0.5f) * Project.Grid.CellHeight);
-
-            if (dragging)
+            if (Input.GetKeyDown(KeyCode.Tab)
+             || Input.GetKeyUp(KeyCode.Tab))
             {
-                ActiveTool.ContinueStroke(LastCursor, ScreenToWorld(Input.mousePosition, floor: true));
+                CancelActions(world);
             }
 
-            LastCursor = cursor;
-
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetKey(KeyCode.Tab))
             {
-                dragging = false;
-                
-                PixelCursor.end = cursor;
-                PixelCursor.Update();
-                ActiveTool.EndStroke(cursor);
+                UpdateDrag(world);
+            }
+            else
+            {
+                UpdateDraw();
             }
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                dragging = true;
-
-                ActiveTool.BeginStroke(cursor);
-            }
+            UpdateCursors();
 
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
@@ -184,6 +269,8 @@ namespace kooltool.Editor
             {
                 Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
             }
+
+            LastCursor = ScreenToWorld(Input.mousePosition);
         }
 
         public void SetProject(Project project)
@@ -245,7 +332,7 @@ namespace kooltool.Editor
             Vector2 screen = focus ?? Input.mousePosition;
 
             Vector2 worlda = ScreenToWorld(screen);
-            World.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
+            Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
             Vector2 worldb = ScreenToWorld(screen);
             
             Pan(worldb - worlda);
@@ -253,11 +340,7 @@ namespace kooltool.Editor
 
         public void Pan(Vector2 delta)
         {
-            World.anchoredPosition += delta * World.localScale.x;
-            /*
-            World.localPosition = new Vector3(Mathf.Floor(World.localPosition.x),
-                                              Mathf.Floor(World.localPosition.y),
-                                              0f);*/
+            World.localPosition += (Vector3) delta;
         }
 
         public void MakeCharacter(Costume costume)

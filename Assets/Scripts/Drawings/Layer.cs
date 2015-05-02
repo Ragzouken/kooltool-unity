@@ -27,24 +27,9 @@ namespace kooltool.Editor
             Editor.Project.Grid.Coords(point, out cell, out offset);
 
             Tileset.Tile tile;
+            CharacterDrawing character;
 
-            CharacterDrawing character = null;
-
-            foreach (CharacterDrawing drawing in CharacterDrawings.Values)
-            {
-                var rtrans = drawing.transform as RectTransform;
-
-                if (rtrans.rect.Contains(point.Vector2()))
-                {
-                    if (character == null
-                     || drawing.transform.GetSiblingIndex() > character.transform.GetSiblingIndex())
-                    {
-                        character = drawing;
-                    }
-                }
-            }
-
-            if (character != null)
+            if (CharacterUnderPoint(point, out character))
             {
                 return character;
             }
@@ -56,6 +41,31 @@ namespace kooltool.Editor
             {
                 return Drawing;
             }
+        }
+
+        public bool CharacterUnderPoint(Point point, out CharacterDrawing character)
+        {
+            Point cell, offset;
+
+            Editor.Project.Grid.Coords(point, out cell, out offset);
+
+            character = null;
+
+            foreach (CharacterDrawing drawing in CharacterDrawings.Values)
+            {
+                var rtrans = drawing.transform as RectTransform;
+
+                if (rtrans.rect.Contains(point.Vector2() - rtrans.anchoredPosition))
+                {
+                    if (character == null
+                     || drawing.transform.GetSiblingIndex() > character.transform.GetSiblingIndex())
+                    {
+                        character = drawing;
+                    }
+                }
+            }
+
+            return character != null;
         }
 
         public CharacterDrawing AddCharacter(Character character)
