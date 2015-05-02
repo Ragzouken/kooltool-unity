@@ -167,11 +167,10 @@ namespace kooltool.Editor
 
             Project.Grid.Coords(new Point(cursor), out grid, out dummy);
 
-            float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+            var offset = Vector2.one * ((Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0);
 
             PixelCursor.end = cursor;
-            PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
-                                                                                     Mathf.FloorToInt(cursor.y) + offset);
+            PixelCursor.GetComponent<RectTransform>().anchoredPosition = cursor.Round() + offset;
             TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth,
                                                                                     (grid.y + 0.5f) * Project.Grid.CellHeight);
         }
@@ -196,8 +195,6 @@ namespace kooltool.Editor
 
                 dragPivot = world - (Vector2) character.transform.localPosition;
                 dragee = character;
-
-                Debug.Log(dragPivot);
             }
         }
 

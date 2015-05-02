@@ -42,8 +42,7 @@ namespace kooltool.Editor
 
         public void BeginStroke(Vector2 start)
         {
-            start = new Vector2(Mathf.Floor(start.x),
-                                Mathf.Floor(start.y));
+            start = start.Round();
 
             Target = Editor.Layer.DrawingUnderPoint(new Point(start));
 
@@ -86,7 +85,7 @@ namespace kooltool.Editor
                 Color color = Color.a > 0 ? Color : Color.white;
                 var blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
 
-                Target.DrawLine(start, end, Thickness, color, blend);
+                Target.DrawLine(start.Round(), end.Round(), Thickness, color, blend);
 
                 Target.Apply();
             }
