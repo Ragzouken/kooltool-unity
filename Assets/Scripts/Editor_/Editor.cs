@@ -169,17 +169,17 @@ namespace kooltool.Editor
         {
             if (Input.GetKey(KeyCode.Tab))
             {
-                if (Input.GetMouseButtonDown(0)) StartDrag(world);
+                if (Input.GetMouseButtonDown(0)) BeginDrag(world);
                 if (Input.GetMouseButtonUp(0))   EndDrag(world);
-                if (Dragging) ContinueDrag(world);
             }
+
+            if (Dragging) ContinueDrag(world);
         }
 
-        protected void StartDrag(Vector2 world)
+        protected void BeginDrag(Vector2 world, CharacterDrawing character=null)
         {
-            CharacterDrawing character;
-
-            if (Layer.CharacterUnderPoint(new Point(world), out character))
+            if (character != null
+             || Layer.CharacterUnderPoint(new Point(world), out character))
             {
                 Dragging = true;
 
@@ -192,7 +192,15 @@ namespace kooltool.Editor
 
         protected void ContinueDrag(Vector2 world)
         {
-            dragee.transform.localPosition = (world - dragPivot).Floor();
+            var half = Vector2.one * 0.5f;
+
+            Point grid, offset;
+
+            Project.Grid.Coords(new Point(world - dragPivot), out grid, out offset);
+
+            //dragee.transform.localPosition = (world - dragPivot).Floor();
+
+            dragee.transform.localPosition = grid.Vector2() * 32f + Vector2.one * 16f;
         }
 
         protected void EndDrag(Vector2 world)
@@ -250,13 +258,14 @@ namespace kooltool.Editor
                 CancelActions(world);
             }
 
-            if (Input.GetKey(KeyCode.Tab))
+            if (!Toolbox.gameObject.activeSelf)
             {
                 UpdateDrag(world);
-            }
-            else
-            {
-                UpdateDraw();
+
+                if (!Input.GetKey(KeyCode.Tab))
+                {
+                    UpdateDraw();
+                }
             }
 
             UpdateCursors();
@@ -280,7 +289,7 @@ namespace kooltool.Editor
             Toolbox.SetProject(project);
         }
 
-        public Vector2 ScreenToWorld(Vector2 screen, bool floor=false)
+        public Vector2 ScreenToWorld(Vector2 screen)
         {
             Vector2 world;
 
@@ -288,9 +297,6 @@ namespace kooltool.Editor
                                                                     screen,
                                                                     null,
                                                                     out world);
-
-            if (floor) world = new Vector2(Mathf.Floor(world.x),
-                                           Mathf.Floor(world.y));
 
             return world;                                                   
         }
@@ -345,9 +351,15 @@ namespace kooltool.Editor
 
         public void MakeCharacter(Costume costume)
         {
+            Toolbox.Hide();
+
             var character = new Character(Point.Zero, costume);
 
-            Layer.AddCharacter(character);
+            CharacterDrawing drawing = Layer.AddCharacter(character);
+
+            (drawing.transform as RectTransform).anchoredPosition = ScreenToWorld(Input.mousePosition);
+
+            BeginDrag(ScreenToWorld(Input.mousePosition), drawing);
         }
     }
 }
