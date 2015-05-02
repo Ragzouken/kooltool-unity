@@ -28,17 +28,27 @@ namespace kooltool.Editor
 
             Tileset.Tile tile;
 
+            CharacterDrawing character = null;
+
             foreach (CharacterDrawing drawing in CharacterDrawings.Values)
             {
                 var rtrans = drawing.transform as RectTransform;
 
                 if (rtrans.rect.Contains(point.Vector2()))
                 {
-                    return drawing;
+                    if (character == null
+                     || drawing.transform.GetSiblingIndex() > character.transform.GetSiblingIndex())
+                    {
+                        character = drawing;
+                    }
                 }
             }
 
-            if (Tilemap.Get(cell, out tile))
+            if (character != null)
+            {
+                return character;
+            }
+            else if (Tilemap.Get(cell, out tile))
             {
                 return Tilemap;
             }

@@ -7,6 +7,11 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
+        [Header("Cursors")]
+        [SerializeField] protected PixelCursor PixelCursor;
+        [SerializeField] protected TileCursor TileCursor;
+
+        [Header("Settings")]
         [SerializeField] protected AnimationCurve ZoomCurve;
 
         public RectTransform World;
@@ -22,6 +27,37 @@ namespace kooltool.Editor
 
         protected Coroutine ZoomCoroutine;
 
+        // poop
+        public ITool ActiveTool;
+        protected Vector2 LastCursor;
+        protected bool dragging;
+        bool panning;
+        Vector2 pansite;
+
+        public void SwitchTool()
+        {
+            PixelCursor.gameObject.SetActive(false);
+            TileCursor.gameObject.SetActive(false);
+        }
+        
+        public void SetPixelTool()
+        {
+            SwitchTool();
+            
+            ActiveTool = Toolbox.PixelTool;
+            
+            PixelCursor.gameObject.SetActive(true);
+        }
+        
+        public void SetTileTool()
+        {
+            SwitchTool();
+            
+            ActiveTool = Toolbox.TileTool;
+            
+            TileCursor.gameObject.SetActive(true);
+        }
+
         protected void Awake()
         {
             Project = new Project(new Point(32, 32));
@@ -31,6 +67,12 @@ namespace kooltool.Editor
 
             Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
             Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
+
+            // poop
+            PixelCursor.Tool = Toolbox.PixelTool;
+            TileCursor.Tool = Toolbox.TileTool;
+            
+            ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
         }
@@ -48,6 +90,59 @@ namespace kooltool.Editor
         protected void Update()
         {
             if (Project == null) return;
+
+            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+
+            Point grid, dummy;
+            
+            Project.Grid.Coords(new Point(cursor), out grid, out dummy);
+            
+            float offset = (Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0;
+            
+            PixelCursor.end = cursor;
+            PixelCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2(Mathf.FloorToInt(cursor.x) + offset,
+                                                                                     Mathf.FloorToInt(cursor.y) + offset);
+            TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth, 
+                                                                                    (grid.y + 0.5f) * Project.Grid.CellHeight);
+
+            if (dragging)
+            {
+                ActiveTool.ContinueStroke(LastCursor, ScreenToWorld(Input.mousePosition, floor: true));
+            }
+
+            LastCursor = cursor;
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                dragging = false;
+                
+                PixelCursor.end = cursor;
+                PixelCursor.Update();
+                ActiveTool.EndStroke(cursor);
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                dragging = true;
+
+                ActiveTool.BeginStroke(cursor);
+            }
+
+            if (panning)
+            {
+                Pan(cursor - pansite);
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                panning = false;
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                pansite = cursor;
+                panning = true;
+            }
 
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
@@ -85,7 +180,7 @@ namespace kooltool.Editor
             Toolbox.SetProject(project);
         }
 
-        public Vector2 ScreenToWorld(Vector2 screen)
+        public Vector2 ScreenToWorld(Vector2 screen, bool floor=false)
         {
             Vector2 world;
 
@@ -93,6 +188,10 @@ namespace kooltool.Editor
                                                                     screen,
                                                                     null,
                                                                     out world);
+
+            if (floor) world = new Vector2(Mathf.Floor(world.x),
+                                           Mathf.Floor(world.y));
+
             return world;                                                   
         }
 

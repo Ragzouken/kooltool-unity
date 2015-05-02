@@ -7,7 +7,7 @@ namespace kooltool.Editor
 {
     public class Toolbox : MonoBehaviour
     {
-        [SerializeField] protected Drawer Drawer;
+        [SerializeField] protected Editor Editor;
         [SerializeField] protected Toggle PixelTabToggle;
         [SerializeField] protected Toggle TileTabToggle;
 
@@ -60,12 +60,12 @@ namespace kooltool.Editor
 
         public void OnToggledPixelTab(bool active)
         {
-            if (active) Drawer.SetPixelTool();
+            if (active) Editor.SetPixelTool();
         }
 
         public void OnToggledTileTab(bool active)
         {
-            if (active) Drawer.SetTileTool();
+            if (active) Editor.SetTileTool();
         }
     }
 }
