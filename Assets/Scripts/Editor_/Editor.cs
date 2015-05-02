@@ -3,11 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using UnityEngine.EventSystems;
+
 namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
         [SerializeField] protected RectTransform Zoomer;
+
+        [Header("UI")]
+        [SerializeField] protected Slider ZoomSlider;
 
         [Header("Cursors")]
         [SerializeField] protected PixelCursor PixelCursor;
@@ -84,7 +89,6 @@ namespace kooltool.Editor
             ZoomTo(1f);
         }
 
-
         protected void Start()
         {
             SetProject(Project);
@@ -92,6 +96,11 @@ namespace kooltool.Editor
             generator.Go(Project);
 
             Toolbox.Hide();
+        }
+
+        protected bool GetMouseDown(int button)
+        {
+            return !EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(button);
         }
 
         protected void CancelActions(Vector2 world)
@@ -103,6 +112,8 @@ namespace kooltool.Editor
 
         protected void CheckNavigation()
         {
+            ZoomTo(ZoomSlider.value);
+
             Vector2 cursor = ScreenToWorld(Input.mousePosition);
 
             // panning
@@ -116,7 +127,7 @@ namespace kooltool.Editor
                 Panning = false;
             }
             
-            if (Input.GetMouseButtonDown(1))
+            if (GetMouseDown(1))
             {
                 CancelActions(cursor);
 
@@ -169,10 +180,10 @@ namespace kooltool.Editor
         {
             if (Input.GetKey(KeyCode.Tab))
             {
-                if (Input.GetMouseButtonDown(0)) BeginDrag(world);
-                if (Input.GetMouseButtonUp(0))   EndDrag(world);
+                if (GetMouseDown(0)) BeginDrag(world);
             }
 
+            if (Dragging && Input.GetMouseButtonUp(0)) EndDrag(world);
             if (Dragging) ContinueDrag(world);
         }
 
@@ -212,9 +223,9 @@ namespace kooltool.Editor
         {
             Vector2 cursor = ScreenToWorld(Input.mousePosition);
 
-            if (Input.GetMouseButtonUp(0))   EndDraw(cursor);
-            if (Input.GetMouseButtonDown(0)) BeginDraw(cursor);
+            if (GetMouseDown(0)) BeginDraw(cursor);
 
+            if (Drawing && Input.GetMouseButtonUp(0)) EndDraw(cursor);
             if (Drawing) ContinueDraw(cursor);
         }
 
@@ -249,7 +260,6 @@ namespace kooltool.Editor
 
             Vector2 world = ScreenToWorld(Input.mousePosition);
 
-            CheckNavigation();
             CheckKeyboardShortcuts();
 
             if (Input.GetKeyDown(KeyCode.Tab)
@@ -260,9 +270,10 @@ namespace kooltool.Editor
 
             if (!Toolbox.gameObject.activeSelf)
             {
+                CheckNavigation();
                 UpdateDrag(world);
 
-                if (!Input.GetKey(KeyCode.Tab))
+                if (!Dragging && !Input.GetKey(KeyCode.Tab))
                 {
                     UpdateDraw();
                 }
@@ -335,13 +346,18 @@ namespace kooltool.Editor
         {
             Zoom = Mathf.Clamp01(zoom);
 
-            Vector2 screen = focus ?? Input.mousePosition;
+            Vector2 center = new Vector2(Camera.main.pixelWidth  * 0.5f,
+                                         Camera.main.pixelHeight * 0.5f);
+
+            Vector2 screen = focus ?? center;
 
             Vector2 worlda = ScreenToWorld(screen);
             Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
             Vector2 worldb = ScreenToWorld(screen);
             
             Pan(worldb - worlda);
+
+            ZoomSlider.value = Zoom;
         }
 
         public void Pan(Vector2 delta)
@@ -351,15 +367,24 @@ namespace kooltool.Editor
 
         public void MakeCharacter(Costume costume)
         {
-            Toolbox.Hide();
-
             var character = new Character(Point.Zero, costume);
 
             CharacterDrawing drawing = Layer.AddCharacter(character);
 
             (drawing.transform as RectTransform).anchoredPosition = ScreenToWorld(Input.mousePosition);
 
-            BeginDrag(ScreenToWorld(Input.mousePosition), drawing);
+            StartCoroutine(Delay(delegate
+            {
+                Toolbox.Hide();
+                BeginDrag(ScreenToWorld(Input.mousePosition), drawing);
+            }));
+        }
+
+        protected IEnumerator Delay(System.Action action)
+        {
+            yield return new WaitForEndOfFrame();
+
+            action();
         }
     }
 }
