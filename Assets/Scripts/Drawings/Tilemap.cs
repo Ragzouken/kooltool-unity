@@ -27,7 +27,8 @@ public class Tilemap : MonoDrawing
         var block = renderer.gameObject;
         
 		Images.Set(cell, renderer);
-        
+
+        block.layer = LayerMask.NameToLayer("World");
         block.transform.SetParent(transform, false);
         block.transform.localPosition = new Vector2(cell.x * Size, 
                                                     cell.y * Size);

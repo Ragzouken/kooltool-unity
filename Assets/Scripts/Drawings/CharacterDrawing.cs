@@ -9,10 +9,11 @@ using PixelDraw;
 
 namespace kooltool.Editor
 {
-    public class CharacterDrawing : MonoDrawing
+    public class CharacterDrawing : MonoDrawing,
+                                    IPointerEnterHandler,
+                                    IPointerExitHandler
     {
         [SerializeField] protected Image Image;
-        [SerializeField] protected GameObject Border;
 
         public Character Character { get; protected set; }
 
@@ -24,6 +25,16 @@ namespace kooltool.Editor
 
             Image.sprite = character.Costume.Sprite;
             Image.SetNativeSize();
+        }
+
+        public void OnPointerEnter(PointerEventData data)
+        {
+            Editor.Instance.CharacterHover(this, true);
+        }
+
+        public void OnPointerExit(PointerEventData data)
+        {
+            Editor.Instance.CharacterHover(this, false);
         }
     }
 }

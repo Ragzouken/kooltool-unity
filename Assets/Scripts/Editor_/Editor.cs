@@ -9,17 +9,25 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
+        public static Editor Instance;
+
+        public LayerMask WorldLayer;
+
         [SerializeField] protected RectTransform Zoomer;
 
         [Header("UI")]
         [SerializeField] protected Slider ZoomSlider;
 
         [Header("Cursors")]
+        [SerializeField] protected GameObject Cursors;
         [SerializeField] protected PixelCursor PixelCursor;
         [SerializeField] protected TileCursor TileCursor;
 
         [Header("Settings")]
         [SerializeField] protected AnimationCurve ZoomCurve;
+
+        [Header("Highlights")]
+        [SerializeField] protected Image HighlightPrefab;
 
         public RectTransform World;
         public Toolbox Toolbox;
@@ -34,6 +42,8 @@ namespace kooltool.Editor
 
         protected Coroutine ZoomCoroutine;
 
+        protected MonoBehaviourPooler<RectTransform, Image> Highlights;
+
         // poop
         public ITool ActiveTool;
         protected Vector2 LastCursor;
@@ -45,6 +55,28 @@ namespace kooltool.Editor
         protected bool Panning;
         protected bool Drawing;
         protected bool Dragging;
+
+        public bool ShowCursors
+        {
+            get
+            {
+                return !Panning
+                    && !Dragging
+                    && IsPointerOverWorld();
+            }
+        }
+
+        public bool IsPointerOverWorld()
+        {
+            var pointer = new PointerEventData(EventSystem.current);
+            pointer.position = Input.mousePosition;
+
+            var results = new List<RaycastResult>();
+
+            EventSystem.current.RaycastAll(pointer, results);
+
+            return !(results.Count > 0 && results[0].gameObject.layer != LayerMask.NameToLayer("World"));
+        }
 
         public void SwitchTool()
         {
@@ -72,6 +104,8 @@ namespace kooltool.Editor
 
         protected void Awake()
         {
+            Instance = this;
+
             Project = new Project(new Point(32, 32));
 
             Toolbox.PixelTool = new PixelTool(this);
@@ -87,6 +121,8 @@ namespace kooltool.Editor
             ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
+
+            Highlights = new MonoBehaviourPooler<RectTransform, Image>(HighlightPrefab);
         }
 
         protected void Start()
@@ -100,7 +136,7 @@ namespace kooltool.Editor
 
         protected bool GetMouseDown(int button)
         {
-            return !EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(button);
+            return IsPointerOverWorld() && Input.GetMouseButtonDown(button);
         }
 
         protected void CancelActions(Vector2 world)
@@ -146,6 +182,8 @@ namespace kooltool.Editor
             }
         }
 
+        private string gistid;
+
         protected void CheckKeyboardShortcuts()
         {
             if (Input.GetKey(KeyCode.Alpha1)) Toolbox.PixelTab.SetSize(1);
@@ -157,6 +195,40 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha7)) Toolbox.PixelTab.SetSize(7);
             if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
             if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
+
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                byte[] tileset = Project.Tileset.Texture.EncodeToPNG();
+                string encoding = System.Convert.ToBase64String(tileset);
+
+                var files = new Dictionary<string, string>
+                {
+                    {"some file.txt", "poop"},
+                    {"another file.txt", "wee"},
+                    {"whatever.txt", "haha"},
+                    {"tileset.png", encoding},
+                };
+
+                StartCoroutine(MakeGist.Gist.Make("testing stuffff", files, delegate(string id)
+                {
+                    Debug.Log(id);
+                    gistid = id;
+                }));
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                StartCoroutine(MakeGist.Gist.Take(gistid, LoadFiles));
+            }
+        }
+
+        protected void LoadFiles(Dictionary<string, string> files)
+        {
+            string encoding = files["tileset.png"];
+
+            var tileset = System.Convert.FromBase64String(encoding);
+
+            Project.Tileset.Texture.LoadImage(tileset);
         }
 
         protected void UpdateCursors()
@@ -173,6 +245,8 @@ namespace kooltool.Editor
             PixelCursor.GetComponent<RectTransform>().anchoredPosition = cursor.Round() + offset;
             TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth,
                                                                                     (grid.y + 0.5f) * Project.Grid.CellHeight);
+
+            Cursors.SetActive(ShowCursors);
         }
 
         protected void UpdateDrag(Vector2 world)
@@ -200,8 +274,6 @@ namespace kooltool.Editor
 
         protected void ContinueDrag(Vector2 world)
         {
-            var half = Vector2.one * 0.5f;
-
             Point grid, offset;
 
             Project.Grid.Coords(new Point(world - dragPivot), out grid, out offset);
@@ -254,6 +326,8 @@ namespace kooltool.Editor
         protected void Update()
         {
             if (Project == null) return;
+
+            Debug.Log(IsPointerOverWorld());
 
             Vector2 world = ScreenToWorld(Input.mousePosition);
 
@@ -313,7 +387,6 @@ namespace kooltool.Editor
         {
             float start = Zoom;
             float end = zoom;
-            float u = 0;
             float timer = 0;
 
             Vector2 focus = new Vector2(Camera.main.pixelWidth  * 0.5f,
@@ -382,6 +455,38 @@ namespace kooltool.Editor
             yield return new WaitForEndOfFrame();
 
             action();
+        }
+        
+        public void HighlightTabbables()
+        {
+            Highlights.Clear();
+
+
+        }
+
+        public void Highlight(RectTransform rtrans)
+        {
+            var highlight = Highlights.Get(rtrans);
+
+            highlight.transform.SetParent(rtrans, false);
+            highlight.gameObject.SetActive(true);
+        }
+
+        public void UnHighlight(RectTransform rtrans)
+        {
+            Highlights.Discard(rtrans);
+        }
+
+        public void CharacterHover(CharacterDrawing drawing, bool active)
+        {
+            if (active)
+            {
+                Highlight(drawing.transform as RectTransform);
+            }
+            else
+            {
+                UnHighlight(drawing.transform as RectTransform);
+            }
         }
     }
 }

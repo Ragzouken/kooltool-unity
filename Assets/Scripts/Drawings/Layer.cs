@@ -71,6 +71,7 @@ namespace kooltool.Editor
         public CharacterDrawing AddCharacter(Character character)
         {
             var drawing = Instantiate<CharacterDrawing>(CharacterPrefab);
+            drawing.gameObject.layer = LayerMask.NameToLayer("World");
             drawing.transform.SetParent(CharacterContainer, false);
             drawing.SetCharacter(character);
             drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
