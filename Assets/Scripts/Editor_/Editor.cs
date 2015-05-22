@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine.EventSystems;
+using System.Linq;
 
 namespace kooltool.Editor
 {
@@ -12,6 +13,8 @@ namespace kooltool.Editor
         public static Editor Instance;
 
         public LayerMask WorldLayer;
+
+        [SerializeField] protected HighlightGroup Highlights;
 
         [SerializeField] protected RectTransform Zoomer;
 
@@ -26,9 +29,6 @@ namespace kooltool.Editor
         [Header("Settings")]
         [SerializeField] protected AnimationCurve ZoomCurve;
 
-        [Header("Highlights")]
-        [SerializeField] protected Image HighlightPrefab;
-
         public RectTransform World;
         public Toolbox Toolbox;
 
@@ -41,8 +41,6 @@ namespace kooltool.Editor
         public float Zoom { get; protected set; }
 
         protected Coroutine ZoomCoroutine;
-
-        protected MonoBehaviourPooler<RectTransform, Image> Highlights;
 
         // poop
         public ITool ActiveTool;
@@ -62,6 +60,7 @@ namespace kooltool.Editor
             {
                 return !Panning
                     && !Dragging
+                    && !Input.GetKey(KeyCode.Tab)
                     && IsPointerOverWorld();
             }
         }
@@ -121,8 +120,6 @@ namespace kooltool.Editor
             ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
-
-            Highlights = new MonoBehaviourPooler<RectTransform, Image>(HighlightPrefab);
         }
 
         protected void Start()
@@ -222,6 +219,25 @@ namespace kooltool.Editor
             }
         }
 
+        protected void CheckHighlights()
+        {
+            var world = new Point(ScreenToWorld(Input.mousePosition));
+            CharacterDrawing character;
+
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                Highlights.Highlights.SetActive(Layer.Characters.Instances.Cast<MonoBehaviour>());
+            }
+            else if (ShowCursors && Layer.CharacterUnderPoint(world, out character))
+            {
+                Highlights.Highlights.SetActive(new MonoBehaviour[] { character });
+            }
+            else
+            {
+                Highlights.Highlights.Clear();
+            }
+        }
+
         protected void LoadFiles(Dictionary<string, string> files)
         {
             string encoding = files["tileset.png"];
@@ -247,6 +263,8 @@ namespace kooltool.Editor
                                                                                     (grid.y + 0.5f) * Project.Grid.CellHeight);
 
             Cursors.SetActive(ShowCursors);
+
+            CheckHighlights();
         }
 
         protected void UpdateDrag(Vector2 world)
@@ -326,8 +344,6 @@ namespace kooltool.Editor
         protected void Update()
         {
             if (Project == null) return;
-
-            Debug.Log(IsPointerOverWorld());
 
             Vector2 world = ScreenToWorld(Input.mousePosition);
 
@@ -439,7 +455,7 @@ namespace kooltool.Editor
         {
             var character = new Character(Point.Zero, costume);
 
-            CharacterDrawing drawing = Layer.AddCharacter(character);
+            CharacterDrawing drawing = Layer.Characters.Get(character);
 
             (drawing.transform as RectTransform).anchoredPosition = ScreenToWorld(Input.mousePosition);
 
@@ -455,38 +471,6 @@ namespace kooltool.Editor
             yield return new WaitForEndOfFrame();
 
             action();
-        }
-        
-        public void HighlightTabbables()
-        {
-            Highlights.Clear();
-
-
-        }
-
-        public void Highlight(RectTransform rtrans)
-        {
-            var highlight = Highlights.Get(rtrans);
-
-            highlight.transform.SetParent(rtrans, false);
-            highlight.gameObject.SetActive(true);
-        }
-
-        public void UnHighlight(RectTransform rtrans)
-        {
-            Highlights.Discard(rtrans);
-        }
-
-        public void CharacterHover(CharacterDrawing drawing, bool active)
-        {
-            if (active)
-            {
-                Highlight(drawing.transform as RectTransform);
-            }
-            else
-            {
-                UnHighlight(drawing.transform as RectTransform);
-            }
         }
     }
 }

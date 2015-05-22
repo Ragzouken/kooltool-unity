@@ -17,8 +17,19 @@ namespace kooltool.Editor
         public Tilemap Tilemap;
         public RectTransform CharacterContainer;
 
-        protected Dictionary<Character, CharacterDrawing> CharacterDrawings
-            = new Dictionary<Character, CharacterDrawing>();
+        public MonoBehaviourPooler<Character, CharacterDrawing> Characters;
+
+        protected void Awake()
+        {
+            Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, CharacterContainer, InitCharacter);
+        }
+
+        protected void InitCharacter(Character character, CharacterDrawing drawing)
+        {
+            drawing.gameObject.layer = LayerMask.NameToLayer("World");
+            drawing.SetCharacter(character);
+            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
+        }
 
         public IDrawing DrawingUnderPoint(Point point)
         {
@@ -51,7 +62,7 @@ namespace kooltool.Editor
 
             character = null;
 
-            foreach (CharacterDrawing drawing in CharacterDrawings.Values)
+            foreach (CharacterDrawing drawing in Characters.Instances)
             {
                 var rtrans = drawing.transform as RectTransform;
 
@@ -66,19 +77,6 @@ namespace kooltool.Editor
             }
 
             return character != null;
-        }
-
-        public CharacterDrawing AddCharacter(Character character)
-        {
-            var drawing = Instantiate<CharacterDrawing>(CharacterPrefab);
-            drawing.gameObject.layer = LayerMask.NameToLayer("World");
-            drawing.transform.SetParent(CharacterContainer, false);
-            drawing.SetCharacter(character);
-            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
-
-            CharacterDrawings.Add(character, drawing);
-
-            return drawing;
         }
     }
 }

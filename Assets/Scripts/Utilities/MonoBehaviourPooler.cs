@@ -19,6 +19,23 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
     protected Stack<TInstance> spare
         = new Stack<TInstance>();
 
+    
+    public IEnumerable<TShortcut> Shortcuts
+    {
+        get
+        {
+            foreach (TShortcut shortcut in instances.Keys) yield return shortcut;
+        }
+    }
+
+    public IEnumerable<TInstance> Instances
+    {
+        get
+        {
+            foreach (TInstance instance in instances.Values) yield return instance;
+        }
+    }
+
     public MonoBehaviourPooler(TInstance prefab,
                                Transform parent=null,
                                Process initialize=null,
@@ -87,6 +104,21 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
         foreach (TShortcut shortcut in new List<TShortcut>(instances.Keys))
         {
             Discard(shortcut);
+        }
+    }
+
+    public void SetActive(IEnumerable<TShortcut> active)
+    {
+        var collection = new HashSet<TShortcut>(active);
+
+        foreach (TShortcut shortcut in new List<TShortcut>(instances.Keys))
+        {
+            if (!collection.Contains(shortcut)) Discard(shortcut);
+        }
+
+        foreach (TShortcut shortcut in active)
+        {
+            Get(shortcut);
         }
     }
 }
