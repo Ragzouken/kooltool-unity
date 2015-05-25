@@ -28,7 +28,7 @@ namespace kooltool.Editor
         {
             drawing.gameObject.layer = LayerMask.NameToLayer("World");
             drawing.SetCharacter(character);
-            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position.Vector2();
+            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position;
         }
 
         public IDrawing DrawingUnderPoint(Point point)
@@ -66,7 +66,7 @@ namespace kooltool.Editor
             {
                 var rtrans = drawing.transform as RectTransform;
 
-                if (rtrans.rect.Contains(point.Vector2() - rtrans.anchoredPosition))
+                if (rtrans.rect.Contains((Vector2) point - rtrans.anchoredPosition))
                 {
                     if (character == null
                      || drawing.transform.GetSiblingIndex() > character.transform.GetSiblingIndex())

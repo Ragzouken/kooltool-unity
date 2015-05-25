@@ -10,9 +10,14 @@ namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
     {
-        public static Editor Instance;
+        public static Sprite debug;
+        public Image Debug_;
+        public RectTransform Debug2;
 
-        public LayerMask WorldLayer;
+        [SerializeField] protected WorldCamera WCamera;
+        [SerializeField] protected Camera Camera_;
+        [SerializeField] protected Button PlayButton;
+        [SerializeField] protected kooltool.Player.Player Player;
 
         [SerializeField] protected HighlightGroup Highlights;
 
@@ -103,8 +108,6 @@ namespace kooltool.Editor
 
         protected void Awake()
         {
-            Instance = this;
-
             Project = new Project(new Point(32, 32));
 
             Toolbox.PixelTool = new PixelTool(this);
@@ -120,6 +123,16 @@ namespace kooltool.Editor
             ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
+
+            PlayButton.onClick.AddListener(Play);
+        }
+
+        protected void Play()
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+
+            ZoomTo(0);
+            Player.Setup(Project);
         }
 
         protected void Start()
@@ -230,11 +243,11 @@ namespace kooltool.Editor
             }
             else if (ShowCursors && Layer.CharacterUnderPoint(world, out character))
             {
-                Highlights.Highlights.SetActive(new MonoBehaviour[] { character });
+                Highlights.Highlights.SetActive(character);
             }
             else
             {
-                Highlights.Highlights.Clear();
+                Highlights.Highlights.SetActive();
             }
         }
 
@@ -297,8 +310,9 @@ namespace kooltool.Editor
             Project.Grid.Coords(new Point(world - dragPivot), out grid, out offset);
 
             //dragee.transform.localPosition = (world - dragPivot).Floor();
+            //dragee.transform.localPosition = ;
 
-            dragee.transform.localPosition = grid.Vector2() * 32f + Vector2.one * 16f;
+            dragee.Character.SetPosition((Vector2) grid * 32f + Vector2.one * 16f);
         }
 
         protected void EndDrag(Vector2 world)
@@ -344,6 +358,13 @@ namespace kooltool.Editor
         protected void Update()
         {
             if (Project == null) return;
+
+            Debug_.sprite = debug;
+            Debug_.SetNativeSize();
+            if (debug != null)
+            {
+                Debug2.anchoredPosition = debug.pivot;
+            }
 
             Vector2 world = ScreenToWorld(Input.mousePosition);
 
@@ -393,7 +414,7 @@ namespace kooltool.Editor
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(World, 
                                                                     screen,
-                                                                    null,
+                                                                    Camera_,
                                                                     out world);
 
             return world;                                                   
@@ -408,13 +429,10 @@ namespace kooltool.Editor
             Vector2 focus = new Vector2(Camera.main.pixelWidth  * 0.5f,
                                         Camera.main.pixelHeight * 0.5f);
 
-
             if (start > end)
             {
                 focus = Input.mousePosition;
             }
-
-            Vector2 worlda = ScreenToWorld(focus);
 
             while (timer < duration)
             {
@@ -438,7 +456,8 @@ namespace kooltool.Editor
             Vector2 screen = focus ?? center;
 
             Vector2 worlda = ScreenToWorld(screen);
-            Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
+            //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
+            WCamera.SetScale(ZoomCurve.Evaluate(Zoom));
             Vector2 worldb = ScreenToWorld(screen);
             
             Pan(worldb - worlda);
@@ -454,6 +473,8 @@ namespace kooltool.Editor
         public void MakeCharacter(Costume costume)
         {
             var character = new Character(Point.Zero, costume);
+
+            Project.Characters.Add(character);
 
             CharacterDrawing drawing = Layer.Characters.Get(character);
 

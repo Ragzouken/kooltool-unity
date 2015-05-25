@@ -121,4 +121,19 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
             Get(shortcut);
         }
     }
+
+    public void SetActive(TShortcut active)
+    {
+        foreach (TShortcut shortcut in new List<TShortcut>(instances.Keys))
+        {
+            if (!shortcut.Equals(active)) Discard(shortcut);
+        }
+
+        Get(active);
+    }
+
+    public void SetActive()
+    {
+        Clear();
+    }
 }

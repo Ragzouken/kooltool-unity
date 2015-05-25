@@ -21,8 +21,6 @@ public class Tilemap : MonoDrawing
 
     protected bool NewTile(Point cell, out Image renderer)
     {
-        //var block = new GameObject("Image Block");
-        //var renderer = block.AddComponent<SpriteRenderer>();
         renderer = Instantiate<Image>(TilePrefab);
         var block = renderer.gameObject;
         

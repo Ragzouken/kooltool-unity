@@ -17,12 +17,23 @@ namespace kooltool.Editor
 
         public void SetCharacter(Character character)
         {
+            if (character != Character && Character != null)
+            {
+                Character.PositionUpdated -= UpdatePosition;
+            }
+
             Character = character;
+            Character.PositionUpdated += UpdatePosition;
 
             Drawing = new SpriteDrawing(character.Costume.Sprite);
 
             Image.sprite = character.Costume.Sprite;
             Image.SetNativeSize();
+        }
+
+        private void UpdatePosition(Point position)
+        {
+            transform.localPosition = position;
         }
     }
 }
