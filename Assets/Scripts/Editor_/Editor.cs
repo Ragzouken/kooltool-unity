@@ -21,8 +21,6 @@ namespace kooltool.Editor
 
         [SerializeField] protected HighlightGroup Highlights;
 
-        [SerializeField] protected RectTransform Zoomer;
-
         [Header("UI")]
         [SerializeField] protected Slider ZoomSlider;
 
@@ -34,7 +32,6 @@ namespace kooltool.Editor
         [Header("Settings")]
         [SerializeField] protected AnimationCurve ZoomCurve;
 
-        public RectTransform World;
         public Toolbox Toolbox;
 
         public Project Project { get; protected set; }
@@ -160,7 +157,7 @@ namespace kooltool.Editor
         {
             ZoomTo(ZoomSlider.value);
 
-            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             // panning
             if (Panning)
@@ -234,7 +231,7 @@ namespace kooltool.Editor
 
         protected void CheckHighlights()
         {
-            var world = new Point(ScreenToWorld(Input.mousePosition));
+            var world = new Point(WCamera.ScreenToWorld(Input.mousePosition));
             CharacterDrawing character;
 
             if (Input.GetKey(KeyCode.Tab))
@@ -262,7 +259,7 @@ namespace kooltool.Editor
 
         protected void UpdateCursors()
         {
-            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             Point grid, dummy;
 
@@ -322,7 +319,7 @@ namespace kooltool.Editor
 
         protected void UpdateDraw()
         {
-            Vector2 cursor = ScreenToWorld(Input.mousePosition);
+            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             if (GetMouseDown(0)) BeginDraw(cursor);
 
@@ -366,7 +363,7 @@ namespace kooltool.Editor
                 Debug2.anchoredPosition = debug.pivot;
             }
 
-            Vector2 world = ScreenToWorld(Input.mousePosition);
+            Vector2 world = WCamera.ScreenToWorld(Input.mousePosition);
 
             CheckKeyboardShortcuts();
 
@@ -398,7 +395,7 @@ namespace kooltool.Editor
                 Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
             }
 
-            LastCursor = ScreenToWorld(Input.mousePosition);
+            LastCursor = WCamera.ScreenToWorld(Input.mousePosition);
         }
 
         public void SetProject(Project project)
@@ -406,18 +403,6 @@ namespace kooltool.Editor
             Project = project;
 
             Toolbox.SetProject(project);
-        }
-
-        public Vector2 ScreenToWorld(Vector2 screen)
-        {
-            Vector2 world;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(World, 
-                                                                    screen,
-                                                                    Camera_,
-                                                                    out world);
-
-            return world;                                                   
         }
 
         public IEnumerator SmoothZoomTo(float zoom, float duration)
@@ -455,10 +440,10 @@ namespace kooltool.Editor
 
             Vector2 screen = focus ?? center;
 
-            Vector2 worlda = ScreenToWorld(screen);
+            Vector2 worlda = WCamera.ScreenToWorld(screen);
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
             WCamera.SetScale(ZoomCurve.Evaluate(Zoom));
-            Vector2 worldb = ScreenToWorld(screen);
+            Vector2 worldb = WCamera.ScreenToWorld(screen);
             
             Pan(worldb - worlda);
 
@@ -467,7 +452,7 @@ namespace kooltool.Editor
 
         public void Pan(Vector2 delta)
         {
-            World.localPosition += (Vector3) delta;
+            WCamera.Pan((Vector3) (-delta));
         }
 
         public void MakeCharacter(Costume costume)
@@ -478,12 +463,12 @@ namespace kooltool.Editor
 
             CharacterDrawing drawing = Layer.Characters.Get(character);
 
-            (drawing.transform as RectTransform).anchoredPosition = ScreenToWorld(Input.mousePosition);
+            (drawing.transform as RectTransform).anchoredPosition = WCamera.ScreenToWorld(Input.mousePosition);
 
             StartCoroutine(Delay(delegate
             {
                 Toolbox.Hide();
-                BeginDrag(ScreenToWorld(Input.mousePosition), drawing);
+                BeginDrag(WCamera.ScreenToWorld(Input.mousePosition), drawing);
             }));
         }
 

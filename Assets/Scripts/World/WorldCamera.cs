@@ -16,10 +16,45 @@ namespace kooltool
         public void SetScale(float scale)
         {
             Camera.orthographicSize = Camera.pixelHeight / (2 * scale);
+        }
 
-            Debug.Log(scale);
+        public void LookAt(Vector3 world, Vector2? screen=null)
+        {
+            var center = new Vector2(Camera.pixelWidth, 
+                                     Camera.pixelHeight) * 0.5f;
 
-            //transform.position = (Vector3) Position + Vector3.back * scale * 32;
+            screen = screen ?? center;
+
+            var panning = new Plane(Vector3.forward, Camera.transform.position);
+
+            Ray ray = Camera.ScreenPointToRay((Vector3) screen);
+            Ray inverse = new Ray(world, -ray.direction);
+
+            float distance;
+
+            panning.Raycast(inverse, out distance);
+
+            Debug.Log(world);
+
+            Camera.transform.position = inverse.GetPoint(distance);
+        }
+
+        public void Pan(Vector3 worldDelta)
+        {
+            // TODO: fix this
+            Camera.transform.position += worldDelta;
+        }
+
+        public Vector2 ScreenToWorld(Vector2 screen)
+        {
+            Vector2 world;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(World,
+                                                                    screen,
+                                                                    Camera,
+                                                                    out world);
+
+            return world;
         }
     }
 }

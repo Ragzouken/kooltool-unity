@@ -31,8 +31,9 @@ namespace kooltool.Player
                 //var center = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight) * 0.5f;
 
                 Camera.SetScale(2);
+                Camera.LookAt(Player_.Position);
 
-                World.localPosition = (Vector2) Player_.Position * -1;
+                World.localPosition = Vector3.zero;
             }
         }
 
