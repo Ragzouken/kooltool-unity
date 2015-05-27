@@ -34,8 +34,6 @@ namespace kooltool
 
             panning.Raycast(inverse, out distance);
 
-            Debug.Log(world);
-
             Camera.transform.position = inverse.GetPoint(distance);
         }
 

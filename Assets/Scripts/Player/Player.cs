@@ -13,6 +13,8 @@ namespace kooltool.Player
         public Project Project { get; protected set; }
         public Character Player_ { get; protected set; }
 
+        protected Coroutine movementCO;
+
         public void Setup(Project project)
         {
             Project = project;
@@ -28,12 +30,8 @@ namespace kooltool.Player
 
             if (Player_ != null)
             {
-                //var center = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight) * 0.5f;
-
                 Camera.SetScale(2);
                 Camera.LookAt(Player_.Position);
-
-                World.localPosition = Vector3.zero;
             }
         }
 
@@ -41,14 +39,26 @@ namespace kooltool.Player
         {
             if (Player_ != null)
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))  StartCoroutine(MoveCharacter(Player_, Player_.Position + Point.Left  * 32, .5f));
-                if (Input.GetKeyDown(KeyCode.RightArrow)) StartCoroutine(MoveCharacter(Player_, Player_.Position + Point.Right * 32, .5f));
+                if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.Position + Point.Left  * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.RightArrow)) MoveCharacter(Player_, Player_.Position + Point.Right * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.UpArrow))    MoveCharacter(Player_, Player_.Position + Point.Up    * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.DownArrow))  MoveCharacter(Player_, Player_.Position + Point.Down  * 32, .5f);
             }
         }
 
-        IEnumerator MoveCharacter(Character character, 
-                                  Vector2 destination, 
-                                  float duration)
+        void MoveCharacter(Character character, 
+                           Vector2 destination, 
+                           float duration)
+        {
+            if (movementCO == null)
+            {
+                movementCO = StartCoroutine(MoveCharacterCO(character, destination, duration));
+            }
+        }
+
+        IEnumerator MoveCharacterCO(Character character, 
+                                    Vector2 destination, 
+                                    float duration)
         {
             float t = 0;
             Vector2 start = character.Position;
@@ -66,6 +76,8 @@ namespace kooltool.Player
             }
 
             character.SetPosition(destination);
+
+            movementCO = null;
         }
     }
 }
