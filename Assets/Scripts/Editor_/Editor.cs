@@ -352,13 +352,24 @@ namespace kooltool.Editor
             ActiveTool.EndStroke(world);
         }
 
+        private bool block;
+
         protected void Update()
         {
             if (Project == null) return;
 
             GameObject current = EventSystem.current.currentSelectedGameObject;
 
-            if (current && current.GetComponent<InputField>() != null) return;
+            if (current && current.GetComponent<InputField>() != null)
+            {
+                block = true;
+                return;
+            }
+            else if (block)
+            {
+                block = false;
+                return;
+            }
 
             Debug_.sprite = debug;
             Debug_.SetNativeSize();

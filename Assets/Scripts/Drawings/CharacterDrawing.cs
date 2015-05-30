@@ -11,9 +11,15 @@ namespace kooltool.Editor
 {
     public class CharacterDrawing : MonoDrawing
     {
-        [SerializeField] protected Image Image;
+        [SerializeField] protected Image image;
+        [SerializeField] protected InputField dialogueInput;
 
         public Character Character { get; protected set; }
+
+        protected void Awake()
+        {
+            dialogueInput.onEndEdit.AddListener(UpdateDialogue);
+        }
 
         public void SetCharacter(Character character)
         {
@@ -27,13 +33,18 @@ namespace kooltool.Editor
 
             Drawing = new SpriteDrawing(character.Costume.Sprite);
 
-            Image.sprite = character.Costume.Sprite;
-            Image.SetNativeSize();
+            image.sprite = character.Costume.Sprite;
+            image.SetNativeSize();
         }
 
         private void UpdatePosition(Point position)
         {
             transform.localPosition = position;
+        }
+
+        private void UpdateDialogue(string text)
+        {
+            Character.dialogue = text;
         }
     }
 }

@@ -12,6 +12,8 @@ namespace kooltool
         public Point Position { get; protected set; }
         public Costume Costume { get; protected set; }
 
+        public string dialogue = "";
+
         public Character(Point position,
                          Costume costume)
         {
