@@ -203,7 +203,7 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
             if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
 
-            if (Input.GetKeyDown(KeyCode.T))
+            if (Input.GetKeyDown(KeyCode.T) && false)
             {
                 byte[] tileset = Project.Tileset.Texture.EncodeToPNG();
                 string encoding = System.Convert.ToBase64String(tileset);
@@ -223,7 +223,7 @@ namespace kooltool.Editor
                 }));
             }
 
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKeyDown(KeyCode.U) && false)
             {
                 StartCoroutine(MakeGist.Gist.Take(gistid, LoadFiles));
             }
@@ -355,6 +355,10 @@ namespace kooltool.Editor
         protected void Update()
         {
             if (Project == null) return;
+
+            GameObject current = EventSystem.current.currentSelectedGameObject;
+
+            if (current && current.GetComponent<InputField>() != null) return;
 
             Debug_.sprite = debug;
             Debug_.SetNativeSize();
