@@ -19,7 +19,7 @@ namespace kooltool.Editor
         {
             if (Tool.Tool == TileTool.ToolMode.Pencil)
             {
-                Preview.sprite = Tool.PaintTile.Thumbnail;
+                Preview.sprite = Tool.PaintTile.sprites[0];
             }
             else if (Tool.Tool == TileTool.ToolMode.Picker)
             {

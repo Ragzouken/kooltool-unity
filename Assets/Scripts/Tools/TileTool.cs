@@ -19,13 +19,13 @@ namespace kooltool.Editor
 
         public ToolMode Tool;
 
-        public Tileset.Tile PaintTile;
+        public kooltool.Serialization.Tile PaintTile;
 
         public TileTool(Editor editor)
         {
             Editor = editor;
 
-            PaintTile = Editor.Project.Tileset.Tiles[0];
+            PaintTile = Editor.project_.tileset.tiles[0];
         }
 
         public static Point Vector2Cell(Vector2 point)
@@ -47,11 +47,11 @@ namespace kooltool.Editor
             }
             else if (Tool == ToolMode.Picker)
             {
-                Tileset.Tile sampled;
+                kooltool.Serialization.TileInstance sampled;
                 
                 if (Editor.Layer.Tilemap.Get(Vector2Cell(start), out sampled))
                 {
-                    PaintTile = sampled;
+                    PaintTile = sampled.tile;
 
                     Tool = ToolMode.Pencil;
                 }
@@ -73,7 +73,7 @@ namespace kooltool.Editor
                 {
                     plot = delegate (int x, int y)
                     {
-                        Editor.Layer.Tilemap.Set(new Point(x, y), PaintTile);
+                        Editor.Layer.Tilemap.Set(new Point(x, y), new kooltool.Serialization.TileInstance { tile = PaintTile });
                         
                         return true;
                     };
@@ -95,11 +95,11 @@ namespace kooltool.Editor
             }
             else if (Tool == ToolMode.Picker)
             {
-                Tileset.Tile sampled;
+                kooltool.Serialization.TileInstance sampled;
                 
                 if (Editor.Layer.Tilemap.Get(Vector2Cell(end), out sampled))
                 {
-                    PaintTile = sampled;
+                    PaintTile = sampled.tile;
                 }
                 else
                 {

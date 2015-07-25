@@ -12,19 +12,19 @@ public class MapGenerator : MonoBehaviour
     private class Turtle
     {
         Tilemap Tilemap;
-        Tileset.Tile Tile;
+        kooltool.Serialization.Tile Tile;
 
         Point Position;
         int Direction;
 
-        public Turtle(Tilemap tilemap, Tileset.Tile tile, Point position, int direction)
+        public Turtle(Tilemap tilemap, kooltool.Serialization.Tile tile, Point position, int direction)
         {
             Tilemap = tilemap;
             Tile = tile;
             Position = position;
             Direction = direction;
 
-            Tilemap.Set(Position, Tile);
+            Tilemap.Set(Position, Tile.Instance());
         }
 
         public void Forward()
@@ -34,7 +34,7 @@ public class MapGenerator : MonoBehaviour
             if (Direction == 2) Position = Position + new Point(-1,  0);
             if (Direction == 3) Position = Position + new Point( 0,  1);
 
-            Tilemap.Set(Position, Tile);
+            Tilemap.Set(Position, Tile.Instance());
         }
 
         public void Room(int width, int height)
@@ -43,7 +43,7 @@ public class MapGenerator : MonoBehaviour
             {
                 for (int x = -width; x < width; ++x)
                 {
-                    Tilemap.Set(Position + new Point(x, y), Tile);
+                    Tilemap.Set(Position + new Point(x, y), Tile.Instance());
                 }
             }
         }
@@ -58,10 +58,10 @@ public class MapGenerator : MonoBehaviour
 
     int turtles = 0;
 
-    public void Go(Project project)
+    public void Go(kooltool.Serialization.Project project)
     {
-        project.Tileset.AddTile();
-        project.Tileset.AddTile();
+        project.tileset.TestTile();
+        project.tileset.TestTile();
 
         int agents = Random.Range(3, 8);
 
@@ -71,11 +71,11 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public IEnumerator Generate(Project project)
+    public IEnumerator Generate(kooltool.Serialization.Project project)
     {
         turtles += 1;
 
-        var turtle = new Turtle(Tilemap, project.Tileset.Tiles[0], Point.Zero, 0);
+        var turtle = new Turtle(Tilemap, project.tileset.tiles[0], Point.Zero, 0);
         int paths = Random.Range(5, 8);
 
         for (int y = 0; y < paths; ++y)
@@ -106,7 +106,7 @@ public class MapGenerator : MonoBehaviour
         CheckOutline(project);
     }
 
-    public void CheckOutline(Project project)
+    public void CheckOutline(kooltool.Serialization.Project project)
     {
         if (turtles == 0)
         {
@@ -114,7 +114,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public IEnumerator Outline(Project project)
+    public IEnumerator Outline(kooltool.Serialization.Project project)
     {
         var outlines = new Queue<Point>();
 
@@ -124,7 +124,7 @@ public class MapGenerator : MonoBehaviour
             {
                 for (int x = -1; x <= 1; ++x)
                 {
-                    Tileset.Tile dummy;
+                    kooltool.Serialization.TileInstance dummy;
 
                     Point outline = tile.Key + new Point(x, y);
 
@@ -140,7 +140,7 @@ public class MapGenerator : MonoBehaviour
 
         foreach (var outline in outlines)
         {
-            Tilemap.Set(outline, project.Tileset.Tiles[1]);
+            Tilemap.Set(outline, project.tileset.tiles[1].Instance());
 
             if (done > 16)
             {
@@ -155,11 +155,10 @@ public class MapGenerator : MonoBehaviour
         StartCoroutine(DrawTiles(project));
     }
 
-    public IEnumerator DrawTiles(Project project)
+    public IEnumerator DrawTiles(kooltool.Serialization.Project project)
     {
-        Tileset.Tile tile = project.Tileset.Tiles[0];
-        IDrawing drawing = tile.Drawing();
-        drawing = Tilemap.Drawing;
+        kooltool.Serialization.Tile tile = project.tileset.tiles[1];
+        IDrawing drawing = Tilemap.Drawing;
 
         Vector2 prev = Vector2.zero;
         Vector2 point = Vector2.zero;

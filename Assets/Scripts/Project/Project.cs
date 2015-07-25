@@ -16,17 +16,15 @@ namespace kooltool
         public SparseGrid<bool> Grid { get; protected set; }
 
         // resources
-        public Tileset Tileset { get; protected set; }
-        public IList<Costume> Costumes { get; protected set; }
+        public readonly IList<Costume> Costumes;
 
         // test
-        public IList<Character> Characters { get; protected set; }
+        public readonly IList<Character> Characters;
 
         public Project(Point gridsize)
         {
             Grid = new SparseGrid<bool>(gridsize.x, gridsize.y);
 
-            Tileset = new Tileset();
             Costumes = new List<Costume>();
 
             Characters = new List<Character>();

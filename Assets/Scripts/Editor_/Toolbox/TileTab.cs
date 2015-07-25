@@ -39,7 +39,7 @@ namespace kooltool.Editor
         {
             Tiles.Clear();
 
-            foreach (Tileset.Tile tile in Editor.Project.Tileset.Tiles)
+            foreach (kooltool.Serialization.Tile tile in Editor.project_.tileset.tiles)
             {
                 TileIndicator element = Tiles.Add();
 
@@ -60,7 +60,7 @@ namespace kooltool.Editor
 
         public void OnClickedNew()
         {
-            Tool.PaintTile = Editor.Project.Tileset.AddTile();
+            Tool.PaintTile = Editor.project_.tileset.TestTile();
 
             Refresh();
         }

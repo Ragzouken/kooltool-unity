@@ -37,7 +37,7 @@ namespace kooltool.Editor
 
             Editor.Project.Grid.Coords(point, out cell, out offset);
 
-            Tileset.Tile tile;
+            kooltool.Serialization.TileInstance tile;
             CharacterDrawing character;
 
             if (CharacterUnderPoint(point, out character))
@@ -77,6 +77,15 @@ namespace kooltool.Editor
             }
 
             return character != null;
+        }
+
+        public void SetLayer(kooltool.Serialization.Layer layer,
+                             kooltool.Serialization.Index index)
+        {
+            foreach (var tile in layer.tiles)
+            {
+
+            }
         }
     }
 }

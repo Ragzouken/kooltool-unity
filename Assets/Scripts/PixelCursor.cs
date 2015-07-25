@@ -17,6 +17,8 @@ namespace kooltool.Editor
 
         public void Update()
         {
+            if (Tool == null) return; 
+
             float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
             IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
             var cursor = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);

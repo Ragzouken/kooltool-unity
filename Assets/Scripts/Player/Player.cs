@@ -9,19 +9,34 @@ namespace kooltool.Player
     {
         [SerializeField] protected WorldCamera Camera;
         [SerializeField] protected RectTransform World;
+        [SerializeField] protected kooltool.Editor.Editor editor;
+
+        [Header("Speech Test")]
+        [SerializeField] protected RectTransform speechContainer;
+        [SerializeField] protected SpeechTest speechPrefab;
 
         public Project Project { get; protected set; }
         public Character Player_ { get; protected set; }
 
         protected Coroutine movementCO;
+        protected Dictionary<Point, Character> collision
+            = new Dictionary<Point, Character>();
 
         public void Setup(Project project)
         {
             Project = project;
 
-
-
             if (Project.Characters.Count > 0) Player_ = Project.Characters[0];
+
+            collision.Clear();
+
+            foreach (var character in project.Characters)
+            {
+                Point start, dummy;
+                project.Grid.Coords(character.Position, out start, out dummy);
+
+                collision[start] = character;
+            }
         }
 
         protected void Update()
@@ -39,11 +54,27 @@ namespace kooltool.Player
         {
             if (Player_ != null)
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.Position + Point.Left  * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.RightArrow)) MoveCharacter(Player_, Player_.Position + Point.Right * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.UpArrow))    MoveCharacter(Player_, Player_.Position + Point.Up    * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.DownArrow))  MoveCharacter(Player_, Player_.Position + Point.Down  * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.Position + Vector2.left  * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.RightArrow)) MoveCharacter(Player_, Player_.Position + Vector2.right * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.UpArrow))    MoveCharacter(Player_, Player_.Position + Vector2.up    * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.DownArrow))  MoveCharacter(Player_, Player_.Position + Vector2.down  * 32, .5f);
             }
+        }
+
+        public void Say(Character character, string text)
+        {
+            var speech = Instantiate<SpeechTest>(speechPrefab);
+            speech.transform.SetParent(speechContainer);
+            speech.Setup(text, 1f);
+
+            var drawing = editor.Layer.Characters.Get(character);
+
+            float angle = Random.value * Mathf.PI * 2;
+
+            Vector2 offset = new Vector2(Mathf.Cos(angle),
+                                         Mathf.Sin(angle));
+
+            speech.transform.position = drawing.transform.position + (Vector3) offset * 32f;
         }
 
         void MoveCharacter(Character character, 
@@ -60,6 +91,22 @@ namespace kooltool.Player
                                     Vector2 destination, 
                                     float duration)
         {
+            Point cstart = Project.Grid.WorldToCell(character.Position);
+            Point cend   = Project.Grid.WorldToCell(destination);
+
+            if (collision.ContainsKey(cend))
+            {
+                var other = collision[cend];
+
+                Say(other, other.dialogue);
+
+                yield break;
+            }
+
+            if (collision.ContainsKey(cstart) && collision[cstart] == character) collision.Remove(cstart);
+
+            collision[cend] = character;
+
             float t = 0;
             Vector2 start = character.Position;
             Vector2 velocity = (destination - start) / duration;
@@ -68,7 +115,7 @@ namespace kooltool.Player
 
             while (t < duration)
             {
-                t += Time.deltaTime;
+                t = Mathf.Min(duration, t + Time.deltaTime);
 
                 character.SetPosition(start + velocity * t);
 

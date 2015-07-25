@@ -7,9 +7,9 @@ namespace kooltool
 {
     public class Character
     {
-        public event System.Action<Point> PositionUpdated;
+        public event System.Action<Vector2> PositionUpdated;
 
-        public Point Position { get; protected set; }
+        public Vector2 Position { get; protected set; }
         public Costume Costume { get; protected set; }
 
         public string dialogue = "";
@@ -21,7 +21,7 @@ namespace kooltool
             Costume = costume;
         }
 
-        public void SetPosition(Point position)
+        public void SetPosition(Vector2 position)
         {
             Position = position;
 

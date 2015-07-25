@@ -12,13 +12,13 @@ namespace kooltool.Editor
         [SerializeField] protected Image Image;
         public Toggle Toggle;
 
-        public Tileset.Tile Tile { get; protected set; }
+        public kooltool.Serialization.Tile Tile { get; protected set; }
 
-        public void SetTile(Tileset.Tile tile)
+        public void SetTile(kooltool.Serialization.Tile tile)
         {
             Tile = tile;
 
-            Image.sprite = tile.Thumbnail;
+            Image.sprite = tile.sprites[0];
             Image.SetNativeSize();
         }
     }

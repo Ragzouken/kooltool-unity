@@ -15,9 +15,9 @@ public class Tilemap : MonoDrawing
 
 	protected SparseGrid<Image> Images
 		= new SparseGrid<Image>(Size);
-	
-    protected SparseGrid<Tileset.Tile> Tiles
-        = new SparseGrid<Tileset.Tile>(Size);
+
+    protected SparseGrid<kooltool.Serialization.TileInstance> Tiles
+        = new SparseGrid<kooltool.Serialization.TileInstance>(Size);
 
     protected bool NewTile(Point cell, out Image renderer)
     {
@@ -40,25 +40,30 @@ public class Tilemap : MonoDrawing
         Drawing = Tiled; 
     }
 
+    public void SetLayer(kooltool.Serialization.Layer layer)
+    {
+
+    }
+
     public override void Apply()
     {
         Drawing.Apply();
     }
 
-    public bool Get(Point cell, out Tileset.Tile tile)
+    public bool Get(Point cell, out kooltool.Serialization.TileInstance tile)
     {
         return Tiles.Get(cell, out tile);
     }
 
-	public void Set(Point cell, Tileset.Tile tile)
+    public void Set(Point cell, kooltool.Serialization.TileInstance tile)
 	{
 		Image image;
 
 		Images.GetDefault(cell, out image, NewTile);
 
-		image.sprite = tile.Drawing().Sprite;
+		image.sprite = tile.tile.sprites[0];
 
-		Tiled.Cells.Set(cell, tile.Drawing());
+		Tiled.Cells.Set(cell, new SpriteDrawing(tile.tile.sprites[0]));
 
         if (Tiles.Set(cell, tile))
         {
@@ -68,7 +73,7 @@ public class Tilemap : MonoDrawing
 
     public void Unset(Point cell)
     {
-        Tileset.Tile tile;
+        kooltool.Serialization.TileInstance tile;
         Image image;
         IDrawing drawing;
 
@@ -83,8 +88,20 @@ public class Tilemap : MonoDrawing
         }
     }
 
-    public IEnumerator<KeyValuePair<Point, Tileset.Tile>> GetEnumerator()
+    public IEnumerator<KeyValuePair<Point, kooltool.Serialization.TileInstance>> GetEnumerator()
     {
         return Tiles.GetEnumerator();
+    }
+
+    public kooltool.Serialization.Layer.Grid Serialize(kooltool.Serialization.Index index)
+    {
+        var tilemap = new kooltool.Serialization.Layer.Grid();
+        
+        foreach (var pair in Tiles)
+        {
+            tilemap.Add(pair.Key, pair.Value);
+        }
+
+        return tilemap;
     }
 }

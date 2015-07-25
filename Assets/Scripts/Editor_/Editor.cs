@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System.Linq;
 
+using Newtonsoft.Json;
+
 namespace kooltool.Editor
 {
     public class Editor : MonoBehaviour
@@ -35,6 +37,7 @@ namespace kooltool.Editor
         public Toolbox Toolbox;
 
         public Project Project { get; protected set; }
+        public Serialization.Project project_;
 
         public MapGenerator generator;
 
@@ -103,9 +106,28 @@ namespace kooltool.Editor
             TileCursor.gameObject.SetActive(true);
         }
 
+        public Serialization.Project CreateNewProject()
+        {
+            var project = new Serialization.Project
+            {
+                
+            };
+
+            return project;
+        }
+
+        public void SetProject(Serialization.Project project)
+        {
+            project_ = project;
+        }
+
         protected void Awake()
         {
             Project = new Project(new Point(32, 32));
+
+            SetProject(Serialization.ProjectTools.Blank());
+
+            project_.tileset.TestTile();
 
             Toolbox.PixelTool = new PixelTool(this);
             Toolbox.TileTool = new TileTool(this);
@@ -128,6 +150,11 @@ namespace kooltool.Editor
         {
             EventSystem.current.SetSelectedGameObject(null);
 
+            foreach (var character in Layer.Characters.Instances)
+            {
+                character.SetPlayer();
+            }
+
             ZoomTo(0);
             Player.Setup(Project);
         }
@@ -136,7 +163,7 @@ namespace kooltool.Editor
         {
             SetProject(Project);
 
-            generator.Go(Project);
+            generator.Go(project_);
 
             Toolbox.Hide();
         }
@@ -185,7 +212,7 @@ namespace kooltool.Editor
             {
                 if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
                 
-                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 2, 0.125f));
+                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 1, 0.125f));
             }
         }
 
@@ -203,9 +230,20 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
             if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
 
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                project_.index.Save(project_);
+            }
+
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                var index = new Serialization.Index();
+                var path = Application.persistentDataPath;
+            }
+
             if (Input.GetKeyDown(KeyCode.T) && false)
             {
-                byte[] tileset = Project.Tileset.Texture.EncodeToPNG();
+                byte[] tileset = project_.tileset.texture.texture.EncodeToPNG();
                 string encoding = System.Convert.ToBase64String(tileset);
 
                 var files = new Dictionary<string, string>
@@ -254,7 +292,7 @@ namespace kooltool.Editor
 
             var tileset = System.Convert.FromBase64String(encoding);
 
-            Project.Tileset.Texture.LoadImage(tileset);
+            project_.tileset.texture.texture.LoadImage(tileset);
         }
 
         protected void UpdateCursors()
@@ -485,6 +523,11 @@ namespace kooltool.Editor
                 Toolbox.Hide();
                 BeginDrag(WCamera.ScreenToWorld(Input.mousePosition), drawing);
             }));
+        }
+
+        public void Say(Character character, string text)
+        {
+            Layer.Characters.Get(character).ShowDialogue(text);
         }
 
         protected IEnumerator Delay(System.Action action)
