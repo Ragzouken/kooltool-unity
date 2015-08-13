@@ -5,8 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
+using kooltool.Serialization;
 
-namespace kooltool.Serialization
+namespace kooltool
 {
     [JsonObject(IsReference=false)]
     public struct Rect
@@ -59,7 +60,7 @@ namespace kooltool.Serialization
 
     public class Tileset : IResource
     {
-        public Texture texture;
+        public Serialization.Texture texture;
         public List<Tile> tiles = new List<Tile>();
 
         void IResource.Load(Index index) { }
@@ -75,7 +76,12 @@ namespace kooltool.Serialization
                 subtiles = new List<Rect> { new Rect { x = i * 32, y = 0, h = 32, w = 32 } },
             };
 
+            var blank = PixelDraw.Brush.Rectangle(32, 32, new Color(Random.value, Random.value, Random.value, 1));
+
             tile.InitTest();
+
+            PixelDraw.Brush.Apply(blank, Point.Zero, tile.sprites[0], Point.Zero, PixelDraw.Blend.Replace);
+            tile.sprites[0].texture.Apply();
 
             tiles.Add(tile);
 

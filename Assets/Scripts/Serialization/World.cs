@@ -23,6 +23,8 @@ namespace kooltool.Serialization
 
         public Tileset tileset;
         public Grid tiles = new Grid();
+
+        public HashSet<Character> characters = new HashSet<Character>();
     }
 
     public class World

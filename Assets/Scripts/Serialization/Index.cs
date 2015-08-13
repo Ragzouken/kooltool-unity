@@ -18,6 +18,8 @@ namespace kooltool.Serialization
 
     public class Index
     {
+        public int id;
+
         public class File_
         {
             public Index index;
@@ -44,8 +46,7 @@ namespace kooltool.Serialization
         public File_ MFile_(string hint)
         {
             string path = Application.persistentDataPath;
-            int id = Random.Range(0, 255);
-            string local = string.Format("{0}-{1}", id, hint);
+            string local = string.Format("{0:x4}-{1}", id++, hint);
 
             return new File_ { index = this, path = local, };
         }
@@ -82,9 +83,20 @@ namespace kooltool.Serialization
             }
         }
 
+        [JsonIgnore]
+        public string folder;
+        [JsonIgnore]
+        public string path
+        {
+            get
+            {
+                return Application.persistentDataPath + "/" + folder;
+            }
+        }
+
         public void Save(object data)
         {
-            string path = Application.persistentDataPath;
+            Directory.CreateDirectory(path);
 
             foreach (IResource resource in resources)
             {
@@ -94,18 +106,24 @@ namespace kooltool.Serialization
             File.WriteAllText(path + "/project.json", JsonWrapper.Serialise(data));
         }
 
+        public void Load()
+        {
+            foreach (IResource resource in resources)
+            {
+                resource.Load(this);
+            }
+        }
+
         public void Write(File_ file, byte[] data)
         {
-            string path = Application.persistentDataPath;
-
             File.WriteAllBytes(path+"/"+file.path, data);
         }
 
         public byte[] Read(File_ file)
         {
-            string path = Application.persistentDataPath;
-
             return File.ReadAllBytes(path + "/" + file.path);
         }
+
+
     }
 }

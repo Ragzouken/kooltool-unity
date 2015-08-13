@@ -19,7 +19,7 @@ namespace kooltool.Editor
 
         public ToolMode Tool;
 
-        public kooltool.Serialization.Tile PaintTile;
+        public kooltool.Tile PaintTile;
 
         public TileTool(Editor editor)
         {

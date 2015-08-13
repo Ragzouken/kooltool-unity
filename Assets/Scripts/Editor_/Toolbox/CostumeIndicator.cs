@@ -4,22 +4,38 @@ using System.Collections;
 using System.Collections.Generic;
 
 using PixelDraw;
+using kooltool.Serialization;
 
 namespace kooltool.Editor
 {
     public class CostumeIndicator : MonoBehaviour
     {
-        [SerializeField] protected Image Image;
-        public Button Button;
+        [SerializeField] private Image Image;
+        [SerializeField] private Button Button;
 
         public Costume Costume { get; protected set; }
 
-        public void SetCostume(Costume costume)
+        private System.Action action;
+
+        private void Awake()
+        {
+            Button.onClick.AddListener(OnClicked);
+        }
+
+        public void SetCostume(Costume costume, System.Action action)
         {
             Costume = costume;
 
-            Image.sprite = Costume.Sprite;
+            this.action = action;
+
+            costume.TestInit();
+            Image.sprite = Costume.sprite;
             Image.SetNativeSize();
+        }
+
+        private void OnClicked()
+        {
+            action();
         }
     }
 }

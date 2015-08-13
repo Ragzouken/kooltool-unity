@@ -12,12 +12,12 @@ public class MapGenerator : MonoBehaviour
     private class Turtle
     {
         Tilemap Tilemap;
-        kooltool.Serialization.Tile Tile;
+        Tile Tile;
 
         Point Position;
         int Direction;
 
-        public Turtle(Tilemap tilemap, kooltool.Serialization.Tile tile, Point position, int direction)
+        public Turtle(Tilemap tilemap, Tile tile, Point position, int direction)
         {
             Tilemap = tilemap;
             Tile = tile;
@@ -157,7 +157,7 @@ public class MapGenerator : MonoBehaviour
 
     public IEnumerator DrawTiles(kooltool.Serialization.Project project)
     {
-        kooltool.Serialization.Tile tile = project.tileset.tiles[1];
+        Tile tile = project.tileset.tiles[1];
         IDrawing drawing = Tilemap.Drawing;
 
         Vector2 prev = Vector2.zero;

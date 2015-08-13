@@ -32,8 +32,11 @@ namespace kooltool.Serialization
 
                 texture = new Texture2D(2, 2);
                 texture.LoadImage(value);
+                texture.filterMode = FilterMode.Point;
             }
         }
+
+        public Texture() { }
 
         public Texture(Index index)
         {

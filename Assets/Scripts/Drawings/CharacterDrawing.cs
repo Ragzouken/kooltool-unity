@@ -32,9 +32,11 @@ namespace kooltool.Editor
             Character = character;
             Character.PositionUpdated += UpdatePosition;
 
-            Drawing = new SpriteDrawing(character.Costume.Sprite);
+            character.costume.TestInit();
+            Drawing = new SpriteDrawing(character.costume.sprite);
+            //dialogueInput.text = character.dialogue;
 
-            image.sprite = character.Costume.Sprite;
+            image.sprite = character.costume.sprite;
             image.SetNativeSize();
         }
 

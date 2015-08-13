@@ -9,14 +9,17 @@ namespace kooltool.Generators
 {
     public static class Costume
     {
-        public static kooltool.Costume Smiley(int width, int height) 
+        public static kooltool.Serialization.Costume Smiley(Serialization.Project project,
+                                                            int width, 
+                                                            int height) 
         {
-            var texture = BlankTexture.New(width, height, Color.clear);
-            
-            var sprite = Sprite.Create(texture, 
-                                       new Rect(0, 0, texture.width, texture.height),
-                                       Vector2.one * 0.5f,
-                                       1f);
+            var costume = new Serialization.Costume
+            {
+                name = "Smiley",
+                texture = project.index.CreateTexture(width, height),
+            };
+
+            costume.TestInit();
 
             Color face = new Color(Random.value,
                                    Random.value,
@@ -28,23 +31,23 @@ namespace kooltool.Generators
 
             Brush.Apply(Brush.Circle(width, face), 
                         new Point(0, 0),
-                        sprite, 
+                        costume.sprite, 
                         new Point(0, 0),
                         Blend.Alpha);
 
             Sprite eye = Brush.Circle(width / 8, feature);
 
             Brush.Apply(eye, new Point(-width / 4, height / 4),
-                        sprite, new Point(0, 0),
+                        costume.sprite, new Point(0, 0),
                         Blend.Alpha);
 
             Brush.Apply(eye, new Point(width / 4, height / 4),
-                        sprite, new Point(0, 0),
+                        costume.sprite, new Point(0, 0),
                         Blend.Alpha);
 
-            texture.Apply();
+            costume.texture.texture.Apply();
 
-            return new kooltool.Costume("Smiley", sprite);
+            return costume;
         }
     }
 }

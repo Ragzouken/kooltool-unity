@@ -19,16 +19,28 @@ namespace kooltool.Editor
 
         public MonoBehaviourPooler<Character, CharacterDrawing> Characters;
 
+        private kooltool.Serialization.Layer layer;
+
         protected void Awake()
         {
-            Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, CharacterContainer, InitCharacter);
+            Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, 
+                                                                              CharacterContainer, 
+                                                                              InitialiseCharacter);
         }
 
-        protected void InitCharacter(Character character, CharacterDrawing drawing)
+        private void InitialiseCharacter(Character character, CharacterDrawing drawing)
         {
             drawing.gameObject.layer = LayerMask.NameToLayer("World");
             drawing.SetCharacter(character);
-            drawing.GetComponent<RectTransform>().anchoredPosition = character.Position;
+            drawing.GetComponent<RectTransform>().anchoredPosition = character.position;
+        }
+
+        public void SetLayer(Serialization.Layer layer)
+        {
+            this.layer = layer;
+
+            Tilemap.SetLayer(layer);
+            Characters.SetActive(layer.characters);
         }
 
         public IDrawing DrawingUnderPoint(Point point)
@@ -77,15 +89,6 @@ namespace kooltool.Editor
             }
 
             return character != null;
-        }
-
-        public void SetLayer(kooltool.Serialization.Layer layer,
-                             kooltool.Serialization.Index index)
-        {
-            foreach (var tile in layer.tiles)
-            {
-
-            }
         }
     }
 }

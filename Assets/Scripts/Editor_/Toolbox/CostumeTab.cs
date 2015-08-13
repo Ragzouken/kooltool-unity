@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using kooltool.Serialization;
+
 namespace kooltool.Editor
 {
     public class CostumeTab : MonoBehaviour
@@ -19,15 +21,23 @@ namespace kooltool.Editor
 
         protected TileTool Tool;
 
-        protected ChildElements<CostumeIndicator> Costumes;
+        private MonoBehaviourPooler<Costume, CostumeIndicator> costumes;
 
         private void Awake()
         {
             NewButton.onClick.AddListener(OnClickedNew);
 
-            Costumes = new ChildElements<CostumeIndicator>(CostumeContainer, CostumePrefab);
+            costumes = new MonoBehaviourPooler<Costume, CostumeIndicator>(CostumePrefab,
+                                                                          CostumeContainer,
+                                                                          InitialiseCostume);
 
             Refresh();
+        }
+
+        private void InitialiseCostume(Costume costume, 
+                                       CostumeIndicator indicator)
+        {
+            indicator.SetCostume(costume, () => Editor.MakeCharacter(costume));
         }
 
         public void SetTileTool(TileTool tool)
@@ -37,26 +47,12 @@ namespace kooltool.Editor
 
         public void Refresh()
         {
-            Costumes.Clear();
-
-            foreach (Costume costume in Editor.Project.Costumes)
-            {
-                CostumeIndicator element = Costumes.Add();
-
-                element.SetCostume(costume);
-
-                element.Button.onClick.RemoveAllListeners();
-                element.Button.onClick.AddListener(delegate
-                {
-                    Editor.MakeCharacter(element.Costume);
-                });
-            }
+            costumes.SetActive(Editor.project_.costumes);
         }
 
         public void OnClickedNew()
         {
-            //Tool.PaintTile = Editor.Project.Tileset.AddTile();
-            Editor.Project.Costumes.Add(Generators.Costume.Smiley(Editor.Project.Grid.CellWidth, Editor.Project.Grid.CellHeight));
+            Editor.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, Editor.Project.Grid.CellWidth, Editor.Project.Grid.CellHeight));
 
             Refresh();
         }

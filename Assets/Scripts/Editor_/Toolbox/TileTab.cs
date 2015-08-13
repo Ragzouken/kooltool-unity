@@ -39,7 +39,7 @@ namespace kooltool.Editor
         {
             Tiles.Clear();
 
-            foreach (kooltool.Serialization.Tile tile in Editor.project_.tileset.tiles)
+            foreach (Tile tile in Editor.project_.tileset.tiles)
             {
                 TileIndicator element = Tiles.Add();
 

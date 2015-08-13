@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using System.Linq;
+
 namespace kooltool.Player
 {
     public class Player : MonoBehaviour
@@ -15,25 +17,27 @@ namespace kooltool.Player
         [SerializeField] protected RectTransform speechContainer;
         [SerializeField] protected SpeechTest speechPrefab;
 
-        public Project Project { get; protected set; }
+        public Serialization.Project Project { get; protected set; }
         public Character Player_ { get; protected set; }
 
         protected Coroutine movementCO;
         protected Dictionary<Point, Character> collision
             = new Dictionary<Point, Character>();
 
-        public void Setup(Project project)
+        public void Setup(Serialization.Project project)
         {
             Project = project;
 
-            if (Project.Characters.Count > 0) Player_ = Project.Characters[0];
+            if (project.world.layers[0].characters.Count > 0) Player_ = project.world.layers[0].characters.First();
+
+            var grid = new SparseGrid<int>(32);
 
             collision.Clear();
 
-            foreach (var character in project.Characters)
+            foreach (var character in project.world.layers[0].characters)
             {
                 Point start, dummy;
-                project.Grid.Coords(character.Position, out start, out dummy);
+                grid.Coords(character.position, out start, out dummy);
 
                 collision[start] = character;
             }
@@ -46,7 +50,7 @@ namespace kooltool.Player
             if (Player_ != null)
             {
                 Camera.SetScale(2);
-                Camera.LookAt(Player_.Position);
+                Camera.LookAt(Player_.position);
             }
         }
 
@@ -54,10 +58,10 @@ namespace kooltool.Player
         {
             if (Player_ != null)
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.Position + Vector2.left  * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.RightArrow)) MoveCharacter(Player_, Player_.Position + Vector2.right * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.UpArrow))    MoveCharacter(Player_, Player_.Position + Vector2.up    * 32, .5f);
-                if (Input.GetKeyDown(KeyCode.DownArrow))  MoveCharacter(Player_, Player_.Position + Vector2.down  * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.position + Vector2.left  * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.RightArrow)) MoveCharacter(Player_, Player_.position + Vector2.right * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.UpArrow))    MoveCharacter(Player_, Player_.position + Vector2.up    * 32, .5f);
+                if (Input.GetKeyDown(KeyCode.DownArrow))  MoveCharacter(Player_, Player_.position + Vector2.down  * 32, .5f);
             }
         }
 
@@ -91,8 +95,10 @@ namespace kooltool.Player
                                     Vector2 destination, 
                                     float duration)
         {
-            Point cstart = Project.Grid.WorldToCell(character.Position);
-            Point cend   = Project.Grid.WorldToCell(destination);
+            var grid = new SparseGrid<int>(32);
+
+            Point cstart = grid.WorldToCell(character.position);
+            Point cend   = grid.WorldToCell(destination);
 
             if (collision.ContainsKey(cend))
             {
@@ -108,7 +114,7 @@ namespace kooltool.Player
             collision[cend] = character;
 
             float t = 0;
-            Vector2 start = character.Position;
+            Vector2 start = character.position;
             Vector2 velocity = (destination - start) / duration;
 
             yield return null;

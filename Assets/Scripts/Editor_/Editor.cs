@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 
 using Newtonsoft.Json;
+using kooltool.Serialization;
 
 namespace kooltool.Editor
 {
@@ -16,9 +17,13 @@ namespace kooltool.Editor
         public Image Debug_;
         public RectTransform Debug2;
 
+        [Header("Toolbar")]
+        [SerializeField] protected Button playButton;
+        [SerializeField] private Button saveButton;
+
         [SerializeField] protected WorldCamera WCamera;
         [SerializeField] protected Camera Camera_;
-        [SerializeField] protected Button PlayButton;
+        
         [SerializeField] protected kooltool.Player.Player Player;
 
         [SerializeField] protected HighlightGroup Highlights;
@@ -106,28 +111,22 @@ namespace kooltool.Editor
             TileCursor.gameObject.SetActive(true);
         }
 
-        public Serialization.Project CreateNewProject()
-        {
-            var project = new Serialization.Project
-            {
-                
-            };
-
-            return project;
-        }
-
         public void SetProject(Serialization.Project project)
         {
             project_ = project;
+
+            Layer.SetLayer(project.world.layers[0]);
         }
+
+        public Browser browser;
 
         protected void Awake()
         {
             Project = new Project(new Point(32, 32));
 
             SetProject(Serialization.ProjectTools.Blank());
-
             project_.tileset.TestTile();
+            //SetProject(LoadProject("test"));
 
             Toolbox.PixelTool = new PixelTool(this);
             Toolbox.TileTool = new TileTool(this);
@@ -143,7 +142,16 @@ namespace kooltool.Editor
 
             ZoomTo(1f);
 
-            PlayButton.onClick.AddListener(Play);
+            playButton.onClick.AddListener(Play);
+            saveButton.onClick.AddListener(Save);
+
+            browser.OnConfirmed += delegate(Serialization.Summary summary)
+            {
+                browser.gameObject.SetActive(false);
+                SetProject(Serialization.ProjectTools.LoadProject(summary));
+            };
+
+            browser.Refresh();
         }
 
         protected void Play()
@@ -156,14 +164,28 @@ namespace kooltool.Editor
             }
 
             ZoomTo(0);
-            Player.Setup(Project);
+            Player.Setup(project_);
+        }
+
+        private void Save()
+        {
+            project_.index.Save(project_);
+
+            var summary = new Serialization.Summary
+            {
+                title = project_.index.folder,
+                description = "unset",
+                icon = "icon.png",
+                iconSprite = PixelDraw.Brush.Circle(128, new Color(Random.value, Random.value, Random.value, 1)),
+                folder = project_.index.folder,
+            };
+
+            Serialization.ProjectTools.SaveSummary(summary);
         }
 
         protected void Start()
         {
-            SetProject(Project);
-
-            generator.Go(project_);
+            //SetProject(Project);
 
             Toolbox.Hide();
         }
@@ -207,8 +229,8 @@ namespace kooltool.Editor
 
             // zoom
             float scroll = Input.GetAxis("Mouse ScrollWheel");
-            
-            if (Mathf.Abs(scroll) > Mathf.Epsilon)
+
+            if (IsPointerOverWorld() && Mathf.Abs(scroll) > Mathf.Epsilon)
             {
                 if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
                 
@@ -230,15 +252,9 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
             if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
 
-            if (Input.GetKeyDown(KeyCode.F5))
+            if (Input.GetKeyDown(KeyCode.F7))
             {
-                project_.index.Save(project_);
-            }
-
-            if (Input.GetKeyDown(KeyCode.F8))
-            {
-                var index = new Serialization.Index();
-                var path = Application.persistentDataPath;
+                generator.Go(project_);
             }
 
             if (Input.GetKeyDown(KeyCode.T) && false)
@@ -512,7 +528,8 @@ namespace kooltool.Editor
         {
             var character = new Character(Point.Zero, costume);
 
-            Project.Characters.Add(character);
+            project_.world.layers[0].characters.Add(character);
+            project_.index.Add(character);
 
             CharacterDrawing drawing = Layer.Characters.Get(character);
 
