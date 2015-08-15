@@ -31,21 +31,25 @@ namespace kooltool.Serialization
         [JsonIgnore]
         public string folder;
         [JsonIgnore]
+        public string root;
+        [JsonIgnore]
         public string path 
         { 
             get 
             { 
-                return Application.persistentDataPath + "/" + folder; 
+                return (root ?? Application.persistentDataPath) + "/" + folder; 
             } 
         }
     }
 
     public static class ProjectTools
     {
-        public static Summary LoadSummary(string folder)
+        public static Summary LoadSummary(string folder, string root=null)
         {
+            root = root ?? Application.persistentDataPath;
+
             string path = string.Format("{0}/{1}",
-                                        Application.persistentDataPath,
+                                        root,
                                         folder);
 
             var summary = JsonWrapper.Deserialise<Summary>(System.IO.File.ReadAllText(path + "/summary.json"));
@@ -55,6 +59,7 @@ namespace kooltool.Serialization
             texture.filterMode = FilterMode.Point;
             summary.iconSprite = Sprite.Create(texture, new UnityEngine.Rect(0, 0, 128, 128), Vector2.zero);
             summary.folder = folder;
+            summary.root = root;
 
             return summary;
         }
@@ -69,13 +74,11 @@ namespace kooltool.Serialization
 
         public static Project LoadProject(Summary summary)
         {
-            string path = string.Format("{0}/{1}",
-                                        Application.persistentDataPath,
-                                        summary.folder);
 
-            var project = JsonWrapper.Deserialise<Project>(System.IO.File.ReadAllText(path + "/project.json"));
+            var project = JsonWrapper.Deserialise<Project>(System.IO.File.ReadAllText(summary.path + "/project.json"));
 
             project.index.folder = summary.folder;
+            project.index.root = summary.root;
             project.index.Load();
 
             return project;

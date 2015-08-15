@@ -1,0 +1,6069 @@
+{
+  "$id": "1",
+  "index": {
+    "$id": "2",
+    "id": 9,
+    "resources": [
+      {
+        "$id": "3",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "4",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0000-texture.png"
+        }
+      },
+      {
+        "$id": "5",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "6",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0001-texture.png"
+        }
+      },
+      {
+        "$id": "7",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "8",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0002-texture.png"
+        }
+      },
+      {
+        "$id": "9",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "10",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0003-texture.png"
+        }
+      },
+      {
+        "$id": "11",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "12",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0004-texture.png"
+        }
+      },
+      {
+        "$id": "13",
+        "$type": "kooltool.Character, Assembly-CSharp",
+        "_position": {
+          "x": -48,
+          "y": 112
+        },
+        "costume": {
+          "$id": "14",
+          "name": "Smiley",
+          "texture": {
+            "$ref": "9"
+          }
+        },
+        "dialogue": "hello what's up"
+      },
+      {
+        "$id": "15",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "16",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0005-texture.png"
+        }
+      },
+      {
+        "$id": "17",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "18",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0006-texture.png"
+        }
+      },
+      {
+        "$id": "19",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "20",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0007-texture.png"
+        }
+      },
+      {
+        "$id": "21",
+        "$type": "kooltool.Serialization.Texture, Assembly-CSharp",
+        "file": {
+          "$id": "22",
+          "index": {
+            "$ref": "2"
+          },
+          "path": "0008-texture.png"
+        }
+      }
+    ]
+  },
+  "icon": {
+    "$ref": "3"
+  },
+  "costumes": [
+    {
+      "$id": "23",
+      "name": "Smiley",
+      "texture": {
+        "$ref": "7"
+      }
+    },
+    {
+      "$ref": "14"
+    },
+    {
+      "$id": "24",
+      "name": "Smiley",
+      "texture": {
+        "$ref": "11"
+      }
+    }
+  ],
+  "tileset": {
+    "$id": "25",
+    "texture": {
+      "$ref": "5"
+    },
+    "tiles": [
+      {
+        "$id": "26",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      },
+      {
+        "$id": "27",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 32.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      },
+      {
+        "$id": "28",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 64.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      },
+      {
+        "$id": "29",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 96.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      },
+      {
+        "$id": "30",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 128.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      },
+      {
+        "$id": "31",
+        "tileset": {
+          "$ref": "25"
+        },
+        "subtiles": [
+          {
+            "x": 160.0,
+            "y": 0.0,
+            "w": 32.0,
+            "h": 32.0
+          }
+        ]
+      }
+    ]
+  },
+  "world": {
+    "$id": "32",
+    "project": {
+      "$ref": "1"
+    },
+    "tileset": {
+      "$ref": "25"
+    },
+    "layers": [
+      {
+        "$id": "33",
+        "world": {
+          "$ref": "32"
+        },
+        "tileset": {
+          "$ref": "25"
+        },
+        "tiles": [
+          {
+            "Key": {
+              "x": 0,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 13,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -11,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 14,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -12,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 15,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -13,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -14,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -15,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -16,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -17,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -18,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -19,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -18,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -19,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 16
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 15,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -1,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 1,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 13,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 13,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -11,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -11,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -5,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 14,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 14,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -12,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -12,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 15,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -13,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -13,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -14,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -14,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -9,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -15,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -15,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": -7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -10,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -16,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -16,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 9
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -17,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -17,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 10
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -18,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": -15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -19,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -20,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -19,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -18,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -20,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -20,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -17,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -20,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 15
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 16
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 16
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 11
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 12
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 13
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": 14
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -8,
+              "y": 17
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -7,
+              "y": 17
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -6,
+              "y": 17
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 14,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 15,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 19,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 19,
+              "y": -1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 19,
+              "y": 0
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 19,
+              "y": 1
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 16,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 17,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 18,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 8
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 7
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 5,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 6,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 7,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -4,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -2,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": 2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": -3,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 13,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 14,
+              "y": -3
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 12,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -2
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 11,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "26"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 10,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -6
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 9,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 8,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 2,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 3,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -5
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          },
+          {
+            "Key": {
+              "x": 4,
+              "y": -4
+            },
+            "Value": {
+              "tile": {
+                "$ref": "27"
+              },
+              "variant": null
+            }
+          }
+        ],
+        "drawing": [
+          {
+            "Key": {
+              "x": -1,
+              "y": 0
+            },
+            "Value": {
+              "$ref": "19"
+            }
+          },
+          {
+            "Key": {
+              "x": 0,
+              "y": 0
+            },
+            "Value": {
+              "$ref": "21"
+            }
+          }
+        ],
+        "characters": [
+          {
+            "$ref": "13"
+          }
+        ]
+      }
+    ]
+  }
+}

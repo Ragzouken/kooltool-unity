@@ -8,6 +8,7 @@ using System.Linq;
 
 using Newtonsoft.Json;
 using kooltool.Serialization;
+using Ionic.Zip;
 
 namespace kooltool.Editor
 {
@@ -20,6 +21,7 @@ namespace kooltool.Editor
         [Header("Toolbar")]
         [SerializeField] protected Button playButton;
         [SerializeField] private Button saveButton;
+        [SerializeField] private Button exportButton;
 
         [SerializeField] protected WorldCamera WCamera;
         [SerializeField] protected Camera Camera_;
@@ -120,10 +122,24 @@ namespace kooltool.Editor
 
         public Browser browser;
 
+        private bool FindEmbedded()
+        {
+            if (System.IO.File.Exists(Application.dataPath + "/autoplay/summary.json"))
+            {
+                var summary = ProjectTools.LoadSummary("autoplay", Application.dataPath);
+                var project = ProjectTools.LoadProject(summary);
+                SetProject(project);
+
+                return true;
+            }
+
+            return false;
+        }
+
         protected void Awake()
         {
             Project = new Project(new Point(32, 32));
-
+                 
             SetProject(Serialization.ProjectTools.Blank());
             project_.tileset.TestTile();
             //SetProject(LoadProject("test"));
@@ -144,6 +160,7 @@ namespace kooltool.Editor
 
             playButton.onClick.AddListener(Play);
             saveButton.onClick.AddListener(Save);
+            exportButton.onClick.AddListener(Export);
 
             browser.OnConfirmed += delegate(Serialization.Summary summary)
             {
@@ -152,6 +169,8 @@ namespace kooltool.Editor
             };
 
             browser.Refresh();
+
+            if (FindEmbedded()) browser.gameObject.SetActive(false);
         }
 
         protected void Play()
@@ -178,9 +197,56 @@ namespace kooltool.Editor
                 icon = "icon.png",
                 iconSprite = PixelDraw.Brush.Circle(128, new Color(Random.value, Random.value, Random.value, 1)),
                 folder = project_.index.folder,
+                root = project_.index.root,
             };
 
             Serialization.ProjectTools.SaveSummary(summary);
+        }
+
+#if UNITY_EDITOR
+        private static string exepath = "../kooltool/";
+#else
+        private static string exepath = "..";
+#endif
+        private void Export()
+        {
+            Save();
+            
+            var name = project_.index.folder;
+
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddDirectory(Application.dataPath + "/" + exepath + "/windows", name);
+                zip.AddDirectory(project_.index.path, name + "/kooltool_Data/autoplay");
+
+                zip.Save(Application.persistentDataPath + "/" + name + "-windows.zip");
+            }
+
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddDirectory(Application.dataPath + "/" + exepath + "/linux", name);
+                zip.AddDirectory(project_.index.path, name + "/kooltool_Data/autoplay");
+
+                zip.Save(Application.persistentDataPath + "/" + name + "-linux.zip");
+            }
+
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddDirectory(Application.dataPath + "/" + exepath + "/mac/kooltool.app", name + ".app");
+                zip.AddDirectory(project_.index.path, name + ".app/Contents/autoplay");
+
+                zip.Save(Application.persistentDataPath + "/" + name + "-mac.zip");
+            }
+        }
+
+        private void Test1(object a, AddProgressEventArgs args)
+        {
+            Debug.Log(args.BytesTransferred + " / " + args.TotalBytesToTransfer);
+        }
+
+        private void Test2(object a, SaveProgressEventArgs args)
+        {
+            Debug.Log(args.BytesTransferred + " / " + args.TotalBytesToTransfer);
         }
 
         protected void Start()

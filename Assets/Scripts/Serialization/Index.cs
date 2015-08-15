@@ -45,7 +45,6 @@ namespace kooltool.Serialization
 
         public File_ MFile_(string hint)
         {
-            string path = Application.persistentDataPath;
             string local = string.Format("{0:x4}-{1}", id++, hint);
 
             return new File_ { index = this, path = local, };
@@ -86,11 +85,13 @@ namespace kooltool.Serialization
         [JsonIgnore]
         public string folder;
         [JsonIgnore]
+        public string root;
+        [JsonIgnore]
         public string path
         {
             get
             {
-                return Application.persistentDataPath + "/" + folder;
+                return (root ?? Application.persistentDataPath) + "/" + folder;
             }
         }
 
