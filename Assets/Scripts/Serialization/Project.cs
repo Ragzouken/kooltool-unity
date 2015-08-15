@@ -101,11 +101,9 @@ namespace kooltool.Serialization
                 world = new World(),
             };
 
+            project.world.project = project;
             project.world.tileset = project.tileset;
-            project.world.layers.Add(new Layer
-            {
-                tileset = project.tileset,
-            });
+            project.world.AddLayer();
 
             return project;
         }

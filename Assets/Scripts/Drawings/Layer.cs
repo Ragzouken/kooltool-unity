@@ -41,6 +41,7 @@ namespace kooltool.Editor
 
             Tilemap.SetLayer(layer);
             Characters.SetActive(layer.characters);
+            Drawing.SetLayer(layer);
         }
 
         public IDrawing DrawingUnderPoint(Point point)
