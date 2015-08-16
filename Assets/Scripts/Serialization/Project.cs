@@ -72,9 +72,25 @@ namespace kooltool.Serialization
             System.IO.File.WriteAllText(summary.path + "/summary.json", JsonWrapper.Serialise(summary));
         }
 
+        public static void CreateProject(Summary summary)
+        {
+            System.IO.Directory.CreateDirectory(summary.path);
+
+            var project = ProjectTools.Blank();
+            project.index.folder = summary.folder;
+            project.index.root = summary.root;
+
+            SaveSummary(summary);
+            project.index.Save(project);
+        }
+
+        public static void DeleteProject(Summary summary)
+        {
+            System.IO.Directory.Delete(summary.path, recursive: true);
+        }
+
         public static Project LoadProject(Summary summary)
         {
-
             var project = JsonWrapper.Deserialise<Project>(System.IO.File.ReadAllText(summary.path + "/project.json"));
 
             project.index.folder = summary.folder;

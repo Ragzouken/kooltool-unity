@@ -23,6 +23,8 @@ namespace kooltool.Editor
         [SerializeField] private Button saveButton;
         [SerializeField] private Button exportButton;
 
+        [SerializeField] private GameObject browserLayer;
+
         [SerializeField] protected WorldCamera WCamera;
         [SerializeField] protected Camera Camera_;
         
@@ -165,6 +167,7 @@ namespace kooltool.Editor
             browser.OnConfirmed += delegate(Serialization.Summary summary)
             {
                 browser.gameObject.SetActive(false);
+                browserLayer.SetActive(false);
                 SetProject(Serialization.ProjectTools.LoadProject(summary));
             };
 
