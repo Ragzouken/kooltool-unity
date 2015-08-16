@@ -41,7 +41,15 @@ namespace kooltool.Editor
 
         private void InitialisePanel(Summary summary, ProjectTile panel)
         {
-            Point cell = Point.Right * p2s.Count;
+            Point cell = summary.position;
+            Point shift = Point.Zero;
+
+            while (shift == Point.Zero) shift = new Point(Random.Range(-1, 2), Random.Range(-1, 2));
+
+            while (p2s.ContainsKey(cell))
+            {
+                cell += shift;
+            }
 
             p2s[cell] = summary;
             s2p[summary] = cell;
@@ -76,7 +84,7 @@ namespace kooltool.Editor
         private void CreateProject()
         {
             Vector2 cursor = wcamera.ScreenToWorld(Input.mousePosition)
-               + Vector2.one * 128;
+                           + Vector2.one * 128;
 
             Point g, o;
 
@@ -89,6 +97,7 @@ namespace kooltool.Editor
                 description = "test",
                 iconSprite = PixelDraw.Brush.Rectangle(128, 128, new Color(Random.value, Random.value, Random.value)),
                 icon = "icon.png",
+                position = g,
             };
 
             ProjectTools.CreateProject(summary);

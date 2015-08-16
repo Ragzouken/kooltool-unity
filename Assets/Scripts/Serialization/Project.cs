@@ -26,6 +26,8 @@ namespace kooltool.Serialization
         public string description;
         public string icon;
 
+        public Point position;
+
         [JsonIgnore]
         public Sprite iconSprite;
         [JsonIgnore]
