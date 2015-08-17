@@ -20,8 +20,8 @@ namespace kooltool.Editor
         private Dictionary<Summary, Point> s2p = new Dictionary<Summary, Point>();
 
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioClip createSound;
-        [SerializeField] private AudioClip deleteSound;
+        [SerializeField] private AudioSource createSound;
+        [SerializeField] private AudioSource deleteSound;
 
         [Header("Grid")]
         [SerializeField] private RectTransform panelContainer;
@@ -87,14 +87,14 @@ namespace kooltool.Editor
 
         private void CreateProject()
         {
+            createSound.Play();
+
             Vector2 cursor = wcamera.ScreenToWorld(Input.mousePosition)
                            + Vector2.one * 128;
 
             Point g, o;
 
             grid.Coords(cursor, out g, out o);
-
-            audioSource.PlayOneShot(createSound);
 
             Summary summary = new Summary
             {
@@ -114,7 +114,7 @@ namespace kooltool.Editor
 
         private void DeleteSummary(Summary summary)
         {
-            audioSource.PlayOneShot(deleteSound);
+            deleteSound.Play();
 
             ProjectTools.DeleteProject(summary);
             summaries.Discard(summary);
