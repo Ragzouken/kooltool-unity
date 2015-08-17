@@ -61,6 +61,7 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
         }
         
         instance.transform.SetParent(Parent, false);
+        instance.gameObject.SetActive(true);
         instances.Add(shortcut, instance);
 
         Initialize(shortcut, instance);

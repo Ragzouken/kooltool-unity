@@ -19,6 +19,10 @@ namespace kooltool.Editor
         private Dictionary<Point, Summary> p2s = new Dictionary<Point, Summary>();
         private Dictionary<Summary, Point> s2p = new Dictionary<Summary, Point>();
 
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip createSound;
+        [SerializeField] private AudioClip deleteSound;
+
         [Header("Grid")]
         [SerializeField] private RectTransform panelContainer;
         [SerializeField] private ProjectTile panelPrefab;
@@ -90,12 +94,14 @@ namespace kooltool.Editor
 
             grid.Coords(cursor, out g, out o);
 
+            audioSource.PlayOneShot(createSound);
+
             Summary summary = new Summary
             {
                 folder = System.Guid.NewGuid().ToString(),
                 title = "test",
                 description = "test",
-                iconSprite = PixelDraw.Brush.Rectangle(128, 128, new Color(Random.value, Random.value, Random.value)),
+                iconSprite = Generators.Cover.Bleh(),
                 icon = "icon.png",
                 position = g,
             };
@@ -108,6 +114,8 @@ namespace kooltool.Editor
 
         private void DeleteSummary(Summary summary)
         {
+            audioSource.PlayOneShot(deleteSound);
+
             ProjectTools.DeleteProject(summary);
             summaries.Discard(summary);
 
@@ -119,6 +127,20 @@ namespace kooltool.Editor
         public void Refresh()
         {
             summaries.SetActive(GetSummaries());
+            //summaries.SetActive(RandomS(9));
+        }
+
+        private IEnumerable<Summary> RandomS(int count)
+        {
+            for (int i = 0; i < count; ++i)
+            {
+                yield return new Summary
+                {
+                    iconSprite = Generators.Cover.Bleh(),
+                    title = "",
+                    description = "",
+                };
+            }
         }
 
         private IEnumerable<Summary> GetSummaries()
