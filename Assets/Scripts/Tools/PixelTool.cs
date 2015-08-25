@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using PixelDraw;
+using System.Linq;
 
 namespace kooltool.Editor
 {
@@ -44,7 +45,10 @@ namespace kooltool.Editor
         {
             start = start.Round();
 
-            Target = Editor.Layer.DrawingUnderPoint(new Point(start));
+            Target = (Editor.hovered.OfType<IDrawable>().FirstOrDefault() ?? Editor.Layer).Drawing;
+
+            var test = Editor.hovered.OfType<IDrawable>().FirstOrDefault();
+            if (test != null) Debug.Log((test as MonoBehaviour).name);
 
             dragging = false;
             picking = false;

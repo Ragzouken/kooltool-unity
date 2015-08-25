@@ -37,6 +37,8 @@ public class Tilemap : MonoDrawing
         image.transform.localPosition = new Vector2(cell.x * Size,
                                                     cell.y * Size);
 
+        image.GetComponent<kooltool.Editor.TileEditable>().drawing = Tiled;
+
         if (layer.tiles.ContainsKey(cell))
         {
             var tile = layer.tiles[cell].tile;

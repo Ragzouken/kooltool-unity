@@ -45,7 +45,10 @@ namespace kooltool
             {
                 for (int i = sprites.Count; i < subtiles.Count; ++i)
                 {
-                    sprites.Add(Sprite.Create(tileset.texture, subtiles[i], Vector2.zero));
+                    var sprite = Sprite.Create(tileset.texture, subtiles[i], Vector2.zero);
+                    sprite.name = "(Tile)";
+
+                    sprites.Add(sprite);
                 }
             }
         }

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MonoBehaviourPooler<TShortcut, TInstance> 
-    where TInstance : MonoBehaviour
+    where TInstance : Component
 {
     public delegate void Process(TShortcut shortcut, TInstance instance);
 

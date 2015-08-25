@@ -7,8 +7,16 @@ using PixelDraw;
 
 namespace kooltool.Editor
 {
-    public class Layer : MonoBehaviour
+    public class Layer : MonoBehaviour, IDrawable
     {
+        IDrawing IDrawable.Drawing
+        {
+            get
+            {
+                return Drawing;
+            }
+        }
+
         [SerializeField] protected Editor Editor;
         [SerializeField] protected CharacterDrawing CharacterPrefab;
 
@@ -31,7 +39,7 @@ namespace kooltool.Editor
         private void InitialiseCharacter(Character character, CharacterDrawing drawing)
         {
             drawing.gameObject.layer = LayerMask.NameToLayer("World");
-            drawing.SetCharacter(character);
+            drawing.SetCharacter(character, Editor);
             drawing.GetComponent<RectTransform>().anchoredPosition = character.position;
         }
 

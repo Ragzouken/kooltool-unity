@@ -30,13 +30,16 @@ namespace kooltool.Serialization
             {
                 Assert.IsNull(texture, "Texture already created!");
 
-                texture = new Texture2D(2, 2);
+                texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
                 texture.LoadImage(value);
                 texture.filterMode = FilterMode.Point;
             }
         }
 
-        public Texture() { }
+        public Texture() 
+        {
+
+        }
 
         public Texture(Index index)
         {

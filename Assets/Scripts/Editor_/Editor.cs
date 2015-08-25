@@ -9,6 +9,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using kooltool.Serialization;
 using Ionic.Zip;
+using kooltool.Editor.Modes;
 
 namespace kooltool.Editor
 {
@@ -17,6 +18,9 @@ namespace kooltool.Editor
         public static Sprite debug;
         public Image Debug_;
         public RectTransform Debug2;
+
+        [Header("Camera / Canvas")]
+        [SerializeField] private GraphicRaycaster worldRaycaster; 
 
         [Header("Toolbar")]
         [SerializeField] protected Button playButton;
@@ -30,7 +34,7 @@ namespace kooltool.Editor
         
         [SerializeField] protected kooltool.Player.Player Player;
 
-        [SerializeField] protected HighlightGroup Highlights;
+        public HighlightGroup Highlights;
 
         [Header("UI")]
         [SerializeField] protected Slider ZoomSlider;
@@ -61,19 +65,56 @@ namespace kooltool.Editor
         protected Vector2 LastCursor;
         Vector2 pansite;
 
-        CharacterDrawing dragee;
-        Vector2 dragPivot;
-
         protected bool Panning;
         protected bool Drawing;
-        protected bool Dragging;
+
+        #region Modes
+
+        private Modes.Object objectMode;
+        private Modes.Draw drawMode;
+        private Modes.Tile tileMode;
+
+        private readonly Stack<Modes.Mode> modes = new Stack<Mode>();
+
+        private Modes.Mode currentMode
+        {
+            get
+            {
+                return modes.Peek();
+            }
+        }
+
+        private void PushMode(Modes.Mode mode)
+        {
+            currentMode.Exit();
+            modes.Push(mode);
+            currentMode.Enter();
+        }
+
+        private void PopMode()
+        {
+            currentMode.Exit();
+            modes.Pop();
+            currentMode.Enter();
+        }
+
+        private void SetMode(Modes.Mode mode)
+        {
+            currentMode.Exit();
+            modes.Clear();
+            modes.Push(mode);
+            currentMode.Enter();
+        }
+
+        #endregion
+
+        public readonly List<Editable> hovered = new List<Editable>();
 
         public bool ShowCursors
         {
             get
             {
                 return !Panning
-                    && !Dragging
                     && !Input.GetKey(KeyCode.Tab)
                     && IsPointerOverWorld();
             }
@@ -140,6 +181,11 @@ namespace kooltool.Editor
 
         protected void Awake()
         {
+            objectMode = new Modes.Object(this);
+            drawMode = new Modes.Draw(this);
+
+            modes.Push(drawMode);
+
             Project = new Project(new Point(32, 32));
                  
             SetProject(Serialization.ProjectTools.Blank());
@@ -209,7 +255,7 @@ namespace kooltool.Editor
 #if UNITY_EDITOR
         private static string exepath = "../kooltool/";
 #else
-        private static string exepath = "..";
+        private static string exepath = "../..";
 #endif
         private void Export()
         {
@@ -268,7 +314,6 @@ namespace kooltool.Editor
         {
             if (Panning) Panning = false;
             if (Drawing) EndDraw(world);
-            if (Dragging) EndDrag(world);
         }
 
         protected void CheckNavigation()
@@ -354,16 +399,16 @@ namespace kooltool.Editor
 
         protected void CheckHighlights()
         {
+            Highlights.Highlights.SetActive(currentMode.highlights);
+
+            return;
+
             var world = new Point(WCamera.ScreenToWorld(Input.mousePosition));
             CharacterDrawing character;
 
-            if (Input.GetKey(KeyCode.Tab))
+            if (ShowCursors && Layer.CharacterUnderPoint(world, out character))
             {
-                Highlights.Highlights.SetActive(Layer.Characters.Instances.Cast<MonoBehaviour>());
-            }
-            else if (ShowCursors && Layer.CharacterUnderPoint(world, out character))
-            {
-                Highlights.Highlights.SetActive(character);
+                Highlights.Highlights.SetActive(character.transform as RectTransform);
             }
             else
             {
@@ -378,6 +423,27 @@ namespace kooltool.Editor
             var tileset = System.Convert.FromBase64String(encoding);
 
             project_.tileset.texture.texture.LoadImage(tileset);
+        }
+
+        private void UpdateHovered()
+        {
+            hovered.Clear();
+
+            var pointer = new PointerEventData(EventSystem.current);
+            pointer.position = Input.mousePosition;
+
+            var results = new List<RaycastResult>();
+            worldRaycaster.Raycast(pointer, results);
+
+            foreach (RaycastResult result in results)
+            {
+                Editable editable = result.gameObject.GetComponent<Editable>();
+
+                if (editable != null)
+                {
+                    hovered.Add(editable);
+                }
+            }
         }
 
         protected void UpdateCursors()
@@ -398,46 +464,6 @@ namespace kooltool.Editor
             Cursors.SetActive(ShowCursors);
 
             CheckHighlights();
-        }
-
-        protected void UpdateDrag(Vector2 world)
-        {
-            if (Input.GetKey(KeyCode.Tab))
-            {
-                if (GetMouseDown(0)) BeginDrag(world);
-            }
-
-            if (Dragging && Input.GetMouseButtonUp(0)) EndDrag(world);
-            if (Dragging) ContinueDrag(world);
-        }
-
-        protected void BeginDrag(Vector2 world, CharacterDrawing character=null)
-        {
-            if (character != null
-             || Layer.CharacterUnderPoint(new Point(world), out character))
-            {
-                Dragging = true;
-
-                dragPivot = world - (Vector2) character.transform.localPosition;
-                dragee = character;
-            }
-        }
-
-        protected void ContinueDrag(Vector2 world)
-        {
-            Point grid, offset;
-
-            Project.Grid.Coords(new Point(world - dragPivot), out grid, out offset);
-
-            //dragee.transform.localPosition = (world - dragPivot).Floor();
-            //dragee.transform.localPosition = ;
-
-            dragee.Character.SetPosition((Vector2) grid * 32f + Vector2.one * 16f);
-        }
-
-        protected void EndDrag(Vector2 world)
-        {
-            Dragging = false;
         }
 
         protected void UpdateDraw()
@@ -477,6 +503,8 @@ namespace kooltool.Editor
 
         private bool block;
 
+        public Vector2 cursorWorld;
+
         protected void Update()
         {
             if (Project == null) return;
@@ -501,22 +529,31 @@ namespace kooltool.Editor
                 Debug2.anchoredPosition = debug.pivot;
             }
 
-            Vector2 world = WCamera.ScreenToWorld(Input.mousePosition);
+            cursorWorld = WCamera.ScreenToWorld(Input.mousePosition);
 
             CheckKeyboardShortcuts();
+
+            UpdateHovered();
+
+            currentMode.Update();
+
+            if (Input.GetMouseButtonDown(0)) currentMode.CursorInteractStart();
+            if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();
+
+            if (Input.GetKeyDown(KeyCode.Tab)) PushMode(objectMode);
+            if (Input.GetKeyUp(KeyCode.Tab)) PopMode();
 
             if (Input.GetKeyDown(KeyCode.Tab)
              || Input.GetKeyUp(KeyCode.Tab))
             {
-                CancelActions(world);
+                CancelActions(cursorWorld);
             }
 
             if (!Toolbox.gameObject.activeSelf)
             {
                 CheckNavigation();
-                UpdateDrag(world);
 
-                if (!Dragging && !Input.GetKey(KeyCode.Tab))
+                if (!Input.GetKey(KeyCode.Tab))
                 {
                     UpdateDraw();
                 }
@@ -607,7 +644,7 @@ namespace kooltool.Editor
             StartCoroutine(Delay(delegate
             {
                 Toolbox.Hide();
-                BeginDrag(WCamera.ScreenToWorld(Input.mousePosition), drawing);
+                objectMode.SetDrag(drawing.GetComponent<Editable>() as IObject, Vector2.zero);
             }));
         }
 
@@ -621,6 +658,48 @@ namespace kooltool.Editor
             yield return new WaitForEndOfFrame();
 
             action();
+        }
+
+        public bool RaycastWorld<T>(Vector2 position, out T first) 
+            where T : class
+        {
+            var pointer = new PointerEventData(EventSystem.current);
+            pointer.position = position;
+
+            var results = new List<RaycastResult>();
+            worldRaycaster.Raycast(pointer, results);
+
+            var builder = new System.Text.StringBuilder();
+
+            foreach (RaycastResult result in results)
+            {
+                Editable editable = result.gameObject.GetComponent<Editable>();
+                first = editable as T;
+
+                if (editable != null)
+                {
+                    builder.Append(result.gameObject.name);
+                    builder.Append(", ");
+                }
+
+                if (first != null)
+                {
+                    return true;
+                }
+            }
+
+            first = null;
+
+            return false;
+        }
+
+        private void OnApplicationFocus(bool focus)
+        {
+            if (!focus)
+            {
+                Panning = false;
+                EndDraw(WCamera.ScreenToWorld(Input.mousePosition));
+            }
         }
     }
 }

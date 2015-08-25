@@ -28,6 +28,7 @@ namespace kooltool.Serialization
                                                             texture.texture.width,
                                                             texture.texture.height), 
                                        Vector2.one * 0.5f, 1);
+                sprite.name = name + " (Costume)";
             }
         }
     }

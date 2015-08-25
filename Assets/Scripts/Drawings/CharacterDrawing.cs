@@ -15,6 +15,8 @@ namespace kooltool.Editor
         [SerializeField] protected InputField dialogueInput;
         [SerializeField] protected CanvasGroup dialogueGroup;
 
+        public Editor editor;
+
         public Character Character { get; protected set; }
 
         protected void Awake()
@@ -22,8 +24,10 @@ namespace kooltool.Editor
             dialogueInput.onEndEdit.AddListener(UpdateDialogue);
         }
 
-        public void SetCharacter(Character character)
+        public void SetCharacter(Character character, Editor editor)
         {
+            this.editor = editor;
+
             if (character != Character && Character != null)
             {
                 Character.PositionUpdated -= UpdatePosition;

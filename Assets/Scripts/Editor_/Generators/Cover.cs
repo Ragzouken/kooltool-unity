@@ -44,12 +44,9 @@ namespace kooltool.Generators
 
                 var color = new Color(Random.value, Random.value, Random.value);
 
-                //drawing.DrawLine(prev, point, 3, color, Blend.Alpha);
-                //drawing.DrawCircle(point, Random.Range(4, 16), color, Blend.Alpha);
-
                 var points = new List<Point>();
 
-                for (int j = 0; j < Random.Range(3, 7); ++j)
+                for (int j = 0; j < Random.Range(3, 5); ++j)
                 {
                     points.Add(RandomPoint(128));
                 }
@@ -61,11 +58,11 @@ namespace kooltool.Generators
 
                 int size = Random.Range(16, 64);
 
-                //if (i % 1 == 0)
+                if (i % 3 == 0)
                 {
                     var copy = Sprite.Create(texture, RandomRect(), Vector2.zero, 1);
 
-                    drawing.Brush(RandomPoint(64), copy, Blend.Alpha);
+                    drawing.Brush(RandomPoint(128) - Point.One * 32, copy, Blend.Alpha);
                 }
 
                 var brush = Brush.Circle(size, new Color(Random.value, Random.value, Random.value));

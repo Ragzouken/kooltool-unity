@@ -11,6 +11,8 @@ public class CycleHue : MonoBehaviour
     public int Saturation = 100;
     [Range(0, 100)]
     public int Lightness = 75;
+    [Range(0, 1)]
+    public float alpha = 1;
 
     protected Image Image;
 
@@ -25,6 +27,6 @@ public class CycleHue : MonoBehaviour
         
         IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, Saturation, Lightness });
         
-        Image.color = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);
+        Image.color = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], alpha);
     }
 }
