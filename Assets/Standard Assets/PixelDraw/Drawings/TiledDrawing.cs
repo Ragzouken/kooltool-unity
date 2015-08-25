@@ -51,8 +51,6 @@ namespace PixelDraw
 
                         drawing.Brush(offset - point + image.pivot, image, blend);
 
-                        Debug.Log("Brushed: " + cell + " as " + ((SpriteDrawing) drawing).Sprite.name);
-
                         Changed.Set(cell, true);
                     }
                 }

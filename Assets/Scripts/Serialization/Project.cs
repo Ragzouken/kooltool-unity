@@ -59,7 +59,7 @@ namespace kooltool.Serialization
 
             texture.LoadImage(System.IO.File.ReadAllBytes(path + "/" + summary.icon));
             texture.filterMode = FilterMode.Point;
-            summary.iconSprite = Sprite.Create(texture, new UnityEngine.Rect(0, 0, 128, 128), Vector2.zero);
+            summary.iconSprite = texture.FullSprite();
             summary.folder = folder;
             summary.root = root;
 

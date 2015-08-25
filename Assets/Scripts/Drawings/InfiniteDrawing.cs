@@ -34,11 +34,7 @@ public class InfiniteDrawing : MonoDrawing
 
     private IDrawing NewCell_(Point cell, Texture2D texture)
     {
-        Debug.Log("New drawing cell: " + cell);
-
-        Sprite sprite = Sprite.Create(texture,
-                                      new Rect(0, 0, Size, Size),
-                                      Vector2.zero, 100f);
+        Sprite sprite = texture.FullSprite();
         sprite.name = string.Format("InfiniteDrawing({0}, {1})",
                                     cell.x,
                                     cell.y);
@@ -78,8 +74,6 @@ public class InfiniteDrawing : MonoDrawing
 
         foreach (var pair in layer.drawing)
         {
-            Debug.Log(pair.Value.file.path + " -> " + pair.Key);
-
             NewCell_(pair.Key, pair.Value);
         }
     }

@@ -265,8 +265,6 @@ namespace PixelDraw
             Color[] canvasColors = canvas.GetPixelRect(canvasRect);
             Color[] brushColors  = brush.GetPixelRect(brushRect);
 
-            //Debug.Log(canvasRect + " / " + brushRect);
-
             Assert.IsTrue(canvasColors.Length == brushColors.Length, "Mismatched texture rects!");
 
             for (int i = 0; i < canvasColors.Length; ++i)
@@ -281,12 +279,8 @@ namespace PixelDraw
                                  Sprite canvas, Point canvasPosition,
                                  Blend.BlendFunction blend)
         {
-            //Debug.Log(brush.name + " -> " + canvas.name + "\n" + brushPosition + " / " + canvasPosition);
-
             var b_offset = brushPosition - brush.pivot;
             var c_offset = canvasPosition - canvas.pivot;
-
-            //Debug.Log(brushPosition + " / " + canvasPosition + "\n=> " + b_offset + " / " + c_offset);
 
             var world_rect_brush = new Rect(b_offset.x,
                                             b_offset.y,
@@ -298,10 +292,6 @@ namespace PixelDraw
                                              canvas.rect.width,
                                              canvas.rect.height);
 
-            //Debug.Log(canvas.rect.width + " / " + canvas.rect.height);
-
-            //Debug.Log(world_rect_brush + " / " + world_rect_canvas);
-
             var activeRect = Intersect(world_rect_brush, world_rect_canvas);
 
             if (activeRect.width < 1 || activeRect.height < 1)
@@ -309,16 +299,13 @@ namespace PixelDraw
                 return false;
             }
 
-            int bpack = 1;//brush.packed ? 1 : 0;
-            int cpack = 1;//canvas.packed ? 1 : 0;
-
-            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x + brush.textureRect.x * bpack,
-                                            activeRect.y - world_rect_brush.y + brush.textureRect.y * bpack,
+            var local_rect_brush = new Rect(activeRect.x - world_rect_brush.x + brush.textureRect.x,
+                                            activeRect.y - world_rect_brush.y + brush.textureRect.y,
                                             activeRect.width,
                                             activeRect.height);
 
-            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x + canvas.textureRect.x * cpack,
-                                             activeRect.y - world_rect_canvas.y + canvas.textureRect.y * cpack,
+            var local_rect_canvas = new Rect(activeRect.x - world_rect_canvas.x + canvas.textureRect.x,
+                                             activeRect.y - world_rect_canvas.y + canvas.textureRect.y,
                                              activeRect.width,
                                              activeRect.height);
 

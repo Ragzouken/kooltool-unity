@@ -47,9 +47,6 @@ namespace kooltool.Editor
 
             Target = (Editor.hovered.OfType<IDrawable>().FirstOrDefault() ?? Editor.Layer).Drawing;
 
-            var test = Editor.hovered.OfType<IDrawable>().FirstOrDefault();
-            if (test != null) Debug.Log((test as MonoBehaviour).name);
-
             dragging = false;
             picking = false;
 

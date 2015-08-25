@@ -19,8 +19,6 @@ namespace PixelDraw
 
         public void Brush(Point offset, Sprite image, Blend.BlendFunction blend)
         {
-            Debug.Log("Brush: " + offset);
-
             PixelDraw.Brush.Apply(image,  offset,
                                   Sprite, new Point(0, 0),
                                   blend);

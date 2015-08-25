@@ -22,4 +22,20 @@ public static class BlankTexture
 
         return texture;
     }
+
+    public static Sprite FullSprite(this Texture2D texture,
+                                    Vector2 pivot=default(Vector2),
+                                    int pixelsPerUnit=100)
+    {
+        var rect = new Rect(0, 0, texture.width, texture.height);
+
+        Sprite sprite = Sprite.Create(texture,
+                                      rect,
+                                      pivot, 
+                                      pixelsPerUnit, 
+                                      0U, 
+                                      SpriteMeshType.FullRect);
+
+        return sprite;
+    }
 }
