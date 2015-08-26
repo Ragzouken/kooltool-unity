@@ -134,7 +134,6 @@ namespace kooltool.Editor
 
         public void SwitchTool()
         {
-            PixelCursor.gameObject.SetActive(false);
             TileCursor.gameObject.SetActive(false);
         }
         
@@ -143,8 +142,8 @@ namespace kooltool.Editor
             SwitchTool();
             
             ActiveTool = Toolbox.PixelTool;
-            
-            PixelCursor.gameObject.SetActive(true);
+
+            SetMode(drawMode);
         }
         
         public void SetTileTool()
@@ -181,10 +180,6 @@ namespace kooltool.Editor
 
         protected void Awake()
         {
-            objectMode = new Modes.Object(this);
-            drawMode = new Modes.Draw(this);
-
-            modes.Push(drawMode);
 
             Project = new Project(new Point(32, 32));
                  
@@ -197,6 +192,11 @@ namespace kooltool.Editor
 
             Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
             Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
+
+            objectMode = new Modes.Object(this);
+            drawMode = new Modes.Draw(this, PixelCursor, Toolbox.PixelTool);
+
+            modes.Push(drawMode);
 
             // poop
             PixelCursor.Tool = Toolbox.PixelTool;
@@ -453,11 +453,6 @@ namespace kooltool.Editor
             Point grid, dummy;
 
             Project.Grid.Coords(new Point(cursor), out grid, out dummy);
-
-            var offset = Vector2.one * ((Toolbox.PixelTool.Thickness % 2 == 1) ? 0.5f : 0);
-
-            PixelCursor.end = cursor;
-            PixelCursor.GetComponent<RectTransform>().anchoredPosition = cursor.Round() + offset;
             TileCursor.GetComponent<RectTransform>().anchoredPosition = new Vector2((grid.x + 0.5f) * Project.Grid.CellWidth,
                                                                                     (grid.y + 0.5f) * Project.Grid.CellHeight);
 
@@ -496,8 +491,6 @@ namespace kooltool.Editor
 
             Drawing = false;
 
-            PixelCursor.end = world;
-            PixelCursor.Update();
             ActiveTool.EndStroke(world);
         }
 

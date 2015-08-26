@@ -10,14 +10,17 @@ public static class BlankTexture
         var texture = new Texture2D(width, height, TextureFormat.ARGB32, false);
         texture.filterMode = FilterMode.Point;
 
-        var pixels = new Color32[width * height];
-        
-        for (int i = 0; i < pixels.Length; ++i)
+        var pixels = new byte[width * height * 4];
+
+        for (int i = 0; i < pixels.Length; i += 4)
         {
-            pixels[i] = color;
+            pixels[i + 0] = color.a;
+            pixels[i + 1] = color.r;
+            pixels[i + 2] = color.g;
+            pixels[i + 3] = color.b;
         }
         
-        texture.SetPixels32(pixels);
+        texture.LoadRawTextureData(pixels);
         texture.Apply();
 
         return texture;

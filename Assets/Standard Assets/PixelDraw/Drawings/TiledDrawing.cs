@@ -67,6 +67,8 @@ namespace PixelDraw
             if (Cells.Get(grid, out drawing))
             {
                 drawing.Fill(offset, color);
+
+                Changed.Set(grid, true);
             }
         }
 
