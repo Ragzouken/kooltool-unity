@@ -9,21 +9,19 @@ namespace kooltool.Editor
 {
     public class PixelCursor : MonoBehaviour
     {
+        public Editor editor;
+
         public Image Preview;
         public Image Line;
 
         public PixelTool Tool;
         public Vector2 end;
 
-        public void Update()
+        public void Refresh()
         {
             if (Tool == null) return; 
 
-            float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
-            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
-            var cursor = new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], 1f);
-
-            Color previewColor = Tool.Color.a == 0 ? cursor : Tool.Color; 
+            Color previewColor = Tool.Color.a == 0 ? editor.GetFlashColour() : Tool.Color; 
 
             var rtrans = transform as RectTransform;
 

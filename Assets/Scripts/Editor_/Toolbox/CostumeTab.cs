@@ -19,8 +19,6 @@ namespace kooltool.Editor
         [SerializeField] protected RectTransform CostumeContainer;
         [SerializeField] protected CostumeIndicator CostumePrefab;
 
-        protected TileTool Tool;
-
         private MonoBehaviourPooler<Costume, CostumeIndicator> costumes;
 
         private void Awake()
@@ -38,11 +36,6 @@ namespace kooltool.Editor
                                        CostumeIndicator indicator)
         {
             indicator.SetCostume(costume, () => Editor.MakeCharacter(costume));
-        }
-
-        public void SetTileTool(TileTool tool)
-        {
-            Tool = tool;
         }
 
         public void Refresh()

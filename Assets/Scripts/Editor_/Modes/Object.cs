@@ -28,7 +28,7 @@ namespace kooltool.Editor.Modes
 
             if (dragging != null)
             {
-                dragging.Drag(dragPivot, editor.cursorWorld);
+                dragging.Drag(dragPivot, editor.currCursorWorld);
             }
         }
 
@@ -56,7 +56,7 @@ namespace kooltool.Editor.Modes
 
             if (dragging != null)
             {
-                dragPivot = dragging.DragPivot(editor.cursorWorld);
+                dragPivot = dragging.DragPivot(editor.currCursorWorld);
             }
         }
 

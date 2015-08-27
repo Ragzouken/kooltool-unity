@@ -17,7 +17,7 @@ namespace kooltool.Editor
         [SerializeField] protected RectTransform TileContainer;
         [SerializeField] protected TileIndicator TilePrefab;
 
-        protected TileTool Tool;
+        private Modes.Tile tileMode;
 
         protected ChildElements<TileIndicator> Tiles;
 
@@ -30,9 +30,9 @@ namespace kooltool.Editor
             Refresh();
         }
 
-        public void SetTileTool(TileTool tool)
+        public void SetTileTool(Modes.Tile mode)
         {
-            Tool = tool;
+            tileMode = mode;
         }
 
         public void Refresh()
@@ -46,21 +46,21 @@ namespace kooltool.Editor
                 element.SetTile(tile);
 
                 element.Toggle.group = TileToggleGroup;
-                if (tile == Tool.PaintTile) element.Toggle.isOn = true;
+                if (tile == tileMode.paintTile) element.Toggle.isOn = true;
 
                 var set = tile;
                
                 element.Toggle.onValueChanged.RemoveAllListeners();
                 element.Toggle.onValueChanged.AddListener(delegate (bool active) 
                 {
-                    if (active) Tool.PaintTile = set;
+                    if (active) tileMode.paintTile = set;
                 });
             }
         }
 
         public void OnClickedNew()
         {
-            Tool.PaintTile = Editor.project_.tileset.TestTile();
+            tileMode.paintTile = Editor.project_.tileset.TestTile();
 
             Refresh();
         }

@@ -15,7 +15,6 @@ namespace kooltool.Editor
         public TileTab TileTab;
 
         public PixelTool PixelTool;
-        public TileTool TileTool;
 
         private void Awake()
         {

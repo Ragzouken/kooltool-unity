@@ -75,7 +75,7 @@ namespace PixelDraw
         public static void FloodFillArea(this Texture2D aTex, 
                                          int startX, 
                                          int startY, 
-                                         Color toValue)
+                                         Color32 toValue)
         {
             int w = aTex.width, h = aTex.height;
 
@@ -181,7 +181,7 @@ namespace PixelDraw
 
         public static void FloodFillAreaNPO2(this Texture2D aTex, 
                                              int aX, int aY, 
-                                             Color aFillColor,
+                                             Color32 aFillColor,
                                              Rect bounds)
         {
             Color[] colors = aTex.GetPixelRect(bounds);

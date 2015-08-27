@@ -7,13 +7,21 @@ using PixelDraw;
 
 namespace kooltool.Editor
 {
-    public class Layer : MonoBehaviour, IDrawable
+    public class Layer : Editable, IDrawable, ITileable
     {
         IDrawing IDrawable.Drawing
         {
             get
             {
                 return Drawing;
+            }
+        }
+        
+        Tilemap ITileable.Tilemap
+        {
+            get
+            {
+                return Tilemap;
             }
         }
 
@@ -50,54 +58,6 @@ namespace kooltool.Editor
             Tilemap.SetLayer(layer);
             Characters.SetActive(layer.characters);
             Drawing.SetLayer(layer);
-        }
-
-        public IDrawing DrawingUnderPoint(Point point)
-        {
-            Point cell, offset;
-
-            Editor.Project.Grid.Coords(point, out cell, out offset);
-
-            kooltool.Serialization.TileInstance tile;
-            CharacterDrawing character;
-
-            if (CharacterUnderPoint(point, out character))
-            {
-                return character;
-            }
-            else if (Tilemap.Get(cell, out tile))
-            {
-                return Tilemap;
-            }
-            else
-            {
-                return Drawing;
-            }
-        }
-
-        public bool CharacterUnderPoint(Point point, out CharacterDrawing character)
-        {
-            Point cell, offset;
-
-            Editor.Project.Grid.Coords(point, out cell, out offset);
-
-            character = null;
-
-            foreach (CharacterDrawing drawing in Characters.Instances)
-            {
-                var rtrans = drawing.transform as RectTransform;
-
-                if (rtrans.rect.Contains((Vector2) point - rtrans.anchoredPosition))
-                {
-                    if (character == null
-                     || drawing.transform.GetSiblingIndex() > character.transform.GetSiblingIndex())
-                    {
-                        character = drawing;
-                    }
-                }
-            }
-
-            return character != null;
         }
     }
 }

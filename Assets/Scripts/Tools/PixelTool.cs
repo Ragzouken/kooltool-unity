@@ -45,7 +45,7 @@ namespace kooltool.Editor
         {
             start = start.Round();
 
-            Target = (Editor.hovered.OfType<IDrawable>().FirstOrDefault() ?? Editor.Layer).Drawing;
+            Target = Editor.hovered.OfType<IDrawable>().First().Drawing;
 
             dragging = false;
             picking = false;

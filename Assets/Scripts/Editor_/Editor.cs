@@ -108,6 +108,15 @@ namespace kooltool.Editor
 
         #endregion
 
+        public Color GetFlashColour(float alpha=1f)
+        {
+            float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
+            
+            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
+            
+            return new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], alpha);
+        }
+
         public readonly List<Editable> hovered = new List<Editable>();
 
         public bool ShowCursors
@@ -150,9 +159,9 @@ namespace kooltool.Editor
         {
             SwitchTool();
             
-            ActiveTool = Toolbox.TileTool;
-            
             TileCursor.gameObject.SetActive(true);
+
+            SetMode(tileMode);
         }
 
         public void SetProject(Serialization.Project project)
@@ -188,20 +197,19 @@ namespace kooltool.Editor
             //SetProject(LoadProject("test"));
 
             Toolbox.PixelTool = new PixelTool(this);
-            Toolbox.TileTool = new TileTool(this);
-
-            Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
-            Toolbox.TileTab.SetTileTool(Toolbox.TileTool);
 
             objectMode = new Modes.Object(this);
             drawMode = new Modes.Draw(this, PixelCursor, Toolbox.PixelTool);
+            tileMode = new Modes.Tile(this, TileCursor);
+
+            Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
+            Toolbox.TileTab.SetTileTool(tileMode);
 
             modes.Push(drawMode);
 
             // poop
-            PixelCursor.Tool = Toolbox.PixelTool;
-            TileCursor.Tool = Toolbox.TileTool;
-            
+            TileCursor.mode = tileMode;
+
             ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
@@ -318,7 +326,7 @@ namespace kooltool.Editor
 
         protected void CheckNavigation()
         {
-            ZoomTo(ZoomSlider.value);
+            ZoomTo(ZoomSlider.value, (Toolbox.transform as RectTransform).anchoredPosition);
 
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
@@ -400,20 +408,6 @@ namespace kooltool.Editor
         protected void CheckHighlights()
         {
             Highlights.Highlights.SetActive(currentMode.highlights);
-
-            return;
-
-            var world = new Point(WCamera.ScreenToWorld(Input.mousePosition));
-            CharacterDrawing character;
-
-            if (ShowCursors && Layer.CharacterUnderPoint(world, out character))
-            {
-                Highlights.Highlights.SetActive(character.transform as RectTransform);
-            }
-            else
-            {
-                Highlights.Highlights.SetActive();
-            }
         }
 
         protected void LoadFiles(Dictionary<string, string> files)
@@ -428,7 +422,7 @@ namespace kooltool.Editor
         private void UpdateHovered()
         {
             hovered.Clear();
-
+            
             var pointer = new PointerEventData(EventSystem.current);
             pointer.position = Input.mousePosition;
 
@@ -444,6 +438,8 @@ namespace kooltool.Editor
                     hovered.Add(editable);
                 }
             }
+
+            hovered.Add(Layer);
         }
 
         protected void UpdateCursors()
@@ -496,7 +492,8 @@ namespace kooltool.Editor
 
         private bool block;
 
-        public Vector2 cursorWorld;
+        public Vector2 currCursorWorld;
+        public Vector2 prevCursorWorld;
 
         protected void Update()
         {
@@ -522,7 +519,8 @@ namespace kooltool.Editor
                 Debug2.anchoredPosition = debug.pivot;
             }
 
-            cursorWorld = WCamera.ScreenToWorld(Input.mousePosition);
+            prevCursorWorld = currCursorWorld;
+            currCursorWorld = WCamera.ScreenToWorld(Input.mousePosition);
 
             CheckKeyboardShortcuts();
 
@@ -530,7 +528,7 @@ namespace kooltool.Editor
 
             currentMode.Update();
 
-            if (Input.GetMouseButtonDown(0)) currentMode.CursorInteractStart();
+            if (Input.GetMouseButtonDown(0) && IsPointerOverWorld()) currentMode.CursorInteractStart();
             if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();
 
             if (Input.GetKeyDown(KeyCode.Tab)) PushMode(objectMode);
@@ -539,7 +537,7 @@ namespace kooltool.Editor
             if (Input.GetKeyDown(KeyCode.Tab)
              || Input.GetKeyUp(KeyCode.Tab))
             {
-                CancelActions(cursorWorld);
+                CancelActions(currCursorWorld);
             }
 
             if (!Toolbox.gameObject.activeSelf)
@@ -560,7 +558,12 @@ namespace kooltool.Editor
             if (Input.GetKeyDown(KeyCode.LeftAlt)
              || Input.GetKeyDown(KeyCode.LeftShift))
             {
-                Toolbox.TileTool.Tool = TileTool.ToolMode.Picker;
+                tileMode.tool = Modes.Tile.Tool.Picker;
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftControl)
+                  || Input.GetKeyDown(KeyCode.RightControl))
+            {
+                tileMode.tool = Modes.Tile.Tool.Promote;
             }
 
             LastCursor = WCamera.ScreenToWorld(Input.mousePosition);
@@ -602,6 +605,10 @@ namespace kooltool.Editor
         public void ZoomTo(float zoom, Vector2? focus = null)
         {
             Zoom = Mathf.Clamp01(zoom);
+
+            //if (ZoomSlider.value == Zoom) return;
+
+            //Debug.Log(focus);
 
             Vector2 center = new Vector2(Camera.main.pixelWidth  * 0.5f,
                                          Camera.main.pixelHeight * 0.5f);
@@ -651,39 +658,6 @@ namespace kooltool.Editor
             yield return new WaitForEndOfFrame();
 
             action();
-        }
-
-        public bool RaycastWorld<T>(Vector2 position, out T first) 
-            where T : class
-        {
-            var pointer = new PointerEventData(EventSystem.current);
-            pointer.position = position;
-
-            var results = new List<RaycastResult>();
-            worldRaycaster.Raycast(pointer, results);
-
-            var builder = new System.Text.StringBuilder();
-
-            foreach (RaycastResult result in results)
-            {
-                Editable editable = result.gameObject.GetComponent<Editable>();
-                first = editable as T;
-
-                if (editable != null)
-                {
-                    builder.Append(result.gameObject.name);
-                    builder.Append(", ");
-                }
-
-                if (first != null)
-                {
-                    return true;
-                }
-            }
-
-            first = null;
-
-            return false;
         }
 
         private void OnApplicationFocus(bool focus)
