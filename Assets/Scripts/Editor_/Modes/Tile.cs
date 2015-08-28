@@ -17,7 +17,6 @@ namespace kooltool.Editor.Modes
             Fill,
             Picker,
             Promote,
-            Demote,
         }
 
         private ITileable hovering;
@@ -25,6 +24,11 @@ namespace kooltool.Editor.Modes
 
         public kooltool.Tile paintTile;
         public Tool tool;
+
+        public void SetToolOrReset(Tool tool)
+        {
+            this.tool = this.tool == tool ? Tool.Pencil : tool;
+        }
 
         public Tile(Editor editor, TileCursor cursor) : base(editor)
         {
@@ -42,7 +46,7 @@ namespace kooltool.Editor.Modes
             return cell;
         }
 
-        private Serialization.TileInstance? hoveredTile
+        public Serialization.TileInstance? hoveredTile
         {
             get
             {
@@ -74,18 +78,6 @@ namespace kooltool.Editor.Modes
             var cell = Vector2Cell(editor.currCursorWorld);
             var tile = hoveredTile;
 
-            if (hovering != null)
-            {
-                var mode = tile.HasValue ? Modes.Tile.Tool.Demote
-                                         : Modes.Tile.Tool.Promote;
-
-                if (tool == Tool.Promote
-                 || tool == Tool.Demote)
-                {
-                    tool = mode;
-                }
-            }
-
             if (dragging != null)
             {
                 var s = Vector2Cell(editor.prevCursorWorld);
@@ -95,7 +87,7 @@ namespace kooltool.Editor.Modes
                 {
                     PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, (x, y) =>
                     {
-                        dragging.Tilemap.Set(new Point(x, y), new kooltool.Serialization.TileInstance { tile = paintTile });
+                        dragging.Tilemap.Set(new Point(x, y), paintTile.Instance());
 
                         return true;
                     });
@@ -140,22 +132,29 @@ namespace kooltool.Editor.Modes
             var cell = Vector2Cell(editor.currCursorWorld);
             var tile = hoveredTile;
 
-            if (tool == Modes.Tile.Tool.Pencil)
+            if (tool == Tool.Pencil)
             {
                 dragging = hovering;
             }
-            else if (tool == Modes.Tile.Tool.Picker)
+            else if (tool == Tool.Picker)
             {
                 paintTile = tile.HasValue ? tile.Value.tile : null;
             }
-            else if (tool == Modes.Tile.Tool.Demote)
+            else if (tool == Tool.Fill)
             {
-                // TODO: copy bg to new tile
-                hovering.Tilemap.Unset(cell);
+                hovering.Tilemap.Fill(cell, paintTile);
             }
-            else if (tool == Modes.Tile.Tool.Promote)
+            else if (tool == Tool.Promote)
             {
-                // TODO: copy tile to bg, gc tile if necc
+                if (tile.HasValue)
+                {
+                    // TODO: copy bg to new tile
+                    hovering.Tilemap.Unset(cell);
+                }
+                else
+                {
+                    // TODO: copy tile to bg, gc tile if necc
+                }
             }
         }
 

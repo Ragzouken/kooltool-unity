@@ -46,8 +46,12 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 1
   alphaIsTransparency: 1
-  textureType: 5
-  buildTargetSettings: []
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Standalone
+    maxTextureSize: 64
+    textureFormat: -2
+    compressionQuality: 50
   spriteSheet:
     sprites:
     - name: border

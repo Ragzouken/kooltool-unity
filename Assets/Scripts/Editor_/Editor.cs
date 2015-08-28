@@ -473,12 +473,12 @@ namespace kooltool.Editor
 
             Drawing = true;
 
-            ActiveTool.BeginStroke(cursor);
+            if (currentMode == drawMode) ActiveTool.BeginStroke(cursor);
         }
 
         protected void ContinueDraw(Vector2 world)
         {
-            ActiveTool.ContinueStroke(LastCursor, world);
+            if (currentMode == drawMode) ActiveTool.ContinueStroke(LastCursor, world);
         }
 
         protected void EndDraw(Vector2 world)
@@ -487,7 +487,7 @@ namespace kooltool.Editor
 
             Drawing = false;
 
-            ActiveTool.EndStroke(world);
+            if (currentMode == drawMode) ActiveTool.EndStroke(world);
         }
 
         private bool block;
@@ -556,14 +556,19 @@ namespace kooltool.Editor
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
 
             if (Input.GetKeyDown(KeyCode.LeftAlt)
-             || Input.GetKeyDown(KeyCode.LeftShift))
+             || Input.GetKeyDown(KeyCode.RightAlt))
             {
-                tileMode.tool = Modes.Tile.Tool.Picker;
+                tileMode.SetToolOrReset(Modes.Tile.Tool.Picker);
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftShift)
+                  || Input.GetKeyDown(KeyCode.RightShift))
+            {
+                tileMode.SetToolOrReset(Modes.Tile.Tool.Fill);
             }
             else if (Input.GetKeyDown(KeyCode.LeftControl)
                   || Input.GetKeyDown(KeyCode.RightControl))
             {
-                tileMode.tool = Modes.Tile.Tool.Promote;
+                tileMode.SetToolOrReset(Modes.Tile.Tool.Promote);
             }
 
             LastCursor = WCamera.ScreenToWorld(Input.mousePosition);

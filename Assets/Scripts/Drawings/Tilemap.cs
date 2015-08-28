@@ -84,6 +84,18 @@ public class Tilemap : MonoDrawing
         }
     }
 
+    public void Set(Point cell, kooltool.Tile tile)
+    {
+        if (tile == null)
+        {
+            Unset(cell);
+        }
+        else
+        {
+            Set(cell, tile.Instance());
+        }
+    }
+
     public void Unset(Point cell)
     {
         kooltool.Serialization.TileInstance tile;
@@ -98,6 +110,44 @@ public class Tilemap : MonoDrawing
         }
 
         if (layer.tiles.ContainsKey(cell)) layer.tiles.Remove(cell);
+    }
+
+    public void Fill(Point first, kooltool.Tile tile, int limit=128)
+    {
+        TileInstance existing;
+        kooltool.Tile original;
+
+        original = Get(first, out existing) ? existing.tile
+                                           : null;
+
+        bool erase = original == null;
+
+        var check = new Queue<Point>();
+
+        System.Action<Point> process = delegate(Point cell)
+        {
+            Set(cell, tile);
+
+            check.Enqueue(cell + Point.Right);
+            check.Enqueue(cell + Point.Down);
+            check.Enqueue(cell + Point.Left);
+            check.Enqueue(cell + Point.Up);
+        };
+
+        process(first);
+
+        for (int i = 0; i < limit && check.Count > 0; ++i)
+        {
+            Point next = check.Dequeue();
+
+            bool exists = Get(next, out existing);
+
+            if ((exists && existing.tile == original)
+             || (!exists && original == null))
+            {
+                process(next);
+            }
+        }
     }
 
     public IEnumerator<KeyValuePair<Point, kooltool.Serialization.TileInstance>> GetEnumerator()
