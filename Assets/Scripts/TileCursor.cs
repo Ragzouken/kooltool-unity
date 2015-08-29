@@ -60,14 +60,14 @@ namespace kooltool.Editor
                 }
             }
 
-            tileImage.sprite = mode.paintTile.sprites[0];
+            if (mode.paintTile != null) tileImage.sprite = mode.paintTile.sprites[0];
             tileImage.enabled = showTile;
 
             iconImage.sprite = icon;
             iconImage.enabled = icon != null;
 
             borderImage.sprite = mode.hoveredTile.HasValue ? dashedBorder
-                                                            : solidBorder;
+                                                           : solidBorder;
         }
     }
 }

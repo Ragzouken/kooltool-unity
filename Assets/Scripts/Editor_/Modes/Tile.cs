@@ -78,12 +78,12 @@ namespace kooltool.Editor.Modes
             var cell = Vector2Cell(editor.currCursorWorld);
             var tile = hoveredTile;
 
-            if (dragging != null)
+            if (dragging != null && tool == Tool.Pencil)
             {
                 var s = Vector2Cell(editor.prevCursorWorld);
                 var e = Vector2Cell(editor.currCursorWorld);
 
-                if (tool == Modes.Tile.Tool.Pencil && paintTile != null)
+                if (paintTile != null)
                 {
                     PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, (x, y) =>
                     {
@@ -92,7 +92,7 @@ namespace kooltool.Editor.Modes
                         return true;
                     });
                 }
-                else if (tool == Modes.Tile.Tool.Pencil && paintTile == null)
+                else
                 {
                     PixelDraw.Bresenham.Line(s.x, s.y, e.x, e.y, (x, y) =>
                     {
@@ -148,8 +148,7 @@ namespace kooltool.Editor.Modes
             {
                 if (tile.HasValue)
                 {
-                    // TODO: copy bg to new tile
-                    hovering.Tilemap.Unset(cell);
+                    hovering.Demote(cell);
                 }
                 else
                 {

@@ -9,5 +9,7 @@ namespace kooltool.Editor
     public interface ITileable
     {
         Tilemap Tilemap { get; }
+
+        void Demote(Point cell);
     }
 }

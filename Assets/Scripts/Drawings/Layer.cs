@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -58,6 +59,22 @@ namespace kooltool.Editor
             Tilemap.SetLayer(layer);
             Characters.SetActive(layer.characters);
             Drawing.SetLayer(layer);
+        }
+
+        void ITileable.Demote(Point cell)
+        {
+            Serialization.TileInstance instance;
+
+            bool exists = Tilemap.Get(cell, out instance);
+
+            Assert.IsTrue(exists, string.Format("No tile to demote at {0}!", cell));
+
+            Tilemap.Unset(cell);
+
+            Sprite brush = instance.tile.sprites[0];
+
+            Drawing.Brush(cell * 32, brush, Blend.Alpha);
+            Drawing.Apply();
         }
     }
 }
