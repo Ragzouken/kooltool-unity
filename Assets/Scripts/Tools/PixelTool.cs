@@ -29,8 +29,6 @@ namespace kooltool.Editor
         public bool dragging;
         public Vector2 start;
 
-        public bool picking;
-
         public PixelTool(Editor editor)
         {
             Editor = editor;
@@ -48,59 +46,21 @@ namespace kooltool.Editor
             Target = Editor.hovered.OfType<IDrawable>().First().Drawing;
 
             dragging = false;
-            picking = false;
 
-            if (Input.GetKey(KeyCode.LeftAlt))
+            if (Tool == ToolMode.Line)
             {
-                Color sampled;
-                
-                if (Target.Sample(new Point(start), out sampled))
-                {
-                    Color = sampled;
-                }
-
-                picking = true;
+                this.start = start;
             }
-            else
-            {
-                if (Tool == ToolMode.Fill)
-                {
-                    Target.Fill(new Point(start), Color);
-                    Target.Apply();
-                }
-                else if (Tool == ToolMode.Line)
-                {
-                    this.start = start;
-                }
 
-                dragging = true;
-            }
+            dragging = true;
         }
 
         public void ContinueStroke(Vector2 start, Vector2 end)
         {
-            if (picking) return;
-
-            if (Tool == ToolMode.Pencil)
-            {
-                Color color = Color.a > 0 ? Color : Color.white;
-                var blend = Color.a == 0 ? Blend.Subtract : Blend.Alpha;
-
-                Target.DrawLine(start.Round(), end.Round(), Thickness, color, blend);
-
-                Target.Apply();
-            }
         }
 
         public void EndStroke(Vector2 end)
         {
-            if (picking) 
-            {
-                picking = false;
-
-                return; 
-            }
-
             if (Tool == ToolMode.Line)
             {
                 Color color = Color.a > 0 ? Color : Color.white;

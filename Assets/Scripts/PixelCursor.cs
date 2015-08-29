@@ -14,20 +14,24 @@ namespace kooltool.Editor
         public Image Preview;
         public Image Line;
 
+        public Modes.Draw mode;
         public PixelTool Tool;
         public Vector2 end;
 
         public void Refresh()
         {
-            if (Tool == null) return; 
+            if (Tool == null) return;
 
-            Color previewColor = Tool.Color.a == 0 ? editor.GetFlashColour() : Tool.Color; 
+            bool erase = mode.paintColour.a == 0;
+
+            Color previewColor = erase ? editor.GetFlashColour() 
+                                       : mode.paintColour; 
 
             var rtrans = transform as RectTransform;
 
-            Line.enabled = Tool.dragging && Tool.Tool == PixelTool.ToolMode.Line;
+            Line.enabled = Tool.dragging && mode.tool == Modes.Draw.Tool.Line;
 
-            if (Tool.Tool == PixelTool.ToolMode.Line && Tool.dragging)
+            if (mode.tool == Modes.Draw.Tool.Line && Tool.dragging)
             {
                 var ltrans = Line.transform as RectTransform;
 
@@ -55,14 +59,14 @@ namespace kooltool.Editor
             }
             else
             {
-                var preview = Brush.Circle(Tool.Thickness, previewColor);
+                var preview = Brush.Circle(mode.thickness, previewColor);
                 preview.texture.Apply();
 
                 Preview.sprite = preview;
             }
 
-            rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Tool.Thickness);
-            rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,   Tool.Thickness);
+            rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mode.thickness);
+            rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,   mode.thickness);
         }
     }
 }

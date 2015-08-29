@@ -28,7 +28,7 @@ namespace kooltool.Editor
 
         protected IList<SizeIndicator> SizeIndicators = new List<SizeIndicator>();
 
-        protected PixelTool Tool;
+        private Modes.Draw mode;
 
         private void Awake()
         {
@@ -49,7 +49,7 @@ namespace kooltool.Editor
 
                 toggled = delegate (bool active)
                 {
-                    if (active) Tool.Thickness = thickness;
+                    if (active) mode.thickness = thickness;
                 };
 
                 indicator.Toggle.onValueChanged.AddListener(toggled);
@@ -59,7 +59,7 @@ namespace kooltool.Editor
 
             EraserColor.Toggle.onValueChanged.AddListener(delegate(bool active)
             {
-                if (active) Tool.Color = Color.clear;
+                if (active) mode.paintColour = Color.clear;
             });
 
             for (int i = 0; i < 10; ++i)
@@ -73,14 +73,14 @@ namespace kooltool.Editor
 
                 indicator.Toggle.onValueChanged.AddListener(delegate(bool active)
                 {
-                    Tool.Color = color;
+                    mode.paintColour = color;
                 });
             }
         }
 
         private void Update()
         {
-            SizeContainer.gameObject.SetActive(Tool.Tool != PixelTool.ToolMode.Fill);
+            SizeContainer.gameObject.SetActive(mode.tool != Modes.Draw.Tool.Fill);
         }
 
         public void SetSize(int size)
@@ -96,24 +96,24 @@ namespace kooltool.Editor
 
         }
 
-        public void SetPixelTool(PixelTool tool)
+        public void SetPixelTool(Modes.Draw mode)
         {
-            Tool = tool;
+            this.mode = mode;
         }
 
         public void OnToggledPencil(bool active)
         {
-            if (active) Tool.Tool = PixelTool.ToolMode.Pencil;
+            if (active) mode.tool = Modes.Draw.Tool.Pencil;
         }
 
         public void OnToggledFill(bool active)
         {
-            if (active) Tool.Tool = PixelTool.ToolMode.Fill;
+            if (active) mode.tool = Modes.Draw.Tool.Fill;
         }
 
         public void OnToggledLine(bool active)
         {
-            if (active) Tool.Tool = PixelTool.ToolMode.Line;
+            if (active) mode.tool = Modes.Draw.Tool.Line;
         }
     }
 }

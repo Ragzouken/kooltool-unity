@@ -71,6 +71,24 @@ namespace kooltool.Editor.Modes
 
         public override void Update()
         {
+            tool = Tool.Pencil;
+
+            if (Input.GetKey(KeyCode.LeftAlt)
+             || Input.GetKey(KeyCode.RightAlt))
+            {
+                tool = Tool.Picker;
+            }
+            else if (Input.GetKey(KeyCode.LeftShift)
+                  || Input.GetKey(KeyCode.RightShift))
+            {
+                tool = Tool.Fill;
+            }
+            else if (Input.GetKey(KeyCode.LeftControl)
+                  || Input.GetKey(KeyCode.RightControl))
+            {
+                tool = Tool.Promote;
+            }
+
             highlights.Clear();
 
             hovering = editor.hovered.OfType<ITileable>().FirstOrDefault();

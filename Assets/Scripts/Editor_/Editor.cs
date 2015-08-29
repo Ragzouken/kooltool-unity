@@ -141,26 +141,13 @@ namespace kooltool.Editor
             return !(results.Count > 0 && results[0].gameObject.layer != LayerMask.NameToLayer("World"));
         }
 
-        public void SwitchTool()
-        {
-            TileCursor.gameObject.SetActive(false);
-        }
-        
         public void SetPixelTool()
         {
-            SwitchTool();
-            
-            ActiveTool = Toolbox.PixelTool;
-
             SetMode(drawMode);
         }
         
         public void SetTileTool()
         {
-            SwitchTool();
-            
-            TileCursor.gameObject.SetActive(true);
-
             SetMode(tileMode);
         }
 
@@ -202,13 +189,14 @@ namespace kooltool.Editor
             drawMode = new Modes.Draw(this, PixelCursor, Toolbox.PixelTool);
             tileMode = new Modes.Tile(this, TileCursor);
 
-            Toolbox.PixelTab.SetPixelTool(Toolbox.PixelTool);
+            Toolbox.PixelTab.SetPixelTool(drawMode);
             Toolbox.TileTab.SetTileTool(tileMode);
 
             modes.Push(drawMode);
 
             // poop
             TileCursor.mode = tileMode;
+            PixelCursor.mode = drawMode;
 
             ActiveTool = Toolbox.PixelTool;
 
@@ -554,22 +542,6 @@ namespace kooltool.Editor
 
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
-
-            if (Input.GetKeyDown(KeyCode.LeftAlt)
-             || Input.GetKeyDown(KeyCode.RightAlt))
-            {
-                tileMode.SetToolOrReset(Modes.Tile.Tool.Picker);
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftShift)
-                  || Input.GetKeyDown(KeyCode.RightShift))
-            {
-                tileMode.SetToolOrReset(Modes.Tile.Tool.Fill);
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftControl)
-                  || Input.GetKeyDown(KeyCode.RightControl))
-            {
-                tileMode.SetToolOrReset(Modes.Tile.Tool.Promote);
-            }
 
             LastCursor = WCamera.ScreenToWorld(Input.mousePosition);
         }

@@ -1,4 +1,4 @@
-Initialize engine version: 5.1.0f3 (ec70b008569d)
+Initialize engine version: 5.1.3f1 (b0a23b31c3d8)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
@@ -14,8 +14,6 @@ Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
-Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
@@ -28,32 +26,24 @@ Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Ionic.Zip.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Newtonsoft.Json.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\Newtonsoft.Json.dll into Unity Child Domain
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Other.dll (this message is harmless)
-Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Other.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.CJK.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.CJK.dll into Unity Child Domain
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll (this message is harmless)
-Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll into Unity Child Domain
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll (this message is harmless)
-Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.MidEast.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.MidEast.dll into Unity Child Domain
-- Completed reload, in  0.279 seconds
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Other.dll (this message is harmless)
+Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Other.dll into Unity Child Domain
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll (this message is harmless)
+Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll into Unity Child Domain
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll (this message is harmless)
+Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll into Unity Child Domain
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Core.dll (this message is harmless)
+- Completed reload, in  0.254 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
 <RI> Initialized touch support.
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.dll (this message is harmless)
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Xml.dll (this message is harmless)
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Data.dll (this message is harmless)
-C:/Users/ragzouken/AppData/LocalLow/kooltool/kooltool/test
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 65)
-
-C:/Users/ragzouken/AppData/LocalLow/kooltool/kooltool/test
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 65)
-
