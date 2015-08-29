@@ -49,7 +49,6 @@ namespace kooltool.Editor
 
         public Toolbox Toolbox;
 
-        public Project Project { get; protected set; }
         public Serialization.Project project_;
 
         public MapGenerator generator;
@@ -61,11 +60,9 @@ namespace kooltool.Editor
         protected Coroutine ZoomCoroutine;
 
         // poop
-        protected Vector2 LastCursor;
         Vector2 pansite;
-
         protected bool Panning;
-        protected bool Drawing;
+        public Project Project;
 
         #region Modes
 
@@ -334,6 +331,9 @@ namespace kooltool.Editor
             // zoom
             float scroll = Input.GetAxis("Mouse ScrollWheel");
 
+            if (Input.GetKey(KeyCode.Equals)) scroll += 5 * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Minus)) scroll -= 5 * Time.deltaTime;
+
             if (IsPointerOverWorld() && Mathf.Abs(scroll) > Mathf.Epsilon)
             {
                 if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
@@ -498,8 +498,6 @@ namespace kooltool.Editor
 
             if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
-
-            LastCursor = WCamera.ScreenToWorld(Input.mousePosition);
         }
 
         public void SetProject(Project project)

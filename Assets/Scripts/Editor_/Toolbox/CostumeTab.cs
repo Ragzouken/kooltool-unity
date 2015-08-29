@@ -45,7 +45,7 @@ namespace kooltool.Editor
 
         public void OnClickedNew()
         {
-            Editor.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, Editor.Project.Grid.CellWidth, Editor.Project.Grid.CellHeight));
+            Editor.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, 32, 32));
 
             Refresh();
         }
