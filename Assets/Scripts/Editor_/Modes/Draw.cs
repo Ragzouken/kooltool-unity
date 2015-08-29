@@ -76,31 +76,25 @@ namespace kooltool.Editor.Modes
                                          thickness, color, blend);
                 drawing.Drawing.Apply();
             }
-            else if (tool == Tool.Line && drawing != null)
-            {
-                drawing.Drawing.DrawLine(start, 
-                                         editor.currCursorWorld, 
-                                         thickness, color, blend);
-                drawing.Drawing.Apply();
-            }
         }
 
         public override void CursorInteractStart()
         {
             base.CursorInteractStart();
 
-            if (tool == Tool.Pencil || tool == Tool.Line)
-            {
-                if (hovering != null)
-                {
-                    drawing = hovering;
-                }
-            }
-            else if (tool == Tool.Pick)
+            if (tool == Tool.Pick || Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
             {
                 if (!hovering.Drawing.Sample(editor.currCursorWorld, out paintColour))
                 {
-                    paintColour = new Color(0, 0, 0, 0);
+                    paintColour = Color.clear;
+                }
+            }
+            else if (tool == Tool.Pencil || tool == Tool.Line)
+            {
+                if (hovering != null)
+                {
+                    start = editor.currCursorWorld;
+                    drawing = hovering;
                 }
             }
             else if (tool == Tool.Fill)
@@ -113,6 +107,20 @@ namespace kooltool.Editor.Modes
         public override void CursorInteractFinish()
         {
             base.CursorInteractFinish();
+
+            bool erase = paintColour.a == 0;
+
+            Color color = erase ? Color.white : paintColour;
+            var blend = erase ? Blend.Subtract
+                              : Blend.Alpha;
+
+            if (tool == Tool.Line && drawing != null)
+            {
+                drawing.Drawing.DrawLine(start.Round(), 
+                                         editor.currCursorWorld.Round(), 
+                                         thickness, color, blend);
+                drawing.Drawing.Apply();
+            }
 
             drawing = null;
         }
