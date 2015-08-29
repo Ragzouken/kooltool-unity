@@ -29,6 +29,8 @@ namespace kooltool.Editor.Modes
         public Tool tool;
         public int thickness = 1;
 
+        public Sprite brush;
+
         public Draw(Editor editor, 
                     PixelCursor cursor) : base(editor)
         {
@@ -75,6 +77,14 @@ namespace kooltool.Editor.Modes
                                          editor.prevCursorWorld.Round(), 
                                          thickness, color, blend);
                 drawing.Drawing.Apply();
+            }
+            else if (tool == Tool.Line && drawing != null)
+            {
+                brush = Brush.Line(start.Round(),
+                                   editor.currCursorWorld.Round(),
+                                   color,
+                                   thickness);
+                brush.texture.Apply();
             }
         }
 

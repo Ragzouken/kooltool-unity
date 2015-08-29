@@ -28,7 +28,7 @@ namespace kooltool.Editor
 
             var rtrans = transform as RectTransform;
 
-            bool lining = mode.tool == Modes.Draw.Tool.Line && mode.drawing != null;
+            bool lining = mode.tool == Modes.Draw.Tool.Line && mode.drawing != null && mode.brush != null;
 
             Line.enabled = lining;
 
@@ -38,25 +38,10 @@ namespace kooltool.Editor
 
                 Preview.color = Color.white;
 
-                Vector2 start = mode.start;
-
-                var tl = new Vector2(Mathf.Min(start.x, end.x),
-                                     Mathf.Min(start.y, end.y));
-                
-                var preview = Brush.Line(new Point(start - tl), 
-                                         new Point(end - tl), 
-                                         previewColor, mode.thickness);
-
-                preview.texture.Apply();
-
-                var pivot = new Vector2(preview.pivot.x / preview.rect.width,
-                                        preview.pivot.y / preview.rect.height);
-
-                Line.sprite = preview;
+                Line.sprite = mode.brush;
                 Line.SetNativeSize();
 
-                ltrans.pivot = pivot;
-                ltrans.anchoredPosition = start;
+                ltrans.position = -mode.brush.pivot;
             }
             else
             {
