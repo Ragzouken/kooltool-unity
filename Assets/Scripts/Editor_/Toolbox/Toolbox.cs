@@ -14,8 +14,6 @@ namespace kooltool.Editor
         public PixelTab PixelTab;
         public TileTab TileTab;
 
-        public PixelTool PixelTool;
-
         private void Awake()
         {
             PixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);

@@ -15,12 +15,11 @@ namespace kooltool.Editor
         public Image Line;
 
         public Modes.Draw mode;
-        public PixelTool Tool;
         public Vector2 end;
 
         public void Refresh()
         {
-            if (Tool == null) return;
+            if (mode == null) return;
 
             bool erase = mode.paintColour.a == 0;
 
@@ -29,22 +28,24 @@ namespace kooltool.Editor
 
             var rtrans = transform as RectTransform;
 
-            Line.enabled = Tool.dragging && mode.tool == Modes.Draw.Tool.Line;
+            bool lining = mode.tool == Modes.Draw.Tool.Line && mode.drawing != null;
 
-            if (mode.tool == Modes.Draw.Tool.Line && Tool.dragging)
+            Line.enabled = lining;
+
+            if (lining)
             {
                 var ltrans = Line.transform as RectTransform;
 
                 Preview.color = Color.white;
 
-                Vector2 start = Tool.start;
+                Vector2 start = mode.start;
 
                 var tl = new Vector2(Mathf.Min(start.x, end.x),
                                      Mathf.Min(start.y, end.y));
                 
                 var preview = Brush.Line(new Point(start - tl), 
                                          new Point(end - tl), 
-                                         previewColor, Tool.Thickness);
+                                         previewColor, mode.thickness);
 
                 preview.texture.Apply();
 

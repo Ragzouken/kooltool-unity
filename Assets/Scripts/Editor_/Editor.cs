@@ -61,7 +61,6 @@ namespace kooltool.Editor
         protected Coroutine ZoomCoroutine;
 
         // poop
-        public ITool ActiveTool;
         protected Vector2 LastCursor;
         Vector2 pansite;
 
@@ -183,10 +182,8 @@ namespace kooltool.Editor
             project_.tileset.TestTile();
             //SetProject(LoadProject("test"));
 
-            Toolbox.PixelTool = new PixelTool(this);
-
             objectMode = new Modes.Object(this);
-            drawMode = new Modes.Draw(this, PixelCursor, Toolbox.PixelTool);
+            drawMode = new Modes.Draw(this, PixelCursor);
             tileMode = new Modes.Tile(this, TileCursor);
 
             Toolbox.PixelTab.SetPixelTool(drawMode);
@@ -197,8 +194,6 @@ namespace kooltool.Editor
             // poop
             TileCursor.mode = tileMode;
             PixelCursor.mode = drawMode;
-
-            ActiveTool = Toolbox.PixelTool;
 
             ZoomTo(1f);
 
@@ -309,7 +304,6 @@ namespace kooltool.Editor
         protected void CancelActions(Vector2 world)
         {
             if (Panning) Panning = false;
-            if (Drawing) EndDraw(world);
         }
 
         protected void CheckNavigation()
@@ -445,39 +439,6 @@ namespace kooltool.Editor
             CheckHighlights();
         }
 
-        protected void UpdateDraw()
-        {
-            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
-
-            if (GetMouseDown(0)) BeginDraw(cursor);
-
-            if (Drawing && Input.GetMouseButtonUp(0)) EndDraw(cursor);
-            if (Drawing) ContinueDraw(cursor);
-        }
-
-        protected void BeginDraw(Vector2 cursor)
-        {
-            CancelActions(cursor);
-
-            Drawing = true;
-
-            if (currentMode == drawMode) ActiveTool.BeginStroke(cursor);
-        }
-
-        protected void ContinueDraw(Vector2 world)
-        {
-            if (currentMode == drawMode) ActiveTool.ContinueStroke(LastCursor, world);
-        }
-
-        protected void EndDraw(Vector2 world)
-        {
-            ContinueDraw(world);
-
-            Drawing = false;
-
-            if (currentMode == drawMode) ActiveTool.EndStroke(world);
-        }
-
         private bool block;
 
         public Vector2 currCursorWorld;
@@ -531,11 +492,6 @@ namespace kooltool.Editor
             if (!Toolbox.gameObject.activeSelf)
             {
                 CheckNavigation();
-
-                if (!Input.GetKey(KeyCode.Tab))
-                {
-                    UpdateDraw();
-                }
             }
 
             UpdateCursors();
@@ -642,7 +598,6 @@ namespace kooltool.Editor
             if (!focus)
             {
                 Panning = false;
-                EndDraw(WCamera.ScreenToWorld(Input.mousePosition));
             }
         }
     }

@@ -20,23 +20,19 @@ namespace kooltool.Editor.Modes
         }
 
         private readonly PixelCursor cursor;
-        private readonly PixelTool tool_;
 
         private IDrawable hovering;
-        private IDrawable drawing;
+        public IDrawable drawing;
+        public Vector2 start;
 
         public Color paintColour = Color.magenta;
         public Tool tool;
         public int thickness = 1;
 
         public Draw(Editor editor, 
-                    PixelCursor cursor,
-                    PixelTool tool) : base(editor)
+                    PixelCursor cursor) : base(editor)
         {
             this.cursor = cursor;
-            this.tool_ = tool;
-
-            cursor.Tool = tool;
         }
 
         public override void Enter()
@@ -60,23 +56,30 @@ namespace kooltool.Editor.Modes
             if (@object != null) highlights.Add(@object.HighlightParent);
 
             var rtrans = cursor.transform as RectTransform;
-            var offset = Vector2.one * ((tool_.Thickness % 2 == 1) ? 0.5f : 0);
+            var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
 
             cursor.end = editor.currCursorWorld;
             rtrans.anchoredPosition = cursor.end.Round() + offset;
 
             cursor.Refresh();
 
+            bool erase = paintColour.a == 0;
+
+            Color color = erase ? Color.white : paintColour;
+            var blend = erase ? Blend.Subtract
+                              : Blend.Alpha;
+
             if (tool == Tool.Pencil && drawing != null)
             {
-                bool erase = paintColour.a == 0;
-
-                Color color = erase ? Color.white : paintColour;
-                var blend = erase ? Blend.Subtract 
-                                  : Blend.Alpha;
-
                 drawing.Drawing.DrawLine(editor.currCursorWorld.Round(), 
                                          editor.prevCursorWorld.Round(), 
+                                         thickness, color, blend);
+                drawing.Drawing.Apply();
+            }
+            else if (tool == Tool.Line && drawing != null)
+            {
+                drawing.Drawing.DrawLine(start, 
+                                         editor.currCursorWorld, 
                                          thickness, color, blend);
                 drawing.Drawing.Apply();
             }
@@ -86,7 +89,7 @@ namespace kooltool.Editor.Modes
         {
             base.CursorInteractStart();
 
-            if (tool == Tool.Pencil)
+            if (tool == Tool.Pencil || tool == Tool.Line)
             {
                 if (hovering != null)
                 {
