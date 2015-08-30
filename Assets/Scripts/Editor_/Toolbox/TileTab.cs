@@ -16,6 +16,7 @@ namespace kooltool.Editor
         [SerializeField] protected ToggleGroup TileToggleGroup;
         [SerializeField] protected RectTransform TileContainer;
         [SerializeField] protected TileIndicator TilePrefab;
+        [SerializeField] private Image tileBackgroundImage;
 
         private Modes.Tile tileMode;
 
@@ -56,6 +57,11 @@ namespace kooltool.Editor
                     if (active) tileMode.paintTile = set;
                 });
             }
+        }
+
+        public void Update()
+        {
+            //tileBackgroundImage.sprite = tileMode.paintTile.sprites[0];
         }
 
         public void OnClickedNew()

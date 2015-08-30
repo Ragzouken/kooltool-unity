@@ -25,6 +25,7 @@ namespace kooltool.Editor
         [SerializeField] protected ToggleGroup ColorToggleGroup;
         [SerializeField] protected RectTransform ColorContainer;
         [SerializeField] protected ColorIndicator ColorPrefab;
+        [SerializeField] private Image colourBackgroundImage;
 
         protected IList<SizeIndicator> SizeIndicators = new List<SizeIndicator>();
 
@@ -81,6 +82,10 @@ namespace kooltool.Editor
         private void Update()
         {
             SizeContainer.gameObject.SetActive(mode.tool != Modes.Draw.Tool.Fill);
+
+            bool erase = mode.paintColour.a == 0;
+            
+            colourBackgroundImage.color = erase ? Editor.GetFlashColour() : mode.paintColour;
         }
 
         public void SetSize(int size)

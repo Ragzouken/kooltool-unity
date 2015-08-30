@@ -32,7 +32,7 @@ namespace kooltool.Editor
 
             Vector3 pos;
 
-            RectTransformUtility.ScreenPointToWorldPointInRectangle(ptrans, Input.mousePosition, null, out pos);
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(ptrans, Input.mousePosition + Vector3.up * 64, null, out pos);
 
             rtrans.position = pos;
 

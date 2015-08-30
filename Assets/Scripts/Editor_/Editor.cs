@@ -106,7 +106,7 @@ namespace kooltool.Editor
 
         #endregion
 
-        public Color GetFlashColour(float alpha=1f)
+        public static Color GetFlashColour(float alpha=1f)
         {
             float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
             

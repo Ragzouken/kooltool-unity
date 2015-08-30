@@ -29,7 +29,7 @@ namespace kooltool.Editor
 
             bool erase = mode.paintColour.a == 0;
 
-            Color previewColor = erase ? editor.GetFlashColour() 
+            Color previewColor = erase ? Editor.GetFlashColour() 
                                        : mode.paintColour; 
 
             var rtrans = transform as RectTransform;
