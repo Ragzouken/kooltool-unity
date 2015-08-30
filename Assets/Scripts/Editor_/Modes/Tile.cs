@@ -25,6 +25,8 @@ namespace kooltool.Editor.Modes
         public kooltool.Tile paintTile;
         public Tool tool;
 
+        private TileCursor cursor;
+
         public void SetToolOrReset(Tool tool)
         {
             this.tool = this.tool == tool ? Tool.Pencil : tool;
@@ -33,6 +35,7 @@ namespace kooltool.Editor.Modes
         public Tile(Editor editor, TileCursor cursor) : base(editor)
         {
             paintTile = editor.project_.tileset.tiles[0];
+            this.cursor = cursor;
         }
 
         public static Point Vector2Cell(Vector2 point)
@@ -120,6 +123,8 @@ namespace kooltool.Editor.Modes
                     });
                 }
             }
+
+            cursor.Refresh();
         }
 
         public void SetDrag(ITileable target)
@@ -136,11 +141,15 @@ namespace kooltool.Editor.Modes
         public override void Enter()
         {
             Reset();
+
+            cursor.gameObject.SetActive(true);
         }
 
         public override void Exit()
         {
             Reset();
+
+            cursor.gameObject.SetActive(false);
         }
 
         public override void CursorInteractStart()

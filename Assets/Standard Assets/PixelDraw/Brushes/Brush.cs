@@ -51,7 +51,7 @@ namespace PixelDraw
             Sprite brush = Sprite.Create(image, 
                                          new Rect(0, 0, width, height),
                                          new Vector2(px / width, py / height),
-                                         1);
+                                         100);
             brush.name = "Rectangle (Brush)";
 
             return brush;
@@ -67,7 +67,7 @@ namespace PixelDraw
             Sprite brush = Sprite.Create(image, 
                                          new Rect(0, 0, diameter, diameter),
                                          Vector2.one * piv,
-                                         1);
+                                         100);
             brush.name = "Circle (Brush)";
 
             int radius = (diameter - 1) / 2;

@@ -14,8 +14,6 @@ namespace kooltool.Editor
         public Image Preview;
         public Image Line;
         
-        [SerializeField] private Image overlayIcon;
-
         [Header("Sprites")]
         [SerializeField] private Sprite pencilSprite;
         [SerializeField] private Sprite pickSprite;
@@ -59,15 +57,10 @@ namespace kooltool.Editor
                 Preview.sprite = preview;
             }
 
-            overlayIcon.sprite = null;
-
-            if (mode.tool == Modes.Draw.Tool.Pick)   overlayIcon.sprite = pickSprite;
-            if (mode.tool == Modes.Draw.Tool.Pencil) overlayIcon.sprite = pencilSprite;
-            if (mode.tool == Modes.Draw.Tool.Fill)   overlayIcon.sprite = fillSprite;
-            if (mode.tool == Modes.Draw.Tool.Line)   overlayIcon.sprite = lineSprite;
-
-            overlayIcon.gameObject.SetActive(overlayIcon.sprite != null);
-            overlayIcon.transform.position = Input.mousePosition;
+            if (mode.tool == Modes.Draw.Tool.Pick)   editor.toolIcon.sprite = pickSprite;
+            if (mode.tool == Modes.Draw.Tool.Pencil) editor.toolIcon.sprite = pencilSprite;
+            if (mode.tool == Modes.Draw.Tool.Fill)   editor.toolIcon.sprite = fillSprite;
+            if (mode.tool == Modes.Draw.Tool.Line)   editor.toolIcon.sprite = lineSprite;
 
             rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mode.thickness);
             rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,   mode.thickness);

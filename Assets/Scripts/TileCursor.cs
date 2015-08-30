@@ -18,12 +18,14 @@ namespace kooltool.Editor
 
         [Header("Images")]
         [SerializeField] private Image tileImage;
-        [SerializeField] private Image iconImage;
         [SerializeField] private Image borderImage;
+        [SerializeField] private Image toolIcon;
 
         public Modes.Tile mode;
 
-        public void Update()
+        public Editor editor;
+
+        public void Refresh()
         {
             bool showTile = false;
             Sprite icon = null;
@@ -63,8 +65,8 @@ namespace kooltool.Editor
             if (mode.paintTile != null) tileImage.sprite = mode.paintTile.sprites[0];
             tileImage.enabled = showTile;
 
-            iconImage.sprite = icon;
-            iconImage.enabled = icon != null;
+            toolIcon.sprite = icon;
+            toolIcon.gameObject.SetActive(toolIcon.sprite != null);
 
             borderImage.sprite = mode.hoveredTile.HasValue ? dashedBorder
                                                            : solidBorder;

@@ -22,7 +22,7 @@ public class TabbedPanels : MonoBehaviour
 		foreach (Transform tab in TabContainer)
 		{
 			var panel = Panels[tab.name];
-			var toggle = tab.GetComponent<Toggle>();
+			var toggle = tab.GetComponentInChildren<Toggle>();
 
 			toggle.onValueChanged.AddListener((bool on) => panel.SetActive(on));
 		}

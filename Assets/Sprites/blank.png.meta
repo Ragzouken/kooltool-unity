@@ -1,9 +1,10 @@
 fileFormatVersion: 2
 guid: 4f7824753664ee74f9c6feba9102486d
-timeCreated: 1425810844
+timeCreated: 1440948597
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: blank_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -45,10 +46,20 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 1
   alphaIsTransparency: 1
-  textureType: 5
+  textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: blank_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: ui
   userData: 
   assetBundleName: 

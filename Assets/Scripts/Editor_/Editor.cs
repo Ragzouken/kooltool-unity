@@ -38,11 +38,13 @@ namespace kooltool.Editor
 
         [Header("UI")]
         [SerializeField] protected Slider ZoomSlider;
+        [SerializeField] public Tooltip tooltip;
 
         [Header("Cursors")]
         [SerializeField] protected GameObject Cursors;
         [SerializeField] protected PixelCursor PixelCursor;
         [SerializeField] protected TileCursor TileCursor;
+        [SerializeField] public Image toolIcon;
 
         [Header("Settings")]
         [SerializeField] protected AnimationCurve ZoomCurve;
@@ -475,7 +477,12 @@ namespace kooltool.Editor
 
             UpdateHovered();
 
+            toolIcon.sprite = null;
+
             currentMode.Update();
+
+            toolIcon.transform.position = Input.mousePosition;
+            toolIcon.gameObject.SetActive(toolIcon.sprite != null);
 
             if (Input.GetMouseButtonDown(0) && IsPointerOverWorld()) currentMode.CursorInteractStart();
             if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();

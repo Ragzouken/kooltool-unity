@@ -23,7 +23,7 @@ namespace kooltool.Editor
             brush.texture.Apply();
 
             Image.sprite = button;
-            Image.SetNativeSize();
+            //Image.SetNativeSize();
 
             /*
             if (value % 2 == 1)
