@@ -15,6 +15,7 @@ public class InfiniteDrawing : MonoDrawing
     protected const int Size = 1024;
 
     private Layer layer;
+    private Layer.Drawing drawing;
 
     protected void Awake()
     {
@@ -27,7 +28,7 @@ public class InfiniteDrawing : MonoDrawing
         var texture = layer.world.project.index.CreateTexture(Size, Size);
 
         drawing = NewCell_(cell, texture);
-        layer.drawing.Add(cell, texture);
+        this.drawing.Add(cell, texture);
 
         return true;
     }
@@ -60,7 +61,7 @@ public class InfiniteDrawing : MonoDrawing
         return drawing;
     }
 
-    public void SetLayer(Layer layer)
+    public void SetLayer(Layer layer, Layer.Drawing drawing)
     {
         foreach (Transform child in transform)
         {
@@ -71,8 +72,9 @@ public class InfiniteDrawing : MonoDrawing
         Drawing = Tiled;
 
         this.layer = layer;
+        this.drawing = drawing;
 
-        foreach (var pair in layer.drawing)
+        foreach (var pair in drawing)
         {
             NewCell_(pair.Key, pair.Value);
         }

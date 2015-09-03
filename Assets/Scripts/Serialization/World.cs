@@ -28,6 +28,7 @@ namespace kooltool.Serialization
         public Tileset tileset;
         public Grid tiles = new Grid();
         public Drawing drawing = new Drawing();
+        public Drawing annotations = new Drawing();
 
         public HashSet<Character> characters = new HashSet<Character>();
     }

@@ -12,7 +12,8 @@ namespace kooltool.Editor
         [SerializeField] protected Toggle FillToggle;
         [SerializeField] protected Toggle LineToggle;
 
-        [SerializeField] protected ColorIndicator EraserColor;
+        [SerializeField] private ColorIndicator EraserColor;
+        [SerializeField] private ColorIndicator notesColor;
 
         [Header("Size")]
         [Range(1, 32)]
@@ -60,7 +61,13 @@ namespace kooltool.Editor
 
             EraserColor.Toggle.onValueChanged.AddListener(delegate(bool active)
             {
-                if (active) mode.paintColour = Color.clear;
+                if (active) mode.paintColour = Modes.Draw.eraseColour;
+            });
+
+            notesColor.Toggle.onValueChanged.AddListener(delegate(bool active)
+            {
+                if (active)
+                    mode.paintColour = Modes.Draw.notesColour;
             });
 
             for (int i = 0; i < 10; ++i)
@@ -83,9 +90,8 @@ namespace kooltool.Editor
         {
             SizeContainer.gameObject.SetActive(mode.tool != Modes.Draw.Tool.Fill);
 
-            bool erase = mode.paintColour.a == 0;
-            
-            colourBackgroundImage.color = erase ? Editor.GetFlashColour() : mode.paintColour;
+            colourBackgroundImage.color = mode.notes ? Editor.GetFlashColour() 
+                                                     : mode.paintColour;
         }
 
         public void SetSize(int size)

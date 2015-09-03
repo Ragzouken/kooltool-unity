@@ -8,8 +8,29 @@ using PixelDraw;
 
 namespace kooltool.Editor
 {
-    public class Layer : Editable, IDrawable, ITileable
+    public class Layer : Editable, IDrawable, ITileable, IAnnotatable
     {
+        public class Hack : IDrawable
+        {
+            public Layer layer;
+
+            IDrawing IDrawable.Drawing
+            {
+                get
+                {
+                    return layer.Annotations;
+                }
+            }
+        }
+
+        Hack IAnnotatable.Hack
+        {
+            get
+            {
+                return hack;
+            }
+        }
+
         IDrawing IDrawable.Drawing
         {
             get
@@ -32,17 +53,21 @@ namespace kooltool.Editor
         [Header("Objects")]
         public InfiniteDrawing Drawing;
         public Tilemap Tilemap;
+        public InfiniteDrawing Annotations;
         public RectTransform CharacterContainer;
 
         public MonoBehaviourPooler<Character, CharacterDrawing> Characters;
 
         private kooltool.Serialization.Layer layer;
+        private Hack hack;
 
         protected void Awake()
         {
             Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, 
                                                                               CharacterContainer, 
                                                                               InitialiseCharacter);
+
+            hack = new Hack { layer = this };
         }
 
         private void InitialiseCharacter(Character character, CharacterDrawing drawing)
@@ -58,7 +83,8 @@ namespace kooltool.Editor
 
             Tilemap.SetLayer(layer);
             Characters.SetActive(layer.characters);
-            Drawing.SetLayer(layer);
+            Drawing.SetLayer(layer, layer.drawing);
+            Annotations.SetLayer(layer, layer.annotations);
         }
 
         void ITileable.Demote(Point cell)

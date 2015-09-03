@@ -11,6 +11,9 @@ namespace kooltool.Editor.Modes
 {
     public class Draw : Mode
     {
+        public static Color eraseColour = Color.clear;
+        public static Color notesColour = new Color(1, 1, 1, 0);
+
         public enum Tool
         {
             Pencil,
@@ -30,6 +33,22 @@ namespace kooltool.Editor.Modes
         public int thickness = 1;
 
         public Sprite brush;
+
+        public bool erase
+        {
+            get
+            {
+                return paintColour == eraseColour;
+            }
+        }
+
+        public bool notes
+        {
+            get
+            {
+                return paintColour == notesColour;
+            }
+        }
 
         public Draw(Editor editor, 
                     PixelCursor cursor) : base(editor)
@@ -53,6 +72,8 @@ namespace kooltool.Editor.Modes
 
             hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
 
+            if (notes) hovering = editor.hovered.OfType<IAnnotatable>().FirstOrDefault().Hack;
+
             var @object = (drawing ?? hovering) as IObject;
 
             if (@object != null) highlights.Add(@object.HighlightParent);
@@ -65,9 +86,7 @@ namespace kooltool.Editor.Modes
 
             cursor.Refresh();
 
-            bool erase = paintColour.a == 0;
-
-            Color color = erase ? Color.white : paintColour;
+            Color color = (erase || notes) ? Color.white : paintColour;
             var blend = erase ? Blend.Subtract
                               : Blend.Alpha;
 
@@ -117,8 +136,6 @@ namespace kooltool.Editor.Modes
         public override void CursorInteractFinish()
         {
             base.CursorInteractFinish();
-
-            bool erase = paintColour.a == 0;
 
             Color color = erase ? Color.white : paintColour;
             var blend = erase ? Blend.Subtract
