@@ -255,6 +255,7 @@ namespace kooltool.Editor
 
             using (ZipFile zip = new ZipFile())
             {
+                zip.ParallelDeflateThreshold = -1;
                 zip.AddDirectory(Application.dataPath + "/" + exepath + "/windows", name);
                 zip.AddDirectory(project_.index.path, name + "/kooltool_Data/autoplay");
 
@@ -263,6 +264,7 @@ namespace kooltool.Editor
 
             using (ZipFile zip = new ZipFile())
             {
+                zip.ParallelDeflateThreshold = -1;
                 zip.AddDirectory(Application.dataPath + "/" + exepath + "/linux", name);
                 zip.AddDirectory(project_.index.path, name + "/kooltool_Data/autoplay");
 
@@ -271,6 +273,7 @@ namespace kooltool.Editor
 
             using (ZipFile zip = new ZipFile())
             {
+                zip.ParallelDeflateThreshold = -1;
                 zip.AddDirectory(Application.dataPath + "/" + exepath + "/mac/kooltool.app", name + ".app");
                 zip.AddDirectory(project_.index.path, name + ".app/Contents/autoplay");
 
