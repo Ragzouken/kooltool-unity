@@ -71,6 +71,7 @@ namespace kooltool.Editor
         private Modes.Object objectMode;
         private Modes.Draw drawMode;
         private Modes.Tile tileMode;
+        private Modes.Notes notesMode;
 
         private readonly Stack<Modes.Mode> modes = new Stack<Mode>();
 
@@ -149,6 +150,11 @@ namespace kooltool.Editor
             SetMode(tileMode);
         }
 
+        public void SetNotesMode()
+        {
+            SetMode(notesMode);
+        }
+
         public void SetProject(Serialization.Project project)
         {
             project_ = project;
@@ -184,9 +190,11 @@ namespace kooltool.Editor
             objectMode = new Modes.Object(this);
             drawMode = new Modes.Draw(this, PixelCursor);
             tileMode = new Modes.Tile(this, TileCursor);
+            notesMode = new Modes.Notes(this, PixelCursor);
 
-            Toolbox.PixelTab.SetPixelTool(drawMode);
-            Toolbox.TileTab.SetTileTool(tileMode);
+            Toolbox.pixelTab.SetPixelTool(drawMode);
+            Toolbox.tileTab.SetTileTool(tileMode);
+            Toolbox.notesTab.SetNotesTool(notesMode);
 
             modes.Push(drawMode);
 
@@ -351,15 +359,15 @@ namespace kooltool.Editor
 
         protected void CheckKeyboardShortcuts()
         {
-            if (Input.GetKey(KeyCode.Alpha1)) Toolbox.PixelTab.SetSize(1);
-            if (Input.GetKey(KeyCode.Alpha2)) Toolbox.PixelTab.SetSize(2);
-            if (Input.GetKey(KeyCode.Alpha3)) Toolbox.PixelTab.SetSize(3);
-            if (Input.GetKey(KeyCode.Alpha4)) Toolbox.PixelTab.SetSize(4);
-            if (Input.GetKey(KeyCode.Alpha5)) Toolbox.PixelTab.SetSize(5);
-            if (Input.GetKey(KeyCode.Alpha6)) Toolbox.PixelTab.SetSize(6);
-            if (Input.GetKey(KeyCode.Alpha7)) Toolbox.PixelTab.SetSize(7);
-            if (Input.GetKey(KeyCode.Alpha8)) Toolbox.PixelTab.SetSize(8);
-            if (Input.GetKey(KeyCode.Alpha9)) Toolbox.PixelTab.SetSize(9);
+            if (Input.GetKey(KeyCode.Alpha1)) Toolbox.pixelTab.SetSize(1);
+            if (Input.GetKey(KeyCode.Alpha2)) Toolbox.pixelTab.SetSize(2);
+            if (Input.GetKey(KeyCode.Alpha3)) Toolbox.pixelTab.SetSize(3);
+            if (Input.GetKey(KeyCode.Alpha4)) Toolbox.pixelTab.SetSize(4);
+            if (Input.GetKey(KeyCode.Alpha5)) Toolbox.pixelTab.SetSize(5);
+            if (Input.GetKey(KeyCode.Alpha6)) Toolbox.pixelTab.SetSize(6);
+            if (Input.GetKey(KeyCode.Alpha7)) Toolbox.pixelTab.SetSize(7);
+            if (Input.GetKey(KeyCode.Alpha8)) Toolbox.pixelTab.SetSize(8);
+            if (Input.GetKey(KeyCode.Alpha9)) Toolbox.pixelTab.SetSize(9);
 
             if (Input.GetKeyDown(KeyCode.F7))
             {

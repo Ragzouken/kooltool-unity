@@ -11,6 +11,9 @@ namespace kooltool.Editor
         RectTransform HighlightParent { get; }
 
         Vector2 DragPivot(Vector2 world);
+        
         void Drag(Vector2 pivot, Vector2 world);
+
+        //void Remove();
     }
 }

@@ -13,7 +13,9 @@ namespace kooltool.Editor
 
         public Image Preview;
         public Image Line;
-        
+
+        public Color colour;
+
         [Header("Sprites")]
         [SerializeField] private Sprite pencilSprite;
         [SerializeField] private Sprite pickSprite;
@@ -26,9 +28,6 @@ namespace kooltool.Editor
         public void Refresh()
         {
             if (mode == null) return;
-
-            Color previewColor = (mode.erase || mode.notes) ? Editor.GetFlashColour() 
-                                                            : mode.paintColour; 
 
             var rtrans = transform as RectTransform;
 
@@ -49,7 +48,7 @@ namespace kooltool.Editor
             }
             else
             {
-                var preview = Brush.Circle(mode.thickness, previewColor);
+                var preview = Brush.Circle(mode.thickness, colour);
                 preview.texture.Apply();
 
                 Preview.sprite = preview;

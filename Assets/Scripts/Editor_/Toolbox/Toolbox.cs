@@ -7,22 +7,25 @@ namespace kooltool.Editor
 {
     public class Toolbox : MonoBehaviour
     {
-        [SerializeField] protected Editor Editor;
-        [SerializeField] protected Toggle PixelTabToggle;
-        [SerializeField] protected Toggle TileTabToggle;
+        [SerializeField] private Editor editor;
+        [SerializeField] private Toggle pixelTabToggle;
+        [SerializeField] private Toggle tileTabToggle;
+        [SerializeField] private Toggle notesTabToggle;
 
-        public PixelTab PixelTab;
-        public TileTab TileTab;
+        public PixelTab pixelTab;
+        public TileTab tileTab;
+        public NotesTab notesTab;
 
         private void Awake()
         {
-            PixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);
-            TileTabToggle.onValueChanged.AddListener(OnToggledTileTab);
+            pixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);
+            tileTabToggle.onValueChanged.AddListener(OnToggledTileTab);
+            notesTabToggle.onValueChanged.AddListener(OnToggledNotesTab);
         }
 
         public void SetProject(Project project)
         {
-            PixelTab.SetProject(project);
+            pixelTab.SetProject(project);
         }
 
         public void Show()
@@ -57,12 +60,17 @@ namespace kooltool.Editor
 
         public void OnToggledPixelTab(bool active)
         {
-            if (active) Editor.SetPixelTool();
+            if (active) editor.SetPixelTool();
         }
 
         public void OnToggledTileTab(bool active)
         {
-            if (active) Editor.SetTileTool();
+            if (active) editor.SetTileTool();
+        }
+
+        public void OnToggledNotesTab(bool active)
+        {
+            if (active) editor.SetNotesMode();
         }
     }
 }

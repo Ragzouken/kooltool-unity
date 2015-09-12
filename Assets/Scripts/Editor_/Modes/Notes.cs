@@ -9,15 +9,11 @@ using PixelDraw;
 
 namespace kooltool.Editor.Modes
 {
-    public class Draw : Mode
+    public class Notes : Mode
     {
-        public static Color eraseColour = Color.clear;
-
         public enum Tool
         {
             Pencil,
-            Pick,
-            Fill,
             Line,
         }
 
@@ -27,22 +23,16 @@ namespace kooltool.Editor.Modes
         public IDrawable drawing;
         public Vector2 start;
 
-        public Color paintColour = Color.magenta;
         public Tool tool;
         public int thickness = 1;
 
         public Sprite brush;
 
-        public bool erase
-        {
-            get
-            {
-                return paintColour == eraseColour;
-            }
-        }
+        public bool erase;
 
-        public Draw(Editor editor, 
-                    PixelCursor cursor) : base(editor)
+        public Notes(Editor editor,
+                     PixelCursor cursor)
+            : base(editor)
         {
             this.cursor = cursor;
         }
@@ -61,12 +51,11 @@ namespace kooltool.Editor.Modes
         {
             highlights.Clear();
 
-
-            hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
+            hovering = editor.hovered.OfType<IAnnotatable>().FirstOrDefault().Hack;
 
             var @object = (drawing ?? hovering) as IObject;
 
-            if (@object != null) highlights.Add(@object.HighlightParent);
+            if (@object != null)  highlights.Add(@object.HighlightParent);
 
             var rtrans = cursor.transform as RectTransform;
             var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
@@ -74,27 +63,26 @@ namespace kooltool.Editor.Modes
             cursor.end = editor.currCursorWorld;
             rtrans.anchoredPosition = cursor.end.Round() + offset;
 
-            cursor.colour = erase ? Editor.GetFlashColour()
-                                  : paintColour; 
+            cursor.colour = Editor.GetFlashColour();
             cursor.Refresh();
 
-            Color color = erase ? Color.white : paintColour;
             var blend = erase ? Blend.Subtract
                               : Blend.Alpha;
 
             if (tool == Tool.Pencil && drawing != null)
             {
-                drawing.Drawing.DrawLine(editor.currCursorWorld.Round(), 
-                                         editor.prevCursorWorld.Round(), 
-                                         thickness, color, blend);
+                drawing.Drawing.DrawLine(editor.currCursorWorld.Round(),
+                                         editor.prevCursorWorld.Round(),
+                                         thickness, Color.white, blend);
                 drawing.Drawing.Apply();
             }
             else if (tool == Tool.Line && drawing != null)
             {
                 brush = Brush.Line(start.Round(),
                                    editor.currCursorWorld.Round(),
-                                   color,
+                                   Color.white,
                                    thickness);
+
                 brush.texture.Apply();
             }
         }
@@ -103,14 +91,7 @@ namespace kooltool.Editor.Modes
         {
             base.CursorInteractStart();
 
-            if (tool == Tool.Pick || Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
-            {
-                if (!hovering.Drawing.Sample(editor.currCursorWorld, out paintColour))
-                {
-                    paintColour = Color.clear;
-                }
-            }
-            else if (tool == Tool.Pencil || tool == Tool.Line)
+            if (tool == Tool.Pencil || tool == Tool.Line)
             {
                 if (hovering != null)
                 {
@@ -118,26 +99,20 @@ namespace kooltool.Editor.Modes
                     drawing = hovering;
                 }
             }
-            else if (tool == Tool.Fill)
-            {
-                hovering.Drawing.Fill(editor.currCursorWorld, paintColour);
-                hovering.Drawing.Apply();
-            }
-        }  
+        }
 
         public override void CursorInteractFinish()
         {
             base.CursorInteractFinish();
 
-            Color color = erase ? Color.white : paintColour;
             var blend = erase ? Blend.Subtract
                               : Blend.Alpha;
 
             if (tool == Tool.Line && drawing != null)
             {
-                drawing.Drawing.DrawLine(start.Round(), 
-                                         editor.currCursorWorld.Round(), 
-                                         thickness, color, blend);
+                drawing.Drawing.DrawLine(start.Round(),
+                                         editor.currCursorWorld.Round(),
+                                         thickness, Color.white, blend);
                 drawing.Drawing.Apply();
             }
 
