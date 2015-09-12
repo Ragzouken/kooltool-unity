@@ -19,6 +19,7 @@ namespace kooltool.Editor.Modes
             Pick,
             Fill,
             Line,
+            Stamp,
         }
 
         private readonly PixelCursor cursor;

@@ -8,26 +8,31 @@ namespace kooltool.Editor
     public class PixelTab : MonoBehaviour
     {
         [Header("Tools")]
-        [SerializeField] protected Toggle PencilToggle;
-        [SerializeField] protected Toggle FillToggle;
-        [SerializeField] protected Toggle LineToggle;
+        [SerializeField] private Toggle PencilToggle;
+        [SerializeField] private Toggle FillToggle;
+        [SerializeField] private Toggle LineToggle;
+        [SerializeField] private Toggle stampToggle;
 
         [SerializeField] private ColorIndicator EraserColor;
 
         [Header("Size")]
         [Range(1, 32)]
-        [SerializeField] protected int MaxSize;
-        [SerializeField] protected ToggleGroup SizeToggleGroup;
-        [SerializeField] protected RectTransform SizeContainer;
-        [SerializeField] protected SizeIndicator SizePrefab;
+        [SerializeField] private int MaxSize;
+        [SerializeField] private ToggleGroup SizeToggleGroup;
+        [SerializeField] private RectTransform SizeContainer;
+        [SerializeField] private SizeIndicator SizePrefab;
 
         [Header("Colour")]
-        [SerializeField] protected ToggleGroup ColorToggleGroup;
-        [SerializeField] protected RectTransform ColorContainer;
-        [SerializeField] protected ColorIndicator ColorPrefab;
+        [SerializeField] private ToggleGroup ColorToggleGroup;
+        [SerializeField] private RectTransform ColorContainer;
+        [SerializeField] private ColorIndicator ColorPrefab;
         [SerializeField] private Image colourBackgroundImage;
 
-        protected IList<SizeIndicator> SizeIndicators = new List<SizeIndicator>();
+        [Header("Stamps")]
+        [SerializeField] private GameObject brushSizeDisableObject;
+        [SerializeField] private GameObject stampTabsDisableObject;
+
+        private IList<SizeIndicator> SizeIndicators = new List<SizeIndicator>();
 
         private Modes.Draw mode;
 
@@ -36,6 +41,7 @@ namespace kooltool.Editor
             PencilToggle.onValueChanged.AddListener(OnToggledPencil);
             FillToggle.onValueChanged.AddListener(OnToggledFill);
             LineToggle.onValueChanged.AddListener(OnToggledLine);
+            stampToggle.onValueChanged.AddListener(OnToggledStamp);
 
             for (int size = 1; size < MaxSize; ++size)
             {
@@ -81,8 +87,10 @@ namespace kooltool.Editor
 
         private void Update()
         {
-            SizeContainer.gameObject.SetActive(mode.tool != Modes.Draw.Tool.Fill);
-
+            brushSizeDisableObject.SetActive(mode.tool == Modes.Draw.Tool.Pencil 
+                                          || mode.tool == Modes.Draw.Tool.Line);
+            stampTabsDisableObject.SetActive(mode.tool == Modes.Draw.Tool.Stamp);
+            
             colourBackgroundImage.color = mode.paintColour;
         }
 
@@ -117,6 +125,11 @@ namespace kooltool.Editor
         public void OnToggledLine(bool active)
         {
             if (active) mode.tool = Modes.Draw.Tool.Line;
+        }
+
+        public void OnToggledStamp(bool active)
+        {
+            if (active) mode.tool = Modes.Draw.Tool.Stamp;
         }
     }
 }
