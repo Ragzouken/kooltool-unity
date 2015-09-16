@@ -11,7 +11,7 @@ namespace kooltool.Editor
         [SerializeField] private CharacterDrawing drawing;
         [SerializeField] private RectTransform highlightParent;
 
-        RectTransform IObject.HighlightParent
+        RectTransform IObject.OverlayParent
         {
             get
             {
@@ -31,6 +31,11 @@ namespace kooltool.Editor
             drawing.editor.Project.Grid.Coords(new Point(world - pivot), out grid, out offset);
 
             drawing.Character.SetPosition((Vector2) grid * 32f + Vector2.one * 16f);
+        }
+
+        void IObject.Remove()
+        {
+            drawing.editor.RemoveCharacter(drawing.Character);
         }
 
         PixelDraw.IDrawing IDrawable.Drawing

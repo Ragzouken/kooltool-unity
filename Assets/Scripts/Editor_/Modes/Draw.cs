@@ -62,19 +62,22 @@ namespace kooltool.Editor.Modes
         {
             highlights.Clear();
 
+            brush = Brush.Circle(thickness, erase ? Editor.GetFlashColour() : paintColour);
+            brush.texture.Apply();
 
-            hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
+            hovering = editor.hovered.OfType<IDrawable>().Where(d => !(d is IAnnotatable)).FirstOrDefault();
 
             var @object = (drawing ?? hovering) as IObject;
 
-            if (@object != null) highlights.Add(@object.HighlightParent);
+            if (@object != null) highlights.Add(@object.OverlayParent);
 
             var rtrans = cursor.transform as RectTransform;
             var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
 
             cursor.end = editor.currCursorWorld;
-            rtrans.anchoredPosition = cursor.end.Round() + offset;
+            rtrans.anchoredPosition = (cursor.end - offset).Round();
 
+            cursor.correct = tool == Tool.Line;
             cursor.colour = erase ? Editor.GetFlashColour()
                                   : paintColour; 
             cursor.Refresh();

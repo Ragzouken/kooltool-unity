@@ -23,31 +23,34 @@ namespace kooltool.Editor
         [SerializeField] private GraphicRaycaster worldRaycaster; 
 
         [Header("Toolbar")]
-        [SerializeField] protected Button playButton;
+        [SerializeField] private Button playButton;
         [SerializeField] private Button saveButton;
         [SerializeField] private Button exportButton;
 
         [SerializeField] private GameObject browserLayer;
 
-        [SerializeField] protected WorldCamera WCamera;
-        [SerializeField] protected Camera Camera_;
+        [SerializeField] private WorldCamera WCamera;
+        [SerializeField] private Camera Camera_;
         
-        [SerializeField] protected kooltool.Player.Player Player;
+        [SerializeField] private kooltool.Player.Player Player;
 
         public HighlightGroup Highlights;
 
         [Header("UI")]
-        [SerializeField] protected Slider ZoomSlider;
+        [SerializeField] private Slider ZoomSlider;
         [SerializeField] public Tooltip tooltip;
 
         [Header("Cursors")]
-        [SerializeField] protected GameObject Cursors;
-        [SerializeField] protected PixelCursor PixelCursor;
-        [SerializeField] protected TileCursor TileCursor;
+        [SerializeField] private GameObject Cursors;
+        [SerializeField] private PixelCursor PixelCursor;
+        [SerializeField] private TileCursor TileCursor;
         [SerializeField] public Image toolIcon;
 
+        [Header("Overlays")]
+        [SerializeField] public ObjectOverlay objectOverlay;
+
         [Header("Settings")]
-        [SerializeField] protected AnimationCurve ZoomCurve;
+        [SerializeField] private AnimationCurve ZoomCurve;
 
         public Toolbox Toolbox;
 
@@ -57,13 +60,13 @@ namespace kooltool.Editor
 
         public Layer Layer;
 
-        public float Zoom { get; protected set; }
+        public float Zoom { get; private set; }
 
-        protected Coroutine ZoomCoroutine;
+        private Coroutine ZoomCoroutine;
 
         // poop
         Vector2 pansite;
-        protected bool Panning;
+        private bool Panning;
         public Project Project;
 
         #region Modes
@@ -178,7 +181,7 @@ namespace kooltool.Editor
             return false;
         }
 
-        protected void Awake()
+        private void Awake()
         {
 
             Project = new Project(new Point(32, 32));
@@ -220,7 +223,7 @@ namespace kooltool.Editor
             if (FindEmbedded()) browser.gameObject.SetActive(false);
         }
 
-        protected void Play()
+        private void Play()
         {
             EventSystem.current.SetSelectedGameObject(null);
 
@@ -299,24 +302,24 @@ namespace kooltool.Editor
             Debug.Log(args.BytesTransferred + " / " + args.TotalBytesToTransfer);
         }
 
-        protected void Start()
+        private void Start()
         {
             //SetProject(Project);
 
             Toolbox.Hide();
         }
 
-        protected bool GetMouseDown(int button)
+        private bool GetMouseDown(int button)
         {
             return IsPointerOverWorld() && Input.GetMouseButtonDown(button);
         }
 
-        protected void CancelActions(Vector2 world)
+        private void CancelActions(Vector2 world)
         {
             if (Panning) Panning = false;
         }
 
-        protected void CheckNavigation()
+        private void CheckNavigation()
         {
             ZoomTo(ZoomSlider.value, (Toolbox.transform as RectTransform).anchoredPosition);
 
@@ -357,7 +360,7 @@ namespace kooltool.Editor
 
         private string gistid;
 
-        protected void CheckKeyboardShortcuts()
+        private void CheckKeyboardShortcuts()
         {
             if (Input.GetKey(KeyCode.Alpha1)) Toolbox.pixelTab.SetSize(1);
             if (Input.GetKey(KeyCode.Alpha2)) Toolbox.pixelTab.SetSize(2);
@@ -400,12 +403,12 @@ namespace kooltool.Editor
             }
         }
 
-        protected void CheckHighlights()
+        private void CheckHighlights()
         {
             Highlights.Highlights.SetActive(currentMode.highlights);
         }
 
-        protected void LoadFiles(Dictionary<string, string> files)
+        private void LoadFiles(Dictionary<string, string> files)
         {
             string encoding = files["tileset.png"];
 
@@ -437,7 +440,7 @@ namespace kooltool.Editor
             hovered.Add(Layer);
         }
 
-        protected void UpdateCursors()
+        private void UpdateCursors()
         {
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
@@ -457,7 +460,7 @@ namespace kooltool.Editor
         public Vector2 currCursorWorld;
         public Vector2 prevCursorWorld;
 
-        protected void Update()
+        private void Update()
         {
             if (Project == null) return;
 
@@ -597,12 +600,20 @@ namespace kooltool.Editor
             }));
         }
 
+        public void RemoveCharacter(Character character)
+        {
+            project_.world.layers[0].characters.Remove(character);
+            project_.index.Remove(character);
+
+            Layer.Characters.Discard(character);
+        }
+
         public void Say(Character character, string text)
         {
             Layer.Characters.Get(character).ShowDialogue(text);
         }
 
-        protected IEnumerator Delay(System.Action action)
+        private IEnumerator Delay(System.Action action)
         {
             yield return new WaitForEndOfFrame();
 

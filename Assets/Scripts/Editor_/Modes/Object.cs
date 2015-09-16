@@ -24,7 +24,8 @@ namespace kooltool.Editor.Modes
 
             hovering = editor.hovered.OfType<IObject>().FirstOrDefault();
 
-            if (hovering != null) highlights.Add(hovering.HighlightParent);
+            if (hovering != null) highlights.Add(hovering.OverlayParent);
+            if (hovering != null) editor.objectOverlay.SetSubject(hovering);
 
             if (dragging != null)
             {
@@ -46,6 +47,8 @@ namespace kooltool.Editor.Modes
         public override void Exit()
         {
             highlights.Clear();
+
+            editor.objectOverlay.SetSubject(null);
 
             dragging = null;
         }

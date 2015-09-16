@@ -55,7 +55,7 @@ namespace kooltool.Editor.Modes
 
             var @object = (drawing ?? hovering) as IObject;
 
-            if (@object != null)  highlights.Add(@object.HighlightParent);
+            if (@object != null)  highlights.Add(@object.OverlayParent);
 
             var rtrans = cursor.transform as RectTransform;
             var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);

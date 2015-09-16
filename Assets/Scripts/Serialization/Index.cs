@@ -43,6 +43,11 @@ namespace kooltool.Serialization
             resources.Add(resource);
         }
 
+        public void Remove(IResource resource)
+        {
+            resources.Remove(resource);
+        }
+
         public File_ MFile_(string hint)
         {
             string local = string.Format("{0:x4}-{1}", id++, hint);

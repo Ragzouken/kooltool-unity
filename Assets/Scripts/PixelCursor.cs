@@ -15,6 +15,7 @@ namespace kooltool.Editor
         public Image Line;
 
         public Color colour;
+        public bool correct;
 
         [Header("Sprites")]
         [SerializeField] private Sprite pencilSprite;
@@ -33,9 +34,9 @@ namespace kooltool.Editor
 
             bool lining = mode.tool == Modes.Draw.Tool.Line && mode.drawing != null && mode.brush != null;
 
-            Line.enabled = lining;
+            //Line.enabled = lining;
 
-            if (lining)
+            //if (lining)
             {
                 var ltrans = Line.transform as RectTransform;
 
@@ -44,15 +45,23 @@ namespace kooltool.Editor
                 Line.sprite = mode.brush;
                 Line.SetNativeSize();
 
-                ltrans.position = -mode.brush.pivot;
+                if (correct)
+                {
+                    ltrans.position = -mode.brush.pivot;
+                }
+                else
+                {
+                    ltrans.position = rtrans.position;
+                }
             }
+            /*
             else
             {
                 var preview = Brush.Circle(mode.thickness, colour);
                 preview.texture.Apply();
 
                 Preview.sprite = preview;
-            }
+            }*/
 
             if (mode.tool == Modes.Draw.Tool.Pick)   editor.toolIcon.sprite = pickSprite;
             if (mode.tool == Modes.Draw.Tool.Pencil) editor.toolIcon.sprite = pencilSprite;
