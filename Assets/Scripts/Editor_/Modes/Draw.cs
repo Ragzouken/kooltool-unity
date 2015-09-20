@@ -65,7 +65,7 @@ namespace kooltool.Editor.Modes
             brush = Brush.Circle(thickness, erase ? Editor.GetFlashColour() : paintColour);
             brush.texture.Apply();
 
-            hovering = editor.hovered.OfType<IDrawable>().Where(d => !(d is IAnnotatable)).FirstOrDefault();
+            hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
 
             var @object = (drawing ?? hovering) as IObject;
 

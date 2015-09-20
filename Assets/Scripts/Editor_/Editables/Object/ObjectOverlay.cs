@@ -9,6 +9,7 @@ namespace kooltool.Editor
     public class ObjectOverlay : MonoBehaviour 
     {
         [SerializeField] private Button deleteButton;
+        [SerializeField] private UIRectFollowRect follow;
 
         private IObject subject;
 
@@ -22,7 +23,8 @@ namespace kooltool.Editor
             this.subject = subject;
 
             gameObject.SetActive(subject != null);
-            transform.SetParent(subject != null ? subject.OverlayParent : null, false);
+
+            follow.target = subject != null ? subject.OverlayParent : null;
         }
 
         private void OnClickedDelete()

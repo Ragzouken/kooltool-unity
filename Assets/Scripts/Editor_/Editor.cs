@@ -48,6 +48,7 @@ namespace kooltool.Editor
 
         [Header("Overlays")]
         [SerializeField] public ObjectOverlay objectOverlay;
+        [SerializeField] private RectTransform overlaysContainer;
 
         [Header("Settings")]
         [SerializeField] private AnimationCurve ZoomCurve;
@@ -606,6 +607,8 @@ namespace kooltool.Editor
             project_.index.Remove(character);
 
             Layer.Characters.Discard(character);
+
+            objectOverlay.SetSubject(null);
         }
 
         public void Say(Character character, string text)

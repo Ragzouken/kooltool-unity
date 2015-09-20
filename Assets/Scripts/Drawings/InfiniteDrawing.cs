@@ -52,7 +52,7 @@ public class InfiniteDrawing : MonoDrawing
         renderer.sprite = sprite;
         renderer.SetNativeSize();
 
-        block.GetComponent<kooltool.Editor.DrawingEditable>().drawing = this;
+        //block.GetComponent<kooltool.Editor.DrawingEditable>().drawing = this;
 
         block.transform.SetParent(transform, false);
         block.transform.localPosition = new Vector2(cell.x * Size,
