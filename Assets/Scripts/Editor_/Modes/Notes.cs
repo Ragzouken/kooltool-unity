@@ -51,6 +51,9 @@ namespace kooltool.Editor.Modes
         {
             highlights.Clear();
 
+            brush = Brush.Circle(thickness, Editor.GetFlashColour());
+            brush.texture.Apply();
+
             hovering = editor.hovered.OfType<IAnnotatable>().FirstOrDefault().Hack;
 
             var @object = (drawing ?? hovering) as IObject;
@@ -60,11 +63,7 @@ namespace kooltool.Editor.Modes
             var rtrans = cursor.transform as RectTransform;
             var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
 
-            cursor.end = editor.currCursorWorld;
-            rtrans.anchoredPosition = cursor.end.Round() + offset;
-
-            cursor.colour = Editor.GetFlashColour();
-            cursor.Refresh();
+            rtrans.anchoredPosition = editor.currCursorWorld.Round() + offset;
 
             var blend = erase ? Blend.Subtract
                               : Blend.Alpha;
@@ -85,6 +84,9 @@ namespace kooltool.Editor.Modes
 
                 brush.texture.Apply();
             }
+
+            cursor.preview = brush;
+            cursor.Refresh();
         }
 
         public override void CursorInteractStart()

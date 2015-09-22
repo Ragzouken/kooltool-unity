@@ -74,14 +74,12 @@ namespace kooltool.Editor.Modes
             var rtrans = cursor.transform as RectTransform;
             var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
 
-            cursor.end = editor.currCursorWorld;
-            rtrans.anchoredPosition = (cursor.end - offset).Round();
+            rtrans.anchoredPosition = (editor.currCursorWorld - offset).Round();
 
             cursor.correct = tool == Tool.Line;
             cursor.colour = erase ? Editor.GetFlashColour()
                                   : paintColour; 
-            cursor.Refresh();
-
+            
             Color color = erase ? Color.white : paintColour;
             var blend = erase ? Blend.Subtract
                               : Blend.Alpha;
@@ -101,6 +99,9 @@ namespace kooltool.Editor.Modes
                                    thickness);
                 brush.texture.Apply();
             }
+
+            cursor.preview = brush;
+            cursor.Refresh();
         }
 
         public override void CursorInteractStart()
