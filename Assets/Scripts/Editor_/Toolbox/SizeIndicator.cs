@@ -31,5 +31,9 @@ namespace kooltool.Editor
                 Image.GetComponent<RectTransform>().anchoredPosition = Vector2.one * 0.5f;
             }*/
         }
+        public void SetSprite(Sprite sprite)
+        {
+            Image.sprite = sprite;
+        }
     }
 }

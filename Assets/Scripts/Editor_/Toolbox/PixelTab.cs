@@ -21,6 +21,7 @@ namespace kooltool.Editor
         [SerializeField] private ToggleGroup SizeToggleGroup;
         [SerializeField] private RectTransform SizeContainer;
         [SerializeField] private SizeIndicator SizePrefab;
+        [SerializeField] private List<Sprite> brushSprites;
 
         [Header("Colour")]
         [SerializeField] private ToggleGroup ColorToggleGroup;
@@ -48,7 +49,7 @@ namespace kooltool.Editor
                 var indicator = Instantiate<SizeIndicator>(SizePrefab);
                 indicator.transform.SetParent(SizeContainer, false);
                 indicator.Toggle.group = SizeToggleGroup;
-                indicator.SetSize(size);
+                indicator.SetSprite(brushSprites[size - 1]);
 
                 int thickness = size;
 
@@ -98,7 +99,10 @@ namespace kooltool.Editor
         {
             if (size - 1 < SizeIndicators.Count)
             {
-                SizeIndicators[size - 1].Toggle.isOn = true;
+                for (int i = 0; i < SizeIndicators.Count; ++i)
+                {
+                    SizeIndicators[i].Toggle.isOn = i == size - 1;
+                }
             }
         }
 
