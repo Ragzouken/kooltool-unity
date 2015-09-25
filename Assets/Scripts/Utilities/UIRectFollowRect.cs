@@ -9,7 +9,7 @@ using System.Linq;
 [ExecuteInEditMode]
 public class UIRectFollowRect : MonoBehaviour 
 {
-    public Camera camera;
+    public new Camera camera;
     public RectTransform target;
 
     private void Update()

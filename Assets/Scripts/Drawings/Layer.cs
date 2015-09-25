@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 using PixelDraw;
 
+using kooltool.Data;
+
 namespace kooltool.Editor
 {
     public class Layer : Editable, IDrawable, ITileable, IAnnotatable
@@ -50,6 +52,10 @@ namespace kooltool.Editor
         [SerializeField] protected Editor Editor;
         [SerializeField] protected CharacterDrawing CharacterPrefab;
 
+        [Header("Noteboxes")]
+        [SerializeField] private NoteboxView noteboxPrefab;
+        [SerializeField] private RectTransform noteboxContainer;
+
         [Header("Objects")]
         public InfiniteDrawing Drawing;
         public Tilemap Tilemap;
@@ -57,8 +63,9 @@ namespace kooltool.Editor
         public RectTransform CharacterContainer;
 
         public MonoBehaviourPooler<Character, CharacterDrawing> Characters;
+        public MonoBehaviourPooler<Notebox, NoteboxView> noteboxes;
 
-        private kooltool.Serialization.Layer layer;
+        private kooltool.Data.Layer layer;
         private Hack hack;
 
         protected void Awake()
@@ -66,6 +73,10 @@ namespace kooltool.Editor
             Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, 
                                                                               CharacterContainer, 
                                                                               InitialiseCharacter);
+
+            noteboxes = new MonoBehaviourPooler<Notebox, NoteboxView>(noteboxPrefab,
+                                                                      noteboxContainer,
+                                                                      InitialiseNotebox);
 
             hack = new Hack { layer = this };
         }
@@ -77,7 +88,13 @@ namespace kooltool.Editor
             drawing.GetComponent<RectTransform>().anchoredPosition = character.position;
         }
 
-        public void SetLayer(Serialization.Layer layer)
+        private void InitialiseNotebox(Notebox notebox, NoteboxView view)
+        {
+            view.SetNotebox(notebox);
+            view.GetComponent<RectTransform>().anchoredPosition = notebox.position;
+        }
+
+        public void SetLayer(Data.Layer layer)
         {
             this.layer = layer;
 
@@ -89,7 +106,7 @@ namespace kooltool.Editor
 
         void ITileable.Demote(Point cell)
         {
-            Serialization.TileInstance instance;
+            Data.TileInstance instance;
 
             bool exists = Tilemap.Get(cell, out instance);
 

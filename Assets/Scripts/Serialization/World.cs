@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace kooltool.Serialization
+namespace kooltool.Data
 {
     [JsonObject(IsReference=false)]
     public struct TileInstance
@@ -17,7 +17,7 @@ namespace kooltool.Serialization
     }
 
     public class Layer
-    {
+    { 
         [JsonArray]
         public class Grid : Dictionary<Point, TileInstance> { }
         [JsonArray]
@@ -31,6 +31,7 @@ namespace kooltool.Serialization
         public Drawing annotations = new Drawing();
 
         public HashSet<Character> characters = new HashSet<Character>();
+        public HashSet<Notebox> noteboxes = new HashSet<Notebox>();
     }
 
     public class World

@@ -9,11 +9,11 @@ namespace kooltool.Generators
 {
     public static class Costume
     {
-        public static kooltool.Serialization.Costume Smiley(Serialization.Project project,
+        public static kooltool.Data.Costume Smiley(Data.Project project,
                                                             int width, 
                                                             int height) 
         {
-            var costume = new Serialization.Costume
+            var costume = new Data.Costume
             {
                 name = "Smiley",
                 texture = project.index.CreateTexture(width, height),

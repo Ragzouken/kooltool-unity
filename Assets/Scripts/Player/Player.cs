@@ -17,14 +17,14 @@ namespace kooltool.Player
         [SerializeField] protected RectTransform speechContainer;
         [SerializeField] protected SpeechTest speechPrefab;
 
-        public Serialization.Project Project { get; protected set; }
+        public Data.Project Project { get; protected set; }
         public Character Player_ { get; protected set; }
 
         protected Coroutine movementCO;
         protected Dictionary<Point, Character> collision
             = new Dictionary<Point, Character>();
 
-        public void Setup(Serialization.Project project)
+        public void Setup(Data.Project project)
         {
             Project = project;
 

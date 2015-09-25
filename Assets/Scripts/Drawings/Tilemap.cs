@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using PixelDraw;
-using kooltool.Serialization;
+using kooltool.Data;
 
 public class Tilemap : MonoDrawing
 {
@@ -14,12 +14,12 @@ public class Tilemap : MonoDrawing
 
     protected TiledDrawing Tiled;
 
-    protected SparseGrid<kooltool.Serialization.TileInstance> Tiles
-        = new SparseGrid<kooltool.Serialization.TileInstance>(Size);
+    protected SparseGrid<TileInstance> Tiles
+        = new SparseGrid<TileInstance>(Size);
 
     private MonoBehaviourPooler<Point, Image> images;
 
-    private kooltool.Serialization.Layer layer;
+    private Layer layer;
 
     public void Awake()
     {
@@ -51,7 +51,7 @@ public class Tilemap : MonoDrawing
         }
     }
 
-    public void SetLayer(kooltool.Serialization.Layer layer)
+    public void SetLayer(Layer layer)
     {
         this.layer = layer;
 
@@ -98,7 +98,7 @@ public class Tilemap : MonoDrawing
 
     public void Unset(Point cell)
     {
-        kooltool.Serialization.TileInstance tile;
+        TileInstance tile;
         IDrawing drawing;
 
         if (Tiles.Unset(cell, out tile))
@@ -119,8 +119,6 @@ public class Tilemap : MonoDrawing
 
         original = Get(first, out existing) ? existing.tile
                                            : null;
-
-        bool erase = original == null;
 
         var check = new Queue<Point>();
 
@@ -150,7 +148,7 @@ public class Tilemap : MonoDrawing
         }
     }
 
-    public IEnumerator<KeyValuePair<Point, kooltool.Serialization.TileInstance>> GetEnumerator()
+    public IEnumerator<KeyValuePair<Point, TileInstance>> GetEnumerator()
     {
         return Tiles.GetEnumerator();
     }

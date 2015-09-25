@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-using kooltool.Serialization;
+using kooltool.Data;
 
 namespace kooltool.Editor
 {

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 
 using Newtonsoft.Json;
-using kooltool.Serialization;
+using kooltool.Data;
 using Ionic.Zip;
 using kooltool.Editor.Modes;
 
@@ -55,7 +55,7 @@ namespace kooltool.Editor
 
         public Toolbox Toolbox;
 
-        public Serialization.Project project_;
+        public Data.Project project_;
 
         public MapGenerator generator;
 
@@ -159,7 +159,7 @@ namespace kooltool.Editor
             SetMode(notesMode);
         }
 
-        public void SetProject(Serialization.Project project)
+        public void SetProject(Data.Project project)
         {
             project_ = project;
 
@@ -187,7 +187,7 @@ namespace kooltool.Editor
 
             Project = new Project(new Point(32, 32));
                  
-            SetProject(Serialization.ProjectTools.Blank());
+            SetProject(Data.ProjectTools.Blank());
             project_.tileset.TestTile();
             //SetProject(LoadProject("test"));
 
@@ -212,11 +212,11 @@ namespace kooltool.Editor
             saveButton.onClick.AddListener(Save);
             exportButton.onClick.AddListener(Export);
 
-            browser.OnConfirmed += delegate(Serialization.Summary summary)
+            browser.OnConfirmed += delegate(Data.Summary summary)
             {
                 browser.gameObject.SetActive(false);
                 browserLayer.SetActive(false);
-                SetProject(Serialization.ProjectTools.LoadProject(summary));
+                SetProject(Data.ProjectTools.LoadProject(summary));
             };
 
             browser.Refresh();
@@ -241,7 +241,7 @@ namespace kooltool.Editor
         {
             project_.index.Save(project_);
 
-            var summary = new Serialization.Summary
+            var summary = new Data.Summary
             {
                 title = project_.index.folder,
                 description = "unset",
@@ -251,7 +251,7 @@ namespace kooltool.Editor
                 root = project_.index.root,
             };
 
-            Serialization.ProjectTools.SaveSummary(summary);
+            Data.ProjectTools.SaveSummary(summary);
         }
 
 #if UNITY_EDITOR
@@ -581,6 +581,17 @@ namespace kooltool.Editor
         public void Pan(Vector2 delta)
         {
             WCamera.Pan((Vector3) (-delta));
+        }
+
+        public void MakeNotebox(string text)
+        {
+            var notebox = new Notebox
+            {
+                position = Point.Zero,
+                text = text,
+            };
+
+            project_.world.layers[0].noteboxes.Add(notebox);
         }
 
         public void MakeCharacter(Costume costume)

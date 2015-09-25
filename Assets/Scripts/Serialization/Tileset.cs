@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
-using kooltool.Serialization;
+using kooltool.Data;
 
 namespace kooltool
 {
@@ -63,7 +63,7 @@ namespace kooltool
 
     public class Tileset : IResource
     {
-        public Serialization.Texture texture;
+        public Data.Texture texture;
         public List<Tile> tiles = new List<Tile>();
 
         void IResource.Load(Index index) { }

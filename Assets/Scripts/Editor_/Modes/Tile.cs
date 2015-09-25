@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.Linq;
-using kooltool.Serialization;
+using kooltool.Data;
 
 namespace kooltool.Editor.Modes
 {
@@ -49,13 +49,13 @@ namespace kooltool.Editor.Modes
             return cell;
         }
 
-        public Serialization.TileInstance? hoveredTile
+        public Data.TileInstance? hoveredTile
         {
             get
             {
                 editor.hovered.OfType<ITileable>().FirstOrDefault();
 
-                Serialization.TileInstance tile;
+                Data.TileInstance tile;
 
                 var cell = Vector2Cell(editor.currCursorWorld);
 

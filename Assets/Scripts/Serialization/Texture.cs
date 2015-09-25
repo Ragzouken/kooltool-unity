@@ -8,7 +8,7 @@ using System.IO;
 
 using Newtonsoft.Json;
 
-namespace kooltool.Serialization
+namespace kooltool.Data
 {
     public class Texture : IResource
     {

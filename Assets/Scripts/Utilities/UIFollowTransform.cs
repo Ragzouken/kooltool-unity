@@ -7,7 +7,7 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class UIFollowTransform : MonoBehaviour 
 {
-    public Camera camera;
+    public new Camera camera;
     public Transform target;
 
     private void Update()

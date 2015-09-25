@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-namespace kooltool.Serialization
+namespace kooltool.Data
 {
     public class Costume : IResource
     {
         public string name;
-        public Serialization.Texture texture;
+        public Data.Texture texture;
 
         [JsonIgnore]
         public Sprite sprite;
