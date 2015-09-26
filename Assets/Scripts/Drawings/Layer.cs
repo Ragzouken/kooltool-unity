@@ -90,6 +90,7 @@ namespace kooltool.Editor
 
         private void InitialiseNotebox(Notebox notebox, NoteboxView view)
         {
+            view.editor = Editor;
             view.SetNotebox(notebox);
             view.GetComponent<RectTransform>().anchoredPosition = notebox.position;
         }

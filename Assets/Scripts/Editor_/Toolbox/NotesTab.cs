@@ -11,6 +11,7 @@ namespace kooltool.Editor
         [SerializeField] private Toggle pencilToggle;
         [SerializeField] private Toggle lineToggle;
         [SerializeField] private Toggle eraserToggle;
+        [SerializeField] private Button noteboxButton;
 
         [Header("Size")]
         [Range(1, 32)]
@@ -28,6 +29,7 @@ namespace kooltool.Editor
             pencilToggle.onValueChanged.AddListener(OnToggledPencil);
             lineToggle.onValueChanged.AddListener(OnToggledLine);
             eraserToggle.onValueChanged.AddListener(OnToggledEraser);
+            noteboxButton.onClick.AddListener(OnClickedNotebox);
 
             for (int size = 1; size < maxSize; ++size)
             {
@@ -82,6 +84,11 @@ namespace kooltool.Editor
         public void OnToggledEraser(bool active)
         {
             mode.erase = active;
+        }
+
+        public void OnClickedNotebox()
+        {
+            mode.editor.MakeNotebox("test");
         }
     }
 }

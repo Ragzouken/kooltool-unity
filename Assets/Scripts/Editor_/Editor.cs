@@ -592,6 +592,25 @@ namespace kooltool.Editor
             };
 
             project_.world.layers[0].noteboxes.Add(notebox);
+
+            NoteboxView view = Layer.noteboxes.Get(notebox);
+
+            (view.transform as RectTransform).anchoredPosition = WCamera.ScreenToWorld(Input.mousePosition);
+
+            StartCoroutine(Delay(delegate
+            {
+                Toolbox.Hide();
+                objectMode.SetDrag(view, Vector2.zero);
+            }));
+        }
+        
+        public void RemoveNotebox(Notebox notebox)
+        {
+            project_.world.layers[0].noteboxes.Remove(notebox);
+
+            Layer.noteboxes.Discard(notebox);
+
+            objectOverlay.SetSubject(null);
         }
 
         public void MakeCharacter(Costume costume)
