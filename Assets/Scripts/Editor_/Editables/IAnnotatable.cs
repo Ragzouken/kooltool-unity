@@ -8,6 +8,6 @@ namespace kooltool.Editor
 {   
     public interface IAnnotatable
     {
-        Layer.Hack Hack { get; }
+        LayerView.Hack Hack { get; }
     }
 }

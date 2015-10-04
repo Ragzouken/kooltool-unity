@@ -13,11 +13,13 @@ using kooltool.Editor.Modes;
 
 namespace kooltool.Editor
 {
-    public class Editor : MonoBehaviour
+    public class Editor : MonoBehaviourSingleton<Editor>
     {
         public static Sprite debug;
         public Image Debug_;
         public RectTransform Debug2;
+
+        [SerializeField] private WorldView world;
 
         [Header("Camera / Canvas")]
         [SerializeField] private GraphicRaycaster worldRaycaster; 
@@ -59,7 +61,7 @@ namespace kooltool.Editor
 
         public MapGenerator generator;
 
-        public Layer Layer;
+        public LayerView Layer;
 
         public float Zoom { get; private set; }
 
@@ -163,7 +165,9 @@ namespace kooltool.Editor
         {
             project_ = project;
 
-            Layer.SetLayer(project.world.layers[0]);
+            world.SetWorld(project.world);
+
+            Layer = world.layers.Get(project.world.layers[0]);
         }
 
         public Browser browser;
@@ -428,15 +432,8 @@ namespace kooltool.Editor
             var results = new List<RaycastResult>();
             worldRaycaster.Raycast(pointer, results);
 
-            foreach (RaycastResult result in results)
-            {
-                Editable editable = result.gameObject.GetComponent<Editable>();
-
-                if (editable != null)
-                {
-                    hovered.Add(editable);
-                }
-            }
+            hovered.AddRange(results.Select(result => result.gameObject.GetComponent<Editable>())
+                                    .Where(editable => editable != null));
 
             hovered.Add(Layer);
         }

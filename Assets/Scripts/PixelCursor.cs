@@ -48,8 +48,6 @@ namespace kooltool.Editor
                 {
                     Vector2 pos = (Vector2) rtrans.position - preview.pivot + Vector2.one * 0.5f;
 
-                    Debug.Log(preview.pivot);
-
                     if (preview.rect.width == 1) pos = rtrans.position;
 
                     ltrans.position = pos.Round();
