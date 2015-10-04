@@ -11,8 +11,6 @@ namespace kooltool.Editor
 {
     public class NoteboxView : Editable, IObject
     {
-        public Editor editor;
-
         [SerializeField] private Text text;
 
         private Notebox notebox;
@@ -44,7 +42,7 @@ namespace kooltool.Editor
 
         void IObject.Remove()
         {
-            editor.RemoveNotebox(notebox);
+            Editor.Instance.RemoveNotebox(notebox);
         }
     }
 }

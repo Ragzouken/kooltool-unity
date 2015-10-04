@@ -9,8 +9,6 @@ namespace kooltool.Editor
 {
     public class CostumeTab : MonoBehaviour
     {
-        [SerializeField] protected Editor Editor;
-
         [Header("Tools")]
         [SerializeField] protected Button NewButton;
 
@@ -45,7 +43,7 @@ namespace kooltool.Editor
 
         public void OnClickedNew()
         {
-            Editor.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, 32, 32));
+            Editor.Instance.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, 32, 32));
 
             Refresh();
         }

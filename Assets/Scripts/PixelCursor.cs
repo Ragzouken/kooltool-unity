@@ -10,7 +10,7 @@ namespace kooltool.Editor
     public class PixelCursor : MonoBehaviour
     {
         public Editor editor;
-
+        
         public Image Preview;
         public Image Line;
 

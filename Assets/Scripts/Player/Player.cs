@@ -11,7 +11,7 @@ namespace kooltool.Player
     {
         [SerializeField] protected WorldCamera Camera;
         [SerializeField] protected RectTransform World;
-        [SerializeField] protected kooltool.Editor.Editor editor;
+        [SerializeField] protected Editor.Editor editor;
 
         [Header("Speech Test")]
         [SerializeField] protected RectTransform speechContainer;

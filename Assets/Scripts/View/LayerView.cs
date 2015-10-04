@@ -83,13 +83,12 @@ namespace kooltool.Editor
         private void InitialiseCharacter(Character character, CharacterDrawing drawing)
         {
             drawing.gameObject.layer = LayerMask.NameToLayer("World");
-            drawing.SetCharacter(character, Editor.Instance);
+            drawing.SetCharacter(character);
             drawing.GetComponent<RectTransform>().anchoredPosition = character.position;
         }
 
         private void InitialiseNotebox(Notebox notebox, NoteboxView view)
         {
-            view.editor = Editor.Instance;
             view.SetNotebox(notebox);
             view.GetComponent<RectTransform>().anchoredPosition = notebox.position;
         }

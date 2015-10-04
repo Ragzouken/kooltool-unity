@@ -7,7 +7,6 @@ namespace kooltool.Editor
 {
     public class Toolbox : MonoBehaviour
     {
-        [SerializeField] private Editor editor;
         [SerializeField] private Toggle pixelTabToggle;
         [SerializeField] private Toggle tileTabToggle;
         [SerializeField] private Toggle notesTabToggle;
@@ -60,17 +59,17 @@ namespace kooltool.Editor
 
         public void OnToggledPixelTab(bool active)
         {
-            if (active) editor.SetPixelTool();
+            if (active) Editor.Instance.SetPixelTool();
         }
 
         public void OnToggledTileTab(bool active)
         {
-            if (active) editor.SetTileTool();
+            if (active) Editor.Instance.SetTileTool();
         }
 
         public void OnToggledNotesTab(bool active)
         {
-            if (active) editor.SetNotesMode();
+            if (active) Editor.Instance.SetNotesMode();
         }
     }
 }

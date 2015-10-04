@@ -28,14 +28,14 @@ namespace kooltool.Editor
         {
             Point grid, offset;
 
-            drawing.editor.Project.Grid.Coords(new Point(world - pivot), out grid, out offset);
+            Editor.Instance.Project.Grid.Coords(new Point(world - pivot), out grid, out offset);
 
             drawing.Character.SetPosition((Vector2) grid * 32f + Vector2.one * 16f);
         }
 
         void IObject.Remove()
         {
-            drawing.editor.RemoveCharacter(drawing.Character);
+            Editor.Instance.RemoveCharacter(drawing.Character);
         }
 
         PixelDraw.IDrawing IDrawable.Drawing

@@ -7,8 +7,6 @@ namespace kooltool.Editor
 {
     public class TileTab : MonoBehaviour
     {
-        [SerializeField] protected Editor Editor;
-
         [Header("Tools")]
         [SerializeField] protected Button NewButton;
 
@@ -40,7 +38,7 @@ namespace kooltool.Editor
         {
             Tiles.Clear();
 
-            foreach (Tile tile in Editor.project_.tileset.tiles)
+            foreach (Tile tile in Editor.Instance.project_.tileset.tiles)
             {
                 TileIndicator element = Tiles.Add();
 
@@ -66,7 +64,7 @@ namespace kooltool.Editor
 
         public void OnClickedNew()
         {
-            tileMode.paintTile = Editor.project_.tileset.TestTile();
+            tileMode.paintTile = Editor.Instance.project_.tileset.TestTile();
 
             Refresh();
         }

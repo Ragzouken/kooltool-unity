@@ -5,14 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine.EventSystems;
+using kooltool.Editor;
 
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler
 {
-    [SerializeField] private kooltool.Editor.Editor editor;
     [SerializeField] private string text;
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        editor.tooltip.SetText(text);
+        Editor.Instance.tooltip.SetText(text);
     }
 }
