@@ -33,17 +33,17 @@ namespace kooltool.Editor
         private void InitialiseCostume(Costume costume, 
                                        CostumeIndicator indicator)
         {
-            indicator.SetCostume(costume, () => Editor.MakeCharacter(costume));
+            indicator.SetCostume(costume, () => Editor.Instance.MakeCharacter(costume));
         }
 
         public void Refresh()
         {
-            costumes.SetActive(Editor.project_.costumes);
+            costumes.SetActive(Editor.Instance.project_.costumes);
         }
 
         public void OnClickedNew()
         {
-            Editor.Instance.project_.costumes.Add(Generators.Costume.Smiley(Editor.project_, 32, 32));
+            Editor.Instance.project_.costumes.Add(Generators.Costume.Smiley(Editor.Instance.project_, 32, 32));
 
             Refresh();
         }
