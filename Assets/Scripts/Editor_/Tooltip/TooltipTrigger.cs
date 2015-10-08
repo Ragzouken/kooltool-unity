@@ -7,12 +7,24 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using kooltool.Editor;
 
-public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler
+public class TooltipTrigger : MonoBehaviour, 
+                              IPointerEnterHandler,
+                              IPointerExitHandler
 {
-    [SerializeField] private string text;
+    public string text;
+
+    private void OnDisable()
+    {
+        Editor.Instance.tooltip.Exit(this);
+    }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        Editor.Instance.tooltip.SetText(text);
+        Editor.Instance.tooltip.Enter(this);
+    }
+
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
+    {
+        Editor.Instance.tooltip.Exit(this);
     }
 }

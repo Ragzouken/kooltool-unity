@@ -14,6 +14,15 @@ namespace kooltool.Editor
         
         void Drag(Vector2 pivot, Vector2 world);
 
-        void Remove();
+        IEnumerable<ObjectAction> Actions
+        {
+            get;
+        }
+    }
+
+    public class ObjectAction
+    {
+        public IconSettings.Icon icon;
+        public System.Action action;
     }
 }

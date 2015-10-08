@@ -51,6 +51,8 @@ namespace kooltool.Editor
         [Header("Overlays")]
         [SerializeField] public ObjectOverlay objectOverlay;
         [SerializeField] private RectTransform overlaysContainer;
+        [SerializeField] private GameObject noteboxEditDisable;
+        [SerializeField] private InputField noteboxEditField;
 
         [Header("Settings")]
         [SerializeField] private AnimationCurve ZoomCurve;
@@ -608,6 +610,26 @@ namespace kooltool.Editor
             Layer.noteboxes.Discard(notebox);
 
             objectOverlay.SetSubject(null);
+        }
+
+        private Notebox nbediting;
+        public void EditNotebox(Notebox notebox)
+        {
+            nbediting = notebox;
+
+            noteboxEditDisable.SetActive(true);
+            noteboxEditField.text = notebox.text;
+            noteboxEditField.onEndEdit.RemoveAllListeners();
+            noteboxEditField.Select();
+            noteboxEditField.onEndEdit.AddListener(EndEditNB);
+        }
+
+        private void EndEditNB(string text)
+        {
+            nbediting.text = text;
+            Layer.noteboxes.Get(nbediting).Refresh();
+            nbediting = null;
+            noteboxEditDisable.SetActive(false);
         }
 
         public void MakeCharacter(Costume costume)

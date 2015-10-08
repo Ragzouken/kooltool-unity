@@ -29,6 +29,11 @@ namespace kooltool.Editor
             text.text = notebox.text;
         }
 
+        public void Refresh()
+        {
+            text.text = notebox.text;
+        }
+
         Vector2 IObject.DragPivot(Vector2 world)
         {
             return world - (Vector2) transform.localPosition;
@@ -40,9 +45,22 @@ namespace kooltool.Editor
             notebox.position = world - pivot;
         }
 
-        void IObject.Remove()
+        IEnumerable<ObjectAction> IObject.Actions
         {
-            Editor.Instance.RemoveNotebox(notebox);
+            get
+            {
+                yield return new ObjectAction
+                {
+                    icon = IconSettings.Icon.EditText,
+                    action = () => Editor.Instance.EditNotebox(notebox),
+                };
+
+                yield return new ObjectAction
+                {
+                    icon = IconSettings.Icon.RemoveObject,
+                    action = () => Editor.Instance.RemoveNotebox(notebox),
+            };
+            }
         }
     }
 }

@@ -108,7 +108,7 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
         }
     }
 
-    public void SetActive(IEnumerable<TShortcut> active)
+    public void SetActive(IEnumerable<TShortcut> active, bool sort=true)
     {
         var collection = new HashSet<TShortcut>(active);
 
@@ -119,7 +119,9 @@ public class MonoBehaviourPooler<TShortcut, TInstance>
 
         foreach (TShortcut shortcut in active)
         {
-            Get(shortcut);
+            var instance = Get(shortcut);
+
+            if (sort) instance.transform.SetAsLastSibling();
         }
     }
 

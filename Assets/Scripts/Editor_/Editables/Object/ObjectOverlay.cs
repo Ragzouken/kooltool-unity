@@ -8,14 +8,27 @@ namespace kooltool.Editor
 {
     public class ObjectOverlay : MonoBehaviour 
     {
-        [SerializeField] private Button deleteButton;
         [SerializeField] private UIRectFollowRect follow;
+
+        [Header("Actions")]
+        [SerializeField] private RectTransform actionContainer;
+        [SerializeField] private ObjectActionButton actionPrefab;
 
         private IObject subject;
 
+        private MonoBehaviourPooler<ObjectAction, ObjectActionButton> actions;
+
         private void Awake()
         {
-            deleteButton.onClick.AddListener(OnClickedDelete);
+            actions = new MonoBehaviourPooler<ObjectAction, ObjectActionButton>(actionPrefab,
+                                                                                actionContainer,
+                                                                                InitialiseAction);
+        }
+
+        private void InitialiseAction(ObjectAction action, 
+                                      ObjectActionButton button)
+        {
+            button.Setup(IconSettings.Instance[action.icon], action.action);
         }
 
         public void SetSubject(IObject subject)
@@ -25,11 +38,8 @@ namespace kooltool.Editor
             gameObject.SetActive(subject != null);
 
             follow.target = subject != null ? subject.OverlayParent : null;
-        }
 
-        private void OnClickedDelete()
-        {
-            subject.Remove();
+            if (subject != null) actions.SetActive(subject.Actions);
         }
     }
 }

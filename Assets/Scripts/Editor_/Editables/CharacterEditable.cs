@@ -19,6 +19,18 @@ namespace kooltool.Editor
             }
         }
 
+        IEnumerable<ObjectAction> IObject.Actions
+        {
+            get
+            {
+                yield return new ObjectAction
+                {
+                    icon = IconSettings.Icon.RemoveObject,
+                    action = () => Editor.Instance.RemoveCharacter(drawing.Character),
+                };
+            }
+        }
+
         Vector2 IObject.DragPivot(Vector2 world)
         {
             return world - (Vector2) drawing.transform.localPosition;
@@ -31,11 +43,6 @@ namespace kooltool.Editor
             Editor.Instance.Project.Grid.Coords(new Point(world - pivot), out grid, out offset);
 
             drawing.Character.SetPosition((Vector2) grid * 32f + Vector2.one * 16f);
-        }
-
-        void IObject.Remove()
-        {
-            Editor.Instance.RemoveCharacter(drawing.Character);
         }
 
         PixelDraw.IDrawing IDrawable.Drawing
