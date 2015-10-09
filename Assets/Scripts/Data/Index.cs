@@ -112,6 +112,20 @@ namespace kooltool.Data
             File.WriteAllText(path + "/project.json", JsonWrapper.Serialise(data));
         }
 
+        public IEnumerator SaveCO(object data, float chunk=0.01f)
+        {
+            Directory.CreateDirectory(path);
+
+            foreach (IResource resource in resources)
+            {
+                resource.Save(this);
+
+                yield return null;
+            }
+
+            File.WriteAllText(path + "/project.json", JsonWrapper.Serialise(data));
+        }
+
         public void Load()
         {
             foreach (IResource resource in resources)

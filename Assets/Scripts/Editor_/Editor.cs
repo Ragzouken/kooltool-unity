@@ -41,6 +41,7 @@ namespace kooltool.Editor
         [Header("UI")]
         [SerializeField] private Slider ZoomSlider;
         [SerializeField] public Tooltip tooltip;
+        [SerializeField] private Toolbox toolboxPrefab;
 
         [Header("Cursors")]
         [SerializeField] private GameObject Cursors;
@@ -54,10 +55,7 @@ namespace kooltool.Editor
         [SerializeField] private GameObject noteboxEditDisable;
         [SerializeField] private InputField noteboxEditField;
 
-        [Header("Settings")]
-        [SerializeField] private AnimationCurve ZoomCurve;
-
-        public Toolbox Toolbox;
+        private Toolbox toolbox;
 
         public Data.Project project_;
 
@@ -72,7 +70,7 @@ namespace kooltool.Editor
         // poop
         Vector2 pansite;
         private bool Panning;
-        public Project Project;
+        public ProjectOld Project;
 
         #region Modes
 
@@ -174,24 +172,16 @@ namespace kooltool.Editor
 
         public Browser browser;
 
-        private bool FindEmbedded()
+        protected override void Awake()
         {
-            if (System.IO.File.Exists(Application.dataPath + "/autoplay/summary.json"))
-            {
-                var summary = ProjectTools.LoadSummary("autoplay", Application.dataPath);
-                var project = ProjectTools.LoadProject(summary);
-                SetProject(project);
+            base.Awake();
 
-                return true;
-            }
+            toolbox = Instantiate<Toolbox>(toolboxPrefab);
+            toolbox.transform.SetParent(transform, false);
+            toolbox.SetProject(this, null);
+            toolbox.Hide();
 
-            return false;
-        }
-
-        private void Awake()
-        {
-
-            Project = new Project(new Point(32, 32));
+            Project = new ProjectOld(new Point(32, 32));
                  
             SetProject(Data.ProjectTools.Blank());
             project_.tileset.TestTile();
@@ -202,9 +192,9 @@ namespace kooltool.Editor
             tileMode = new Modes.Tile(this, TileCursor);
             notesMode = new Modes.Notes(this, PixelCursor);
 
-            Toolbox.pixelTab.SetPixelTool(drawMode);
-            Toolbox.tileTab.SetTileTool(tileMode);
-            Toolbox.notesTab.SetNotesTool(notesMode);
+            toolbox.pixelTab.SetPixelTool(drawMode);
+            toolbox.tileTab.SetTileTool(tileMode);
+            toolbox.notesTab.SetNotesTool(notesMode);
 
             modes.Push(drawMode);
 
@@ -214,10 +204,6 @@ namespace kooltool.Editor
 
             ZoomTo(1f);
 
-            playButton.onClick.AddListener(Play);
-            saveButton.onClick.AddListener(Save);
-            exportButton.onClick.AddListener(Export);
-
             browser.OnConfirmed += delegate(Data.Summary summary)
             {
                 browser.gameObject.SetActive(false);
@@ -226,11 +212,9 @@ namespace kooltool.Editor
             };
 
             browser.Refresh();
-
-            if (FindEmbedded()) browser.gameObject.SetActive(false);
         }
 
-        private void Play()
+        public void Play()
         {
             EventSystem.current.SetSelectedGameObject(null);
 
@@ -243,9 +227,9 @@ namespace kooltool.Editor
             Player.Setup(project_);
         }
 
-        private void Save()
+        public void Save()
         {
-            project_.index.Save(project_);
+            StartCoroutine(project_.index.SaveCO(project_));
 
             var summary = new Data.Summary
             {
@@ -265,7 +249,7 @@ namespace kooltool.Editor
 #else
         private static string exepath = "../..";
 #endif
-        private void Export()
+        public void Export()
         {
             Save();
             
@@ -299,36 +283,9 @@ namespace kooltool.Editor
             }
         }
 
-        private void Test1(object a, AddProgressEventArgs args)
-        {
-            Debug.Log(args.BytesTransferred + " / " + args.TotalBytesToTransfer);
-        }
-
-        private void Test2(object a, SaveProgressEventArgs args)
-        {
-            Debug.Log(args.BytesTransferred + " / " + args.TotalBytesToTransfer);
-        }
-
-        private void Start()
-        {
-            //SetProject(Project);
-
-            Toolbox.Hide();
-        }
-
-        private bool GetMouseDown(int button)
-        {
-            return IsPointerOverWorld() && Input.GetMouseButtonDown(button);
-        }
-
-        private void CancelActions(Vector2 world)
-        {
-            if (Panning) Panning = false;
-        }
-
         private void CheckNavigation()
         {
-            ZoomTo(ZoomSlider.value, (Toolbox.transform as RectTransform).anchoredPosition);
+            ZoomTo(ZoomSlider.value, (toolbox.transform as RectTransform).anchoredPosition);
 
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
@@ -343,10 +300,8 @@ namespace kooltool.Editor
                 Panning = false;
             }
             
-            if (GetMouseDown(1))
+            if (IsPointerOverWorld() && Input.GetMouseButtonDown(1))
             {
-                CancelActions(cursor);
-
                 pansite = cursor;
                 Panning = true;
             }
@@ -369,15 +324,15 @@ namespace kooltool.Editor
 
         private void CheckKeyboardShortcuts()
         {
-            if (Input.GetKey(KeyCode.Alpha1)) Toolbox.pixelTab.SetSize(1);
-            if (Input.GetKey(KeyCode.Alpha2)) Toolbox.pixelTab.SetSize(2);
-            if (Input.GetKey(KeyCode.Alpha3)) Toolbox.pixelTab.SetSize(3);
-            if (Input.GetKey(KeyCode.Alpha4)) Toolbox.pixelTab.SetSize(4);
-            if (Input.GetKey(KeyCode.Alpha5)) Toolbox.pixelTab.SetSize(5);
-            if (Input.GetKey(KeyCode.Alpha6)) Toolbox.pixelTab.SetSize(6);
-            if (Input.GetKey(KeyCode.Alpha7)) Toolbox.pixelTab.SetSize(7);
-            if (Input.GetKey(KeyCode.Alpha8)) Toolbox.pixelTab.SetSize(8);
-            if (Input.GetKey(KeyCode.Alpha9)) Toolbox.pixelTab.SetSize(9);
+            if (Input.GetKey(KeyCode.Alpha1)) toolbox.pixelTab.SetSize(1);
+            if (Input.GetKey(KeyCode.Alpha2)) toolbox.pixelTab.SetSize(2);
+            if (Input.GetKey(KeyCode.Alpha3)) toolbox.pixelTab.SetSize(3);
+            if (Input.GetKey(KeyCode.Alpha4)) toolbox.pixelTab.SetSize(4);
+            if (Input.GetKey(KeyCode.Alpha5)) toolbox.pixelTab.SetSize(5);
+            if (Input.GetKey(KeyCode.Alpha6)) toolbox.pixelTab.SetSize(6);
+            if (Input.GetKey(KeyCode.Alpha7)) toolbox.pixelTab.SetSize(7);
+            if (Input.GetKey(KeyCode.Alpha8)) toolbox.pixelTab.SetSize(8);
+            if (Input.GetKey(KeyCode.Alpha9)) toolbox.pixelTab.SetSize(9);
 
             if (Input.GetKeyDown(KeyCode.F7))
             {
@@ -451,6 +406,7 @@ namespace kooltool.Editor
                                                                                     (grid.y + 0.5f) * Project.Grid.CellHeight);
 
             Cursors.SetActive(ShowCursors);
+            toolIcon.enabled = toolIcon.sprite != null && ShowCursors;
 
             CheckHighlights();
         }
@@ -507,25 +463,18 @@ namespace kooltool.Editor
             if (Input.GetKeyDown(KeyCode.Tab)
              || Input.GetKeyUp(KeyCode.Tab))
             {
-                CancelActions(currCursorWorld);
+                Panning = false;
             }
 
-            if (!Toolbox.gameObject.activeSelf)
+            if (!toolbox.gameObject.activeSelf)
             {
                 CheckNavigation();
             }
 
             UpdateCursors();
 
-            if (Input.GetKeyDown(KeyCode.Space)) Toolbox.Show();
-            if (Input.GetKeyUp(KeyCode.Space)) Toolbox.Hide();
-        }
-
-        public void SetProject(Project project)
-        {
-            Project = project;
-
-            Toolbox.SetProject(project);
+            if (Input.GetKeyDown(KeyCode.Space)) toolbox.Show();
+            if (Input.GetKeyUp(KeyCode.Space)) toolbox.Hide();
         }
 
         public IEnumerator SmoothZoomTo(float zoom, float duration)
@@ -569,7 +518,7 @@ namespace kooltool.Editor
 
             Vector2 worlda = WCamera.ScreenToWorld(screen);
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
-            WCamera.SetScale(ZoomCurve.Evaluate(Zoom));
+            WCamera.SetScale(UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom));
             Vector2 worldb = WCamera.ScreenToWorld(screen);
             
             Pan(worldb - worlda);
@@ -579,7 +528,7 @@ namespace kooltool.Editor
 
         public void Pan(Vector2 delta)
         {
-            WCamera.Pan((Vector3) (-delta));
+            WCamera.Pan(-delta);
         }
 
         public void MakeNotebox(string text)
@@ -598,7 +547,7 @@ namespace kooltool.Editor
 
             StartCoroutine(Delay(delegate
             {
-                Toolbox.Hide();
+                toolbox.Hide();
                 objectMode.SetDrag(view, Vector2.zero);
             }));
         }
@@ -645,7 +594,7 @@ namespace kooltool.Editor
 
             StartCoroutine(Delay(delegate
             {
-                Toolbox.Hide();
+                toolbox.Hide();
                 objectMode.SetDrag(drawing.GetComponent<Editable>() as IObject, Vector2.zero);
             }));
         }

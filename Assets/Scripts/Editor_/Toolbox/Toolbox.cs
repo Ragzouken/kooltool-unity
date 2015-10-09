@@ -15,6 +15,8 @@ namespace kooltool.Editor
         public TileTab tileTab;
         public NotesTab notesTab;
 
+        public Editor editor { get; private set; }
+
         private void Awake()
         {
             pixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);
@@ -22,8 +24,11 @@ namespace kooltool.Editor
             notesTabToggle.onValueChanged.AddListener(OnToggledNotesTab);
         }
 
-        public void SetProject(Project project)
+        public void SetProject(Editor editor,
+                               ProjectOld project)
         {
+            this.editor = editor;
+
             pixelTab.SetProject(project);
         }
 

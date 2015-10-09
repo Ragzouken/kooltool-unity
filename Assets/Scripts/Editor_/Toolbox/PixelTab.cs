@@ -106,7 +106,7 @@ namespace kooltool.Editor
             }
         }
 
-        public void SetProject(Project project)
+        public void SetProject(ProjectOld project)
         {
 
         }

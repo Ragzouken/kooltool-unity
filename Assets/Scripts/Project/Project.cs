@@ -7,11 +7,11 @@ using PixelDraw;
 
 namespace kooltool
 {
-    public class Project
+    public class ProjectOld
     {
         public SparseGrid<bool> Grid { get; protected set; }
 
-        public Project(Point gridsize)
+        public ProjectOld(Point gridsize)
         {
             Grid = new SparseGrid<bool>(gridsize.x, gridsize.y);
         }

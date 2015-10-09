@@ -1,11 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Assertions;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEditor;
 using System;
 using System.IO;
@@ -44,7 +39,8 @@ namespace CreateScriptableObject
             EditorGUILayout.BeginScrollView(scroll);
 
             var types = Assembly.GetExecutingAssembly().GetTypes();
-            var valid = types.Where(type => type.IsSubclassOf(typeof(ScriptableObject)));
+            var valid = types.Where(type => type.IsSubclassOf(typeof(ScriptableObject)))
+                             .Where(type => !type.IsGenericTypeDefinition);
 
             foreach (Type type in valid)
             {
