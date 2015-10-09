@@ -13,6 +13,31 @@ namespace kooltool
         public Vector2 Position { get; protected set; }
         public float Scale { get; protected set; }
 
+        public Vector2 focusTarget;
+        private Vector2 focusVelocity;
+
+        public float scaleTarget;
+
+        public Vector2 focus
+        {
+            set
+            {
+                Camera.transform.position = new Vector3(value.x, value.y, -256);
+            }
+
+            get
+            {
+                Vector3 pos = Camera.transform.position;
+
+                return new Vector2(pos.x, pos.y);
+            }
+        }
+
+        private void Update()
+        {
+            //focus = Vector2.SmoothDamp(focus, focusTarget, ref focusVelocity, .1f);
+        }
+
         public void SetScale(float scale)
         {
             Camera.orthographicSize = Camera.pixelHeight / (2 * scale);
@@ -35,12 +60,6 @@ namespace kooltool
             panning.Raycast(inverse, out distance);
 
             Camera.transform.position = inverse.GetPoint(distance);
-        }
-
-        public void Pan(Vector3 worldDelta)
-        {
-            // TODO: fix this
-            Camera.transform.position += worldDelta;
         }
 
         public Vector2 ScreenToWorld(Vector2 screen)

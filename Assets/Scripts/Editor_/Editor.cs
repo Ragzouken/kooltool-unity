@@ -292,7 +292,7 @@ namespace kooltool.Editor
             // panning
             if (Panning)
             {
-                Pan(cursor - pansite);
+                WCamera.focus -= (cursor - pansite);
             }
             
             if (Input.GetMouseButtonUp(1))
@@ -457,8 +457,8 @@ namespace kooltool.Editor
             if (Input.GetMouseButtonDown(0) && IsPointerOverWorld()) currentMode.CursorInteractStart();
             if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();
 
-            if (Input.GetKeyDown(KeyCode.Tab)) PushMode(objectMode);
-            if (Input.GetKeyUp(KeyCode.Tab)) PopMode();
+            if (Input.GetKey(KeyCode.Tab)) SetMode(objectMode);
+            //if (Input.GetKeyUp(KeyCode.Tab)) PopMode();
 
             if (Input.GetKeyDown(KeyCode.Tab)
              || Input.GetKeyUp(KeyCode.Tab))
@@ -520,15 +520,10 @@ namespace kooltool.Editor
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
             WCamera.SetScale(UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom));
             Vector2 worldb = WCamera.ScreenToWorld(screen);
-            
-            Pan(worldb - worlda);
+
+            WCamera.focus -= (worldb - worlda);
 
             ZoomSlider.value = Zoom;
-        }
-
-        public void Pan(Vector2 delta)
-        {
-            WCamera.Pan(-delta);
         }
 
         public void MakeNotebox(string text)
