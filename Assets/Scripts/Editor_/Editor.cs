@@ -24,17 +24,12 @@ namespace kooltool.Editor
         [Header("Camera / Canvas")]
         [SerializeField] private GraphicRaycaster worldRaycaster; 
 
-        [Header("Toolbar")]
-        [SerializeField] private Button playButton;
-        [SerializeField] private Button saveButton;
-        [SerializeField] private Button exportButton;
-
         [SerializeField] private GameObject browserLayer;
 
         [SerializeField] private WorldCamera WCamera;
         [SerializeField] private Camera Camera_;
         
-        [SerializeField] private kooltool.Player.Player Player;
+        [SerializeField] private Player.Player Player;
 
         public HighlightGroup Highlights;
 
@@ -57,11 +52,9 @@ namespace kooltool.Editor
 
         private Toolbox toolbox;
 
-        public Data.Project project_;
+        public Project project_;
 
-        public MapGenerator generator;
-
-        public LayerView Layer;
+        [HideInInspector] public LayerView Layer;
 
         public float Zoom { get; private set; }
 
@@ -79,9 +72,9 @@ namespace kooltool.Editor
         private Modes.Tile tileMode;
         private Modes.Notes notesMode;
 
-        private readonly Stack<Modes.Mode> modes = new Stack<Mode>();
+        private readonly Stack<Mode> modes = new Stack<Mode>();
 
-        private Modes.Mode currentMode
+        private Mode currentMode
         {
             get
             {
@@ -89,7 +82,7 @@ namespace kooltool.Editor
             }
         }
 
-        private void PushMode(Modes.Mode mode)
+        private void PushMode(Mode mode)
         {
             currentMode.Exit();
             modes.Push(mode);
@@ -103,7 +96,7 @@ namespace kooltool.Editor
             currentMode.Enter();
         }
 
-        private void SetMode(Modes.Mode mode)
+        private void SetMode(Mode mode)
         {
             currentMode.Exit();
             modes.Clear();
@@ -333,11 +326,6 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Alpha7)) toolbox.pixelTab.SetSize(7);
             if (Input.GetKey(KeyCode.Alpha8)) toolbox.pixelTab.SetSize(8);
             if (Input.GetKey(KeyCode.Alpha9)) toolbox.pixelTab.SetSize(9);
-
-            if (Input.GetKeyDown(KeyCode.F7))
-            {
-                generator.Go(project_);
-            }
 
             if (Input.GetKeyDown(KeyCode.T) && false)
             {

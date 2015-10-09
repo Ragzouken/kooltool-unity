@@ -8,6 +8,8 @@ namespace kooltool
     public class WorldCamera : MonoBehaviour
     {
         [SerializeField] protected Camera Camera;
+        [SerializeField] private Transform focusTransform;
+
         [SerializeField] protected RectTransform World;
 
         public Vector2 Position { get; protected set; }
@@ -22,12 +24,12 @@ namespace kooltool
         {
             set
             {
-                Camera.transform.position = new Vector3(value.x, value.y, -256);
+                focusTransform.position = new Vector3(value.x, value.y, -256);
             }
 
             get
             {
-                Vector3 pos = Camera.transform.position;
+                Vector3 pos = focusTransform.position;
 
                 return new Vector2(pos.x, pos.y);
             }
