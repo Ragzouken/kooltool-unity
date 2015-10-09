@@ -130,5 +130,41 @@ namespace kooltool.Data
 
             return project;
         }
+
+        public static void RemoveTile(this Project project,
+                                      Tile tile)
+        {
+            project.tileset.tiles.Remove(tile);
+
+            if (project.tileset.tiles.Count == 0)
+            {
+                project.tileset.TestTile();
+            }
+
+            var replace = project.tileset.tiles[0];
+            var changes = new Dictionary<Point, TileInstance>();
+
+            foreach (var layer in project.world.layers)
+            {
+                changes.Clear();
+
+                foreach (var pair in layer.tiles)
+                {
+                    TileInstance instance = pair.Value;
+
+                    if (instance.tile == tile)
+                    {
+                        instance.tile = replace;
+
+                        changes.Add(pair.Key, instance);
+                    }
+                }
+
+                foreach (var change in changes)
+                {
+                    layer.tiles[change.Key] = change.Value;
+                }
+            }
+        }
     }
 }

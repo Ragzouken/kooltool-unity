@@ -9,17 +9,11 @@ using kooltool.Editor;
 
 public class TooltipTrigger : MonoBehaviour, 
                               IPointerEnterHandler,
-                              IPointerExitHandler,
-                              IPointerClickHandler
+                              IPointerExitHandler
 {
     public string text;
 
     private void OnDisable()
-    {
-        Editor.Instance.tooltip.Exit(this);
-    }
-
-    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
         Editor.Instance.tooltip.Exit(this);
     }

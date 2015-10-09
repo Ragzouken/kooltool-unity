@@ -58,6 +58,12 @@ public class Tilemap : MonoDrawing
         images.SetActive(layer.tiles.Keys);
     }
 
+    public void Refresh()
+    {
+        images.Clear();
+        images.SetActive(layer.tiles.Keys);
+    }
+
     public override void Apply()
     {
         Drawing.Apply();

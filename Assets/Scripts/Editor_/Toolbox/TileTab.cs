@@ -3,12 +3,17 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using kooltool.Data;
+
 namespace kooltool.Editor
 {
     public class TileTab : MonoBehaviour
     {
+        [SerializeField] private Toolbox toolbox;
+
         [Header("Tools")]
         [SerializeField] protected Button NewButton;
+        [SerializeField] private GameObject trashIcon;
 
         [Header("Tiles")]
         [SerializeField] protected ToggleGroup TileToggleGroup;
@@ -38,11 +43,11 @@ namespace kooltool.Editor
         {
             Tiles.Clear();
 
-            foreach (Tile tile in Editor.Instance.project_.tileset.tiles)
+            foreach (Tile tile in toolbox.editor.project_.tileset.tiles)
             {
                 TileIndicator element = Tiles.Add();
 
-                element.SetTile(tile);
+                element.SetTile(tile, toolbox);
 
                 element.Toggle.group = TileToggleGroup;
                 if (tile == tileMode.paintTile) element.Toggle.isOn = true;
@@ -59,7 +64,8 @@ namespace kooltool.Editor
 
         public void Update()
         {
-            //tileBackgroundImage.sprite = tileMode.paintTile.sprites[0];
+            NewButton.gameObject.SetActive(toolbox.draggedItem == null);
+            trashIcon.gameObject.SetActive(toolbox.draggedItem != null);
         }
 
         public void OnClickedNew()
@@ -67,6 +73,19 @@ namespace kooltool.Editor
             tileMode.paintTile = Editor.Instance.project_.tileset.TestTile();
 
             Refresh();
+        }
+
+        public void OnDroppedTrash()
+        {
+            var tile = toolbox.draggedItem as Tile;
+
+            if (tile != null)
+            {
+                toolbox.CancelDrag();
+                toolbox.editor.project_.RemoveTile(tile);
+                toolbox.editor.RefreshTilemap();
+                Refresh();
+            }
         }
     }
 }

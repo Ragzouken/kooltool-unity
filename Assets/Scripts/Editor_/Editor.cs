@@ -154,13 +154,18 @@ namespace kooltool.Editor
             SetMode(notesMode);
         }
 
-        public void SetProject(Data.Project project)
+        public void SetProject(Project project)
         {
             project_ = project;
 
             world.SetWorld(project.world);
 
             Layer = world.layers.Get(project.world.layers[0]);
+        }
+
+        public void RefreshTilemap()
+        {
+            Layer.Tilemap.Refresh();
         }
 
         public Browser browser;

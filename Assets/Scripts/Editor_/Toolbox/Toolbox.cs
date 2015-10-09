@@ -7,6 +7,11 @@ namespace kooltool.Editor
 {
     public class Toolbox : MonoBehaviour
     {
+        [Header("Dragging")]
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private Image draggedItemImage;
+
+        [Header("Tabs")]
         [SerializeField] private Toggle pixelTabToggle;
         [SerializeField] private Toggle tileTabToggle;
         [SerializeField] private Toggle notesTabToggle;
@@ -17,11 +22,15 @@ namespace kooltool.Editor
 
         public Editor editor { get; private set; }
 
+        public object draggedItem;
+
         private void Awake()
         {
             pixelTabToggle.onValueChanged.AddListener(OnToggledPixelTab);
             tileTabToggle.onValueChanged.AddListener(OnToggledTileTab);
             notesTabToggle.onValueChanged.AddListener(OnToggledNotesTab);
+
+            draggedItemImage.gameObject.SetActive(false);
         }
 
         public void SetProject(Editor editor,
@@ -60,6 +69,28 @@ namespace kooltool.Editor
         public void Hide()
         {
             gameObject.SetActive(false);
+
+            CancelDrag();
+        }
+
+        private void Update()
+        {
+            draggedItemImage.transform.position = Input.mousePosition;
+        }
+
+        public void BeginDrag(object item, Sprite sprite)
+        {
+            draggedItem = item;
+            draggedItemImage.gameObject.SetActive(true);
+            draggedItemImage.sprite = sprite;
+            canvasGroup.interactable = false;
+        }
+
+        public void CancelDrag()
+        {
+            draggedItem = null;
+            draggedItemImage.gameObject.SetActive(false);
+            canvasGroup.interactable = true;
         }
 
         public void OnToggledPixelTab(bool active)
