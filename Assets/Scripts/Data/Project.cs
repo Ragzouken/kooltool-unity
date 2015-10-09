@@ -122,6 +122,8 @@ namespace kooltool.Data
                 world = new World(),
             };
 
+            project.tileset.TestTile();
+
             project.world.project = project;
             project.world.tileset = project.tileset;
             project.world.AddLayer();
