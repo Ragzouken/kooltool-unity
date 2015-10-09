@@ -278,16 +278,36 @@ namespace kooltool.Editor
 
         private void CheckNavigation()
         {
-            ZoomTo(ZoomSlider.value, (toolbox.transform as RectTransform).anchoredPosition);
+            //ZoomTo(ZoomSlider.value, (toolbox.transform as RectTransform).anchoredPosition);
 
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             // panning
             if (Panning)
             {
+                // camera focus should situate pansite underneath cursor
                 WCamera.focus -= (cursor - pansite);
+                WCamera.Halt();
             }
-            
+            else
+            {
+                if (Input.GetKey(KeyCode.LeftShift)
+                 || Input.GetKey(KeyCode.RightShift))
+                {
+                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.scaleTarget += 0.05f;
+                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.scaleTarget -= 0.05f;
+                }
+                else
+                {
+                    float scale = 10 / WCamera.scale;
+
+                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.focusTarget += Vector2.up    * scale;
+                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.focusTarget += Vector2.down  * scale;
+                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.focusTarget += Vector2.left  * scale;
+                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.focusTarget += Vector2.right * scale;
+                }
+            }
+
             if (Input.GetMouseButtonUp(1))
             {
                 Panning = false;
@@ -445,7 +465,7 @@ namespace kooltool.Editor
             if (Input.GetMouseButtonDown(0) && IsPointerOverWorld()) currentMode.CursorInteractStart();
             if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();
 
-            if (Input.GetKey(KeyCode.Tab)) SetMode(objectMode);
+            if (Input.GetKeyDown(KeyCode.Tab)) SetMode(objectMode);
             //if (Input.GetKeyUp(KeyCode.Tab)) PopMode();
 
             if (Input.GetKeyDown(KeyCode.Tab)
@@ -506,10 +526,11 @@ namespace kooltool.Editor
 
             Vector2 worlda = WCamera.ScreenToWorld(screen);
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
-            WCamera.SetScale(UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom));
+            WCamera.scale = UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom);
             Vector2 worldb = WCamera.ScreenToWorld(screen);
 
             WCamera.focus -= (worldb - worlda);
+            WCamera.Halt();
 
             ZoomSlider.value = Zoom;
         }

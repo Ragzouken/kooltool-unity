@@ -12,13 +12,11 @@ namespace kooltool
 
         [SerializeField] protected RectTransform World;
 
-        public Vector2 Position { get; protected set; }
-        public float Scale { get; protected set; }
-
         public Vector2 focusTarget;
         private Vector2 focusVelocity;
 
         public float scaleTarget;
+        private float scaleVelocity;
 
         public Vector2 focus
         {
@@ -35,14 +33,37 @@ namespace kooltool
             }
         }
 
-        private void Update()
+        public float scale
         {
-            //focus = Vector2.SmoothDamp(focus, focusTarget, ref focusVelocity, .1f);
+            set
+            {
+                Camera.orthographicSize = Camera.pixelHeight / (2 * value);
+            }
+
+            get
+            {
+                return Camera.pixelHeight / (2 * Camera.orthographicSize);
+            }
         }
 
-        public void SetScale(float scale)
+        private void Awake()
         {
-            Camera.orthographicSize = Camera.pixelHeight / (2 * scale);
+            Halt();
+        }
+
+        private void Update()
+        {
+            focus = Vector2.SmoothDamp(focus, focusTarget, ref focusVelocity, .1f);
+            scale = Mathf.SmoothDamp(scale, scaleTarget, ref scaleVelocity, .1f);
+        }
+
+        public void Halt()
+        {
+            focusTarget = focus;
+            scaleTarget = scale;
+
+            focusVelocity = Vector2.zero;
+            scaleVelocity = 0f;
         }
 
         public void LookAt(Vector3 world, Vector2? screen=null)
@@ -61,7 +82,7 @@ namespace kooltool
 
             panning.Raycast(inverse, out distance);
 
-            Camera.transform.position = inverse.GetPoint(distance);
+            focus = inverse.GetPoint(distance);
         }
 
         public Vector2 ScreenToWorld(Vector2 screen)

@@ -49,7 +49,7 @@ namespace kooltool.Player
 
             if (Player_ != null)
             {
-                Camera.SetScale(2);
+                Camera.scale = 2;
                 Camera.LookAt(Player_.position);
             }
         }
