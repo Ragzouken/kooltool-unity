@@ -131,6 +131,12 @@ namespace kooltool.Data
             return project;
         }
 
+        public static void RemoveCostume(this Project project,
+                                         Costume costume)
+        {
+            project.costumes.Remove(costume);
+        }
+
         public static void RemoveTile(this Project project,
                                       Tile tile)
         {

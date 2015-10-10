@@ -9,13 +9,16 @@ namespace kooltool.Editor
 {
     public class CostumeTab : MonoBehaviour
     {
+        [SerializeField] private Toolbox toolbox;
+
         [Header("Tools")]
-        [SerializeField] protected Button NewButton;
+        [SerializeField] private Button NewButton;
+        [SerializeField] private GameObject trashIcon;
 
         [Header("Tiles")]
-        [SerializeField] protected ToggleGroup CostumeToggleGroup;
-        [SerializeField] protected RectTransform CostumeContainer;
-        [SerializeField] protected CostumeIndicator CostumePrefab;
+        [SerializeField] private ToggleGroup CostumeToggleGroup;
+        [SerializeField] private RectTransform CostumeContainer;
+        [SerializeField] private CostumeIndicator CostumePrefab;
 
         private MonoBehaviourPooler<Costume, CostumeIndicator> costumes;
 
@@ -33,7 +36,13 @@ namespace kooltool.Editor
         private void InitialiseCostume(Costume costume, 
                                        CostumeIndicator indicator)
         {
-            indicator.SetCostume(costume, () => Editor.Instance.MakeCharacter(costume));
+            indicator.SetCostume(toolbox, costume, () => Editor.Instance.MakeCharacter(costume));
+        }
+
+        private void Update()
+        {
+            NewButton.gameObject.SetActive(toolbox.draggedItem == null);
+            trashIcon.gameObject.SetActive(toolbox.draggedItem != null);
         }
 
         public void Refresh()
@@ -46,6 +55,18 @@ namespace kooltool.Editor
             Editor.Instance.project_.costumes.Add(Generators.Costume.Smiley(Editor.Instance.project_, 32, 32));
 
             Refresh();
+        }
+
+        public void OnDroppedTrash()
+        {
+            var costume = toolbox.draggedItem as Costume;
+
+            if (costume != null)
+            {
+                toolbox.CancelDrag();
+                toolbox.editor.project_.RemoveCostume(costume);
+                Refresh();
+            }
         }
     }
 }
