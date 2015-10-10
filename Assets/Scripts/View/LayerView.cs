@@ -67,6 +67,22 @@ namespace kooltool.Editor
         private kooltool.Data.Layer layer;
         private Hack hack;
 
+        public float separation
+        {
+            set
+            {
+                Vector3 position;
+
+                position = CharacterContainer.localPosition;
+                position.z = -value;
+                CharacterContainer.localPosition = position;
+
+                position = Drawing.transform.localPosition;
+                position.z = value;
+                Drawing.transform.localPosition = position;
+            }
+        }
+
         protected void Awake()
         {
             Characters = new MonoBehaviourPooler<Character, CharacterDrawing>(CharacterPrefab, 

@@ -200,8 +200,9 @@ namespace kooltool.Editor
             TileCursor.mode = tileMode;
             PixelCursor.mode = drawMode;
 
-            ZoomTo(1f);
+            ZoomTo(0.75f);
 
+            /*
             browser.OnConfirmed += delegate(Data.Summary summary)
             {
                 browser.gameObject.SetActive(false);
@@ -210,6 +211,9 @@ namespace kooltool.Editor
             };
 
             browser.Refresh();
+            */
+
+            FindObjectOfType<MapGenerator>().Go(project_, Layer.Tilemap);
         }
 
         public void Play()
@@ -296,20 +300,24 @@ namespace kooltool.Editor
             }
             else
             {
+                float dt = Time.deltaTime;
+
                 if (Input.GetKey(KeyCode.LeftShift)
                  || Input.GetKey(KeyCode.RightShift))
                 {
-                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.scaleTarget += 0.05f;
-                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.scaleTarget -= 0.05f;
+                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.scaleTarget += WCamera.scaleTarget * dt;
+                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.scaleTarget -= WCamera.scaleTarget * dt;
+                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.rotationTarget += 90 * dt;
+                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.rotationTarget -= 90 * dt;
                 }
                 else
                 {
-                    float scale = 10 / WCamera.scale;
+                    float scale = 1000 / WCamera.scale * dt;
 
-                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.focusTarget += Vector2.up    * scale;
-                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.focusTarget += Vector2.down  * scale;
-                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.focusTarget += Vector2.left  * scale;
-                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.focusTarget += Vector2.right * scale;
+                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.focusTarget += WCamera.up    * scale;
+                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.focusTarget -= WCamera.up    * scale;
+                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.focusTarget -= WCamera.right * scale;
+                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.focusTarget += WCamera.right * scale;
                 }
             }
 
@@ -488,6 +496,13 @@ namespace kooltool.Editor
 
             if (Input.GetKeyDown(KeyCode.Space)) toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) toolbox.Hide();
+
+            WCamera.pivotTarget = Input.GetKey(KeyCode.V) ? 45 : 0;
+
+            foreach (var layer in world.layers.Instances)
+            {
+                layer.separation = Mathf.Lerp(0, 25, WCamera.pivot / 45);
+            }
         }
 
         public IEnumerator SmoothZoomTo(float zoom, float duration)

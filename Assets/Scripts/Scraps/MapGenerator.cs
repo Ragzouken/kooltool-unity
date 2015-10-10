@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using PixelDraw;
 using kooltool;
-using kooltool.Editor;
+using kooltool.Data;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -54,12 +54,14 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public Tilemap Tilemap;
+    private Tilemap Tilemap;
 
     int turtles = 0;
 
-    public void Go(kooltool.Data.Project project)
+    public void Go(Project project, Tilemap tilemap)
     {
+        Tilemap = tilemap;
+
         project.tileset.TestTile();
         project.tileset.TestTile();
 
@@ -71,7 +73,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public IEnumerator Generate(kooltool.Data.Project project)
+    public IEnumerator Generate(Project project)
     {
         turtles += 1;
 
@@ -106,7 +108,7 @@ public class MapGenerator : MonoBehaviour
         CheckOutline(project);
     }
 
-    public void CheckOutline(kooltool.Data.Project project)
+    public void CheckOutline(Project project)
     {
         if (turtles == 0)
         {
@@ -114,7 +116,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public IEnumerator Outline(kooltool.Data.Project project)
+    public IEnumerator Outline(Project project)
     {
         var outlines = new Queue<Point>();
 
@@ -155,7 +157,7 @@ public class MapGenerator : MonoBehaviour
         StartCoroutine(DrawTiles(project));
     }
 
-    public IEnumerator DrawTiles(kooltool.Data.Project project)
+    public IEnumerator DrawTiles(Project project)
     {
         Tile tile = project.tileset.tiles[1];
         IDrawing drawing = Tilemap.Drawing;
