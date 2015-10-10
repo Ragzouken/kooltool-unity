@@ -180,6 +180,7 @@ namespace kooltool.Editor.Modes
                 else
                 {
                     // TODO: copy tile to bg, gc tile if necc
+                    hovering.Promote(cell);
                 }
             }
         }

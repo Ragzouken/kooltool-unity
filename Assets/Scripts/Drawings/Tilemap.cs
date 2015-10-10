@@ -12,7 +12,7 @@ public class Tilemap : MonoDrawing
 
     [SerializeField] protected Image TilePrefab;
 
-    protected TiledDrawing Tiled;
+    public TiledDrawing Tiled;
 
     protected SparseGrid<TileInstance> Tiles
         = new SparseGrid<TileInstance>(Size);

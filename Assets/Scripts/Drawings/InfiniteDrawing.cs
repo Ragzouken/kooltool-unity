@@ -10,7 +10,7 @@ public class InfiniteDrawing : MonoDrawing
 {
     [SerializeField] protected Image ImageBlockPrefab;
 
-    protected TiledDrawing Tiled; 
+    public TiledDrawing Tiled; 
 
     protected const int Size = 1024;
 
@@ -59,7 +59,7 @@ public class InfiniteDrawing : MonoDrawing
                                                     cell.y * Size);
 
         return drawing;
-    }
+    } 
 
     public void SetLayer(Layer layer, Layer.Drawing drawing)
     {

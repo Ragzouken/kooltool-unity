@@ -105,5 +105,55 @@ namespace PixelDraw
             
             Changed.Clear();
         }
+
+        public virtual Sprite Sample(Rect area)
+        {
+            var texture = BlankTexture.New((int) area.width, 
+                                           (int) area.height, 
+                                           new Color(0, 0, 0, 0));
+
+            var sprite = texture.FullSprite();
+
+            Point grid, offset;
+
+            Cells.Coords(area.min, out grid, out offset);
+
+            var gw = Mathf.CeilToInt((area.width + offset.x) / Cells.CellWidth);
+            var gh = Mathf.CeilToInt((area.height + offset.y) / Cells.CellHeight);
+
+            Debug.LogFormat("area {0}\ngrid {1}\noffset{2}\n{3},{4}", area.min, grid, offset, gw, gh);
+
+            for (int y = 0; y < gh; ++y)
+            {
+                for (int x = 0; x < gw; ++x)
+                {
+                    IDrawing drawing;
+
+                    Point cell = new Point(grid.x + x, grid.y + y);
+
+                    if (Cells.Get(cell, out drawing))
+                    {
+                        Debug.Log("yep");
+
+                        var point = new Point(x * Cells.CellWidth, y * Cells.CellHeight);
+                        var brush = ((SpriteDrawing) drawing).Sprite;
+
+                        Debug.LogFormat("{0} vs {1}", cell * Cells.CellWidth, area.min); 
+
+                        PixelDraw.Brush.Apply(brush, 
+                                              cell * Cells.CellWidth, 
+                                              sprite, 
+                                              area.min, 
+                                              Blend.Replace);
+                    }
+                    else
+                    {
+                        Debug.Log("nope");
+                    }
+                }
+            }
+
+            return sprite;
+        }
     }
 }

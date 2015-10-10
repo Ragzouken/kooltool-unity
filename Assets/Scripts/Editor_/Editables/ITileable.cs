@@ -11,5 +11,6 @@ namespace kooltool.Editor
         Tilemap Tilemap { get; }
 
         void Demote(Point cell);
+        void Promote(Point cell);
     }
 }

@@ -121,7 +121,7 @@ namespace kooltool.Editor
 
         void ITileable.Demote(Point cell)
         {
-            Data.TileInstance instance;
+            TileInstance instance;
 
             bool exists = Tilemap.Get(cell, out instance);
 
@@ -133,6 +133,22 @@ namespace kooltool.Editor
 
             Drawing.Brush(cell * 32, brush, Blend.Alpha);
             Drawing.Apply();
+        }
+
+        void ITileable.Promote(Point cell)
+        {
+            var rect = new UnityEngine.Rect(cell * 32, Vector2.one * 32);
+            Tile tile = layer.world.project.tileset.TestTile();
+            var sprite = Drawing.Tiled.Sample(rect);
+            Brush.Apply(sprite, Point.Zero, tile.sprites[0], Point.Zero, Blend.Replace);
+
+            tile.sprites[0].texture.Apply();
+
+            Drawing.DrawRect(rect.min, rect.size, Color.clear, Blend.Replace);
+            Drawing.Apply();
+
+            Tilemap.Set(cell, tile);
+            Tilemap.Refresh();
         }
     }
 }
