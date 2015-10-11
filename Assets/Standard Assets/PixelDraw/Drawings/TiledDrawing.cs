@@ -121,8 +121,6 @@ namespace PixelDraw
             var gw = Mathf.CeilToInt((area.width + offset.x) / Cells.CellWidth);
             var gh = Mathf.CeilToInt((area.height + offset.y) / Cells.CellHeight);
 
-            Debug.LogFormat("area {0}\ngrid {1}\noffset{2}\n{3},{4}", area.min, grid, offset, gw, gh);
-
             for (int y = 0; y < gh; ++y)
             {
                 for (int x = 0; x < gw; ++x)
@@ -133,22 +131,14 @@ namespace PixelDraw
 
                     if (Cells.Get(cell, out drawing))
                     {
-                        Debug.Log("yep");
-
                         var point = new Point(x * Cells.CellWidth, y * Cells.CellHeight);
                         var brush = ((SpriteDrawing) drawing).Sprite;
-
-                        Debug.LogFormat("{0} vs {1}", cell * Cells.CellWidth, area.min); 
 
                         PixelDraw.Brush.Apply(brush, 
                                               cell * Cells.CellWidth, 
                                               sprite, 
                                               area.min, 
                                               Blend.Replace);
-                    }
-                    else
-                    {
-                        Debug.Log("nope");
                     }
                 }
             }
