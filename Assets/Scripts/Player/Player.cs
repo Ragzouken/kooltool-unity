@@ -9,9 +9,9 @@ namespace kooltool.Player
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] protected WorldCamera Camera;
-        [SerializeField] protected RectTransform World;
-        [SerializeField] protected Editor.Editor editor;
+        [SerializeField] private WorldCamera Camera;
+        [SerializeField] private RectTransform World;
+        [SerializeField] private Editor.Editor editor;
 
         [Header("Speech Test")]
         [SerializeField] protected RectTransform speechContainer;
@@ -50,7 +50,7 @@ namespace kooltool.Player
             if (Player_ != null)
             {
                 Camera.scale = 2;
-                Camera.LookAt(Player_.position);
+                Camera.focus = Player_.position;
             }
         }
 

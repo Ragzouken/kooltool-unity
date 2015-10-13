@@ -179,25 +179,6 @@ namespace kooltool
             pivotVelocity = 0f;
         }
 
-        public void LookAt(Vector3 world, Vector2? screen=null)
-        {
-            var center = new Vector2(Camera.pixelWidth, 
-                                     Camera.pixelHeight) * 0.5f;
-
-            screen = screen ?? center;
-
-            var panning = new Plane(Vector3.forward, Camera.transform.position);
-
-            Ray ray = Camera.ScreenPointToRay((Vector3) screen);
-            Ray inverse = new Ray(world, -ray.direction);
-
-            float distance;
-
-            panning.Raycast(inverse, out distance);
-
-            focus = inverse.GetPoint(distance);
-        }
-
         public Vector2 ScreenToWorld(Vector2 screen)
         {
             Vector2 world;

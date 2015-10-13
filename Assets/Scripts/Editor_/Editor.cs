@@ -34,7 +34,6 @@ namespace kooltool.Editor
         public HighlightGroup Highlights;
 
         [Header("UI")]
-        [SerializeField] private Slider ZoomSlider;
         [SerializeField] public Tooltip tooltip;
         [SerializeField] private Toolbox toolboxPrefab;
 
@@ -287,8 +286,6 @@ namespace kooltool.Editor
 
         private void CheckNavigation()
         {
-            //ZoomTo(ZoomSlider.value, (toolbox.transform as RectTransform).anchoredPosition);
-
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             // panning
@@ -437,6 +434,12 @@ namespace kooltool.Editor
         public Vector2 currCursorWorld;
         public Vector2 prevCursorWorld;
 
+        private float tilt;
+        private float tiltVelocity;
+
+        private float sep;
+        private float sepVelocity;
+
         private void Update()
         {
             if (Project == null) return;
@@ -497,11 +500,15 @@ namespace kooltool.Editor
             if (Input.GetKeyDown(KeyCode.Space)) toolbox.Show();
             if (Input.GetKeyUp(KeyCode.Space)) toolbox.Hide();
 
-            WCamera.pivotTarget = Input.GetKey(KeyCode.V) ? 45 : 0;
+            bool split = Input.GetKey(KeyCode.V);
+            tilt = Mathf.SmoothDamp(tilt, split ? 1 : 0, ref tiltVelocity, .1f);
+            sep = Mathf.SmoothDamp(sep, (split & tilt >= 0.5f) ? 50 : 0, ref sepVelocity, .3f);
+
+            WCamera.pivotTarget = tilt * 45;
 
             foreach (var layer in world.layers.Instances)
             {
-                layer.separation = Mathf.Lerp(0, 25, WCamera.pivot / 45);
+                layer.separation = sep;
             }
         }
 
@@ -535,8 +542,6 @@ namespace kooltool.Editor
         {
             Zoom = Mathf.Clamp01(zoom);
 
-            //if (ZoomSlider.value == Zoom) return;
-
             //Debug.Log(focus);
 
             Vector2 center = new Vector2(Camera.main.pixelWidth  * 0.5f,
@@ -551,8 +556,6 @@ namespace kooltool.Editor
 
             WCamera.focus -= (worldb - worlda);
             WCamera.Halt();
-
-            ZoomSlider.value = Zoom;
         }
 
         public void MakeNotebox(string text)
