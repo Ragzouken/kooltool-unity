@@ -9,9 +9,9 @@ namespace kooltool.Player
 {
     public class Player : MonoBehaviour
     {
+        [SerializeField] private Main main;
         [SerializeField] private WorldCamera Camera;
-        [SerializeField] private RectTransform World;
-        [SerializeField] private Editor.Editor editor;
+        [SerializeField] private WorldView world;
 
         [Header("Speech Test")]
         [SerializeField] protected RectTransform speechContainer;
@@ -56,6 +56,8 @@ namespace kooltool.Player
 
         protected void CheckInput()
         {
+            if (Input.GetKeyDown(KeyCode.Escape)) main.SetEditor(Project);
+
             if (Player_ != null)
             {
                 if (Input.GetKeyDown(KeyCode.LeftArrow))  MoveCharacter(Player_, Player_.position + Vector2.left  * 32, .5f);
@@ -71,7 +73,7 @@ namespace kooltool.Player
             speech.transform.SetParent(speechContainer);
             speech.Setup(text, 1f);
 
-            var drawing = editor.Layer.Characters.Get(character);
+            var drawing = world.layers.Get(Project.world.layers[0]).Characters.Get(character);
 
             float angle = Random.value * Mathf.PI * 2;
 

@@ -29,7 +29,7 @@ namespace kooltool.Editor
         [SerializeField] private WorldCamera WCamera;
         [SerializeField] private Camera Camera_;
         
-        [SerializeField] private Player.Player Player;
+        [SerializeField] private Main main;
 
         public HighlightGroup Highlights;
 
@@ -224,8 +224,9 @@ namespace kooltool.Editor
                 character.SetPlayer();
             }
 
-            ZoomTo(0);
-            Player.Setup(project_);
+            toolbox.Hide();
+
+            main.SetPlayer(project_);
         }
 
         public void Save()

@@ -44,5 +44,21 @@ namespace kooltool
             project = null;
             return false;
         }
+
+        public void SetPlayer(Project project)
+        {
+            editor.gameObject.SetActive(false);
+            player.gameObject.SetActive(true);
+
+            player.Setup(project);
+        }
+
+        public void SetEditor(Project project)
+        {
+            editor.gameObject.SetActive(true);
+            player.gameObject.SetActive(false);
+
+            //editor.Setup(project);
+        }
     }
 }
