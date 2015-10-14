@@ -4,38 +4,40 @@ using UnityEngine.EventSystems;
 
 public class GrowingInputField : MonoBehaviour
 {
-    [SerializeField] protected InputField Input;
-    [SerializeField] protected Text Text;
-    [SerializeField] protected LayoutElement Layout;
-    [SerializeField] protected RectTransform Caret;
+    [SerializeField] private InputField input;
+    [SerializeField] private Text text;
+    [SerializeField] private LayoutElement layout;
+    [SerializeField] private RectTransform rtrans;
 
-    string saved;
+    private RectTransform Caret;
+    private string saved;
 
     protected void Start()
     {
-        Input.onValueChange.AddListener(Grow);
+       // input.onValueChange.AddListener(Grow);
     }
 
-    protected void Grow(string text)
+    private void Update()
     {
-        Caret = Input.transform.GetChild(0) as RectTransform;
+        Caret = input.transform.GetChild(0) as RectTransform;
 
-        Vector2 extents = Input.textComponent.rectTransform.rect.size;
-        var settings = Input.textComponent.GetGenerationSettings(extents);
-        settings.generateOutOfBounds = false;
+        Vector2 extents = input.textComponent.rectTransform.rect.size;
+        var settings = input.textComponent.GetGenerationSettings(extents);
+        settings.generateOutOfBounds = true;
 
-        float width = new TextGenerator().GetPreferredWidth(text.Replace(' ', '_'), settings);
-        float height = new TextGenerator().GetPreferredHeight(text.Replace(' ', '_'), settings);
+        var fake = input.text.Replace(' ', '_');
 
-        Layout.preferredWidth = width;
-        Layout.preferredHeight = height;
+        float width = new TextGenerator().GetPreferredWidth(fake, settings);
+        float height = new TextGenerator().GetPreferredHeight(fake, settings);
 
-        Caret.anchoredPosition = new Vector2(width / 2f + 5, -(height / 2f + 5));
-        Caret.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-        Caret.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+        layout.preferredWidth = width;
+        layout.preferredHeight = height;
 
-        Input.ActivateInputField();
+        rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
 
-        Text.color = Color.white;
+        input.ActivateInputField();
+
+        this.text.color = Color.white;
     }
 }
