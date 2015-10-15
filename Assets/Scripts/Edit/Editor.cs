@@ -48,6 +48,7 @@ namespace kooltool.Editor
         [SerializeField] private RectTransform overlaysContainer;
         [SerializeField] private GameObject noteboxEditDisable;
         [SerializeField] private InputField noteboxEditField;
+        [SerializeField] private CharacterDetailsPanel characterDetails;
 
         private Toolbox toolbox;
 
@@ -177,6 +178,8 @@ namespace kooltool.Editor
             toolbox.transform.SetParent(transform, false);
             toolbox.SetProject(this, null);
             toolbox.Hide();
+
+            characterDetails.gameObject.SetActive(false);
 
             Project = new ProjectOld(new Point(32, 32));
                  
@@ -639,12 +642,16 @@ namespace kooltool.Editor
 
         public void EditScript(Character character)
         {
-
-        }
-
-        public void Say(Character character, string text)
-        {
-            Layer.Characters.Get(character).ShowDialogue(text);
+            if (characterDetails.gameObject.activeSelf
+             && characterDetails.character == character)
+            {
+                characterDetails.gameObject.SetActive(false);
+            }
+            else
+            {
+                characterDetails.gameObject.SetActive(true);
+                characterDetails.SetCharacter(character);
+            }
         }
 
         private IEnumerator Delay(System.Action action)

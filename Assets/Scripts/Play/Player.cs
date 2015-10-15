@@ -24,6 +24,9 @@ namespace kooltool.Player
         protected Dictionary<Point, Character> collision
             = new Dictionary<Point, Character>();
 
+        private HashSet<Character> speaking
+            = new HashSet<Character>();
+
         public void Setup(Data.Project project)
         {
             Project = project;
@@ -69,6 +72,8 @@ namespace kooltool.Player
 
         public void Say(Character character, string text)
         {
+            if (speaking.Contains(character)) return;
+
             var speech = Instantiate<SpeechTest>(speechPrefab);
             speech.transform.SetParent(speechContainer);
             speech.Setup(text, 1f);
@@ -81,6 +86,16 @@ namespace kooltool.Player
                                          Mathf.Sin(angle));
 
             speech.transform.position = drawing.transform.position + (Vector3) offset * 32f;
+
+            speaking.Add(character);
+            StartCoroutine(Delay(0.5f, () => speaking.Remove(character)));
+        }
+
+        private IEnumerator Delay(float delay, System.Action callback)
+        {
+            yield return new WaitForSeconds(delay);
+
+            callback();
         }
 
         void MoveCharacter(Character character, 
