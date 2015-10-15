@@ -53,13 +53,15 @@ namespace kooltool.Editor
                 {
                     icon = IconSettings.Icon.EditText,
                     action = () => Editor.Instance.EditNotebox(notebox),
+                    tooltip = "edit text",
                 };
 
                 yield return new ObjectAction
                 {
                     icon = IconSettings.Icon.RemoveObject,
                     action = () => Editor.Instance.RemoveNotebox(notebox),
-            };
+                    tooltip = "remove notebox",
+                };
             }
         }
     }

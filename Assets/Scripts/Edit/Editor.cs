@@ -637,6 +637,11 @@ namespace kooltool.Editor
             objectOverlay.SetSubject(null);
         }
 
+        public void EditScript(Character character)
+        {
+
+        }
+
         public void Say(Character character, string text)
         {
             Layer.Characters.Get(character).ShowDialogue(text);

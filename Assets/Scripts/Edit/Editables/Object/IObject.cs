@@ -24,5 +24,6 @@ namespace kooltool.Editor
     {
         public IconSettings.Icon icon;
         public System.Action action;
+        public string tooltip;
     }
 }

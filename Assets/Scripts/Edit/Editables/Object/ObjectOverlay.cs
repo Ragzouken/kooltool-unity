@@ -28,7 +28,7 @@ namespace kooltool.Editor
         private void InitialiseAction(ObjectAction action, 
                                       ObjectActionButton button)
         {
-            button.Setup(IconSettings.Instance[action.icon], action.action);
+            button.Setup(action);
         }
 
         public void SetSubject(IObject subject)

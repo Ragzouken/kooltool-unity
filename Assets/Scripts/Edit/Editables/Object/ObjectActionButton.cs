@@ -11,6 +11,7 @@ namespace kooltool.Editor
     {
         [SerializeField] private Image iconImage;
         [SerializeField] private Button button;
+        [SerializeField] private TooltipTrigger tooltip;
 
         private System.Action action;
 
@@ -19,10 +20,11 @@ namespace kooltool.Editor
             button.onClick.AddListener(OnClickedButton);
         }
 
-        public void Setup(Sprite icon, System.Action action)
+        public void Setup(ObjectAction action)
         {
-            iconImage.sprite = icon;
-            this.action = action;
+            iconImage.sprite = IconSettings.Instance[action.icon];
+            this.action = action.action;
+            tooltip.text = action.tooltip;
         }
 
         private void OnClickedButton()

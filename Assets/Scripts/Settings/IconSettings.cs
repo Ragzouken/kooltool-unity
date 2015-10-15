@@ -16,11 +16,13 @@ public class IconSettings : ScriptableObjectSingleton<IconSettings>,
 {
     public enum Icon
     {
+        Missing,
         RemoveObject,
         EditText,
+        OpenScript,
     }
 
-    [HideInInspector][SerializeField] private List<Icon> iconsKeys;
+    [HideInInspector][SerializeField] private List<string> iconsKeys;
     [HideInInspector][SerializeField] private List<Sprite> iconsValues;
 
     public class IconListing : Dictionary<Icon, Sprite> { }
@@ -31,7 +33,7 @@ public class IconSettings : ScriptableObjectSingleton<IconSettings>,
     {
         get
         {
-            return icons[icon];
+            return icons.ContainsKey(icon) ? icons[icon] : icons[Icon.Missing];
         }
     }
 
@@ -41,7 +43,10 @@ public class IconSettings : ScriptableObjectSingleton<IconSettings>,
 
         for (int i = 0; i < iconsKeys.Count; ++i)
         {
-            icons.Add(iconsKeys[i], iconsValues[i]);
+            string name = iconsKeys[i];
+            var icon = (Icon) System.Enum.Parse(typeof(Icon), name);
+
+            icons.Add(icon, iconsValues[i]);
         }
     }
 
@@ -52,7 +57,7 @@ public class IconSettings : ScriptableObjectSingleton<IconSettings>,
 
         foreach (var pair in icons)
         {
-            iconsKeys.Add(pair.Key);
+            iconsKeys.Add(pair.Key.ToString());
             iconsValues.Add(pair.Value);
         }
     }

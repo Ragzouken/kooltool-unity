@@ -25,8 +25,16 @@ namespace kooltool.Editor
             {
                 yield return new ObjectAction
                 {
+                    icon = IconSettings.Icon.OpenScript,
+                    action = () => Editor.Instance.EditScript(drawing.Character),
+                    tooltip = "toggle script panel",
+                };
+
+                yield return new ObjectAction
+                {
                     icon = IconSettings.Icon.RemoveObject,
                     action = () => Editor.Instance.RemoveCharacter(drawing.Character),
+                    tooltip = "remove character",
                 };
             }
         }
