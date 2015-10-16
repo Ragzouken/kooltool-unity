@@ -5,8 +5,11 @@ using System.Collections.Generic;
 
 namespace kooltool
 {
-    public class WorldCamera : MonoBehaviour
+    public class CameraController : MonoBehaviour
     {
+        private static UnityEngine.Rect unit
+            = new UnityEngine.Rect(0, 0, 1, 1);
+
         [SerializeField] protected Camera Camera;
         [SerializeField] private Transform focusTransform;
         [SerializeField] private Transform scaleTransform;
@@ -25,6 +28,37 @@ namespace kooltool
 
         public float pivotTarget;
         private float pivotVelocity;
+
+        public UnityEngine.Rect pixelRect
+        {
+            get
+            {
+                return Camera.pixelRect;
+            }
+        }
+
+        public bool focussed
+        {
+            get
+            {
+                Vector3 normal = Camera.ScreenToViewportPoint(Input.mousePosition);
+
+                return unit.Contains(normal);
+            }
+        }
+
+        public UnityEngine.Rect viewport
+        {
+            set
+            {
+                Camera.rect = value;
+            }
+
+            get
+            {
+                return Camera.rect;
+            }
+        }
 
         public Vector2 up
         {

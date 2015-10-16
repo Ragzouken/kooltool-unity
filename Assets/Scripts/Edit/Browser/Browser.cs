@@ -29,7 +29,7 @@ namespace kooltool.Editor
 
         [Header("New Project")]
         [SerializeField] private CreateTile createProjectButton;
-        [SerializeField] private WorldCamera wcamera;
+        [SerializeField] private CameraController wcamera;
 
         private SparseGrid<bool> grid = new SparseGrid<bool>(256);
         private Summary summary;

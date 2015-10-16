@@ -10,7 +10,7 @@ namespace kooltool.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] private Main main;
-        [SerializeField] private WorldCamera Camera;
+        [SerializeField] private CameraController Camera;
         [SerializeField] private WorldView world;
 
         [Header("Speech Test")]

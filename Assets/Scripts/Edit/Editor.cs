@@ -22,11 +22,15 @@ namespace kooltool.Editor
         [SerializeField] private WorldView world;
 
         [Header("Camera / Canvas")]
+        [SerializeField] private CameraController worldCamera;
+        [SerializeField] private CameraController etherCamera;
+        [SerializeField] private RectTransform viewportDivider;
+
         [SerializeField] private GraphicRaycaster worldRaycaster; 
 
         [SerializeField] private GameObject browserLayer;
 
-        [SerializeField] private WorldCamera WCamera;
+        [SerializeField] private CameraController WCamera;
         [SerializeField] private Camera Camera_;
         
         [SerializeField] private Main main;
@@ -202,7 +206,9 @@ namespace kooltool.Editor
             TileCursor.mode = tileMode;
             PixelCursor.mode = drawMode;
 
-            ZoomTo(0.75f);
+            ZoomTo(worldCamera, 0.75f);
+
+            SetDivide(1f);
 
             /*
             browser.OnConfirmed += delegate(Data.Summary summary)
@@ -339,11 +345,18 @@ namespace kooltool.Editor
             if (Input.GetKey(KeyCode.Equals)) scroll += 5 * Time.deltaTime;
             if (Input.GetKey(KeyCode.Minus)) scroll -= 5 * Time.deltaTime;
 
-            if (IsPointerOverWorld() && Mathf.Abs(scroll) > Mathf.Epsilon)
+            if (Mathf.Abs(scroll) > Mathf.Epsilon)
             {
                 if (ZoomCoroutine != null) StopCoroutine(ZoomCoroutine);
-                
-                ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 1, 0.125f));
+
+                if (etherCamera.focussed)
+                {
+                    ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 1, 0.125f, etherCamera));
+                }
+                else if (IsPointerOverWorld())
+                {
+                    ZoomCoroutine = StartCoroutine(SmoothZoomTo(Zoom - scroll * 1, 0.125f, worldCamera));
+                }
             }
         }
 
@@ -433,6 +446,30 @@ namespace kooltool.Editor
             CheckHighlights();
         }
 
+        public void UpdateCameras()
+        {
+            float u = (1 + Mathf.Sin(Time.timeSinceLevelLoad)) * 0.5f;
+
+            u = Input.mousePosition.x / Screen.width;
+
+            SetDivide(u);
+        }
+
+        private float divide = .99f;
+
+        private void SetDivide(float u)
+        {
+            u = Mathf.Clamp(u, 0.01f, 0.99f);
+
+            divide = u;
+
+            float l = u;
+            float r = 1 - u;
+
+            worldCamera.viewport = new UnityEngine.Rect(0, 0, l, 1);
+            etherCamera.viewport = new UnityEngine.Rect(l, 0, r, 1);
+        }
+
         private bool block;
 
         public Vector2 currCursorWorld;
@@ -447,6 +484,11 @@ namespace kooltool.Editor
         private void Update()
         {
             if (Project == null) return;
+
+            var ptrans = viewportDivider.parent as RectTransform;
+            viewportDivider.anchoredPosition = Vector2.right * divide * ptrans.rect.width;
+
+            //UpdateCameras();
 
             GameObject current = EventSystem.current.currentSelectedGameObject;
 
@@ -516,14 +558,15 @@ namespace kooltool.Editor
             }
         }
 
-        public IEnumerator SmoothZoomTo(float zoom, float duration)
+        public IEnumerator SmoothZoomTo(float zoom, 
+                                        float duration, 
+                                        CameraController camera)
         {
             float start = Zoom;
             float end = zoom;
             float timer = 0;
 
-            Vector2 focus = new Vector2(Camera.main.pixelWidth  * 0.5f,
-                                        Camera.main.pixelHeight * 0.5f);
+            Vector2 focus = camera.pixelRect.center;
 
             if (start > end)
             {
@@ -536,13 +579,15 @@ namespace kooltool.Editor
 
                 timer += Time.deltaTime;
 
-                ZoomTo(start + timer / duration * (end - start), focus);
+                ZoomTo(camera, start + timer / duration * (end - start), focus);
             }
 
-            ZoomTo(end, focus);
+            ZoomTo(camera, end, focus);
         }
 
-        public void ZoomTo(float zoom, Vector2? focus = null)
+        public void ZoomTo(CameraController camera,
+                           float zoom, 
+                           Vector2? focus = null)
         {
             Zoom = Mathf.Clamp01(zoom);
 
@@ -553,13 +598,13 @@ namespace kooltool.Editor
 
             Vector2 screen = focus ?? center;
 
-            Vector2 worlda = WCamera.ScreenToWorld(screen);
+            Vector2 worlda = camera.ScreenToWorld(screen);
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);
-            WCamera.scale = UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom);
-            Vector2 worldb = WCamera.ScreenToWorld(screen);
+            camera.scale = UISettings.Instance.navigation.zoomCurve.Evaluate(Zoom);
+            Vector2 worldb = camera.ScreenToWorld(screen);
 
-            WCamera.focus -= (worldb - worlda);
-            WCamera.Halt();
+            camera.focus -= (worldb - worlda);
+            camera.Halt();
         }
 
         public void MakeNotebox(string text)
