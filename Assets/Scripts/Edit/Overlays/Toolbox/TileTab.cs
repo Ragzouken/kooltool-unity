@@ -12,18 +12,24 @@ namespace kooltool.Editor
         [SerializeField] private Toolbox toolbox;
 
         [Header("Tools")]
-        [SerializeField] protected Button NewButton;
+        [SerializeField] private Button NewButton;
         [SerializeField] private GameObject trashIcon;
 
         [Header("Tiles")]
-        [SerializeField] protected ToggleGroup TileToggleGroup;
-        [SerializeField] protected RectTransform TileContainer;
-        [SerializeField] protected TileIndicator TilePrefab;
+        [SerializeField] private ToggleGroup TileToggleGroup;
+        [SerializeField] private RectTransform TileContainer;
+        [SerializeField] private TileIndicator TilePrefab;
         [SerializeField] private Image tileBackgroundImage;
+
+        [Header("Regions")]
+        [SerializeField] private ToggleGroup regionToggleGroup;
+        [SerializeField] private RectTransform regionContainer;
+        [SerializeField] private RegionElement regionPrefab;
 
         private Modes.Tile tileMode;
 
-        protected ChildElements<TileIndicator> Tiles;
+        private ChildElements<TileIndicator> Tiles;
+        private MonoBehaviourPooler<Region, RegionElement> regions;
 
         private void Awake()
         {
@@ -31,7 +37,17 @@ namespace kooltool.Editor
 
             Tiles = new ChildElements<TileIndicator>(TileContainer, TilePrefab);
 
+            regions = new MonoBehaviourPooler<Region, RegionElement>(regionPrefab,
+                                                                     regionContainer,
+                                                                     InitialiseRegion);
+
             Refresh();
+        }
+
+        private void InitialiseRegion(Region region, RegionElement element)
+        {
+            element.SetRegion(region, toolbox);
+            element.toggle.group = regionToggleGroup;
         }
 
         public void SetTileTool(Modes.Tile mode)
@@ -41,6 +57,8 @@ namespace kooltool.Editor
 
         public void Refresh()
         {
+            regions.SetActive(toolbox.editor.project_.regions.regions);
+
             Tiles.Clear();
 
             foreach (Tile tile in toolbox.editor.project_.tileset.tiles)
@@ -84,6 +102,15 @@ namespace kooltool.Editor
                 toolbox.CancelDrag();
                 toolbox.editor.project_.RemoveTile(tile);
                 toolbox.editor.RefreshTilemap();
+                Refresh();
+            }
+
+            var region = toolbox.draggedItem as Region;
+
+            if (region != null)
+            {
+                toolbox.CancelDrag();
+                toolbox.editor.project_.regions.Remove(region);
                 Refresh();
             }
         }

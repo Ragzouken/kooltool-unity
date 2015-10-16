@@ -15,7 +15,10 @@ namespace kooltool.Data
         public Texture icon;
 
         public HashSet<Costume> costumes = new HashSet<Costume>();
+
         public Tileset tileset;
+        public Regions regions;
+
         public World world;
     }
 
@@ -127,6 +130,19 @@ namespace kooltool.Data
             project.world.project = project;
             project.world.tileset = project.tileset;
             project.world.AddLayer();
+
+            var icon = project.index.CreateTexture(32, 32);
+            var blank = PixelDraw.Brush.Rectangle(32, 32, new Color(Random.value, Random.value, Random.value, 1));
+            
+            PixelDraw.Brush.Apply(blank, Point.Zero, icon.texture.FullSprite(), Point.Zero, PixelDraw.Blend.Replace);
+            icon.texture.Apply();
+
+            project.regions = new Regions();
+            project.regions.Add(new Region
+            {
+                name = "wall",
+                icon = icon,
+            });
 
             return project;
         }

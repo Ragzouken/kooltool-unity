@@ -24,12 +24,12 @@ namespace kooltool.Editor
         [SerializeField] private AudioSource deleteSound;
 
         [Header("Grid")]
-        [SerializeField] private RectTransform panelContainer;
+        [SerializeField, SceneOnly] private RectTransform panelContainer;
         [SerializeField] private ProjectTile panelPrefab;
 
         [Header("New Project")]
-        [SerializeField] private CreateTile createProjectButton;
-        [SerializeField] private CameraController wcamera;
+        [SerializeField, SceneOnly] private CreateTile createProjectButton;
+        [SerializeField, SceneOnly] private CameraController wcamera;
 
         private SparseGrid<bool> grid = new SparseGrid<bool>(256);
         private Summary summary;

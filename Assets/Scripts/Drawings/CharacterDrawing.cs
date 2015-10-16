@@ -12,7 +12,6 @@ namespace kooltool.Editor
     public class CharacterDrawing : MonoDrawing
     {
         [SerializeField] protected Image image;
-        [SerializeField] protected CanvasGroup dialogueGroup;
 
         public Character Character { get; protected set; }
 
@@ -36,13 +35,10 @@ namespace kooltool.Editor
 
         public void SetEditor()
         {
-            dialogueGroup.interactable = true;
-            dialogueGroup.alpha = 1;
         }
 
         public void SetPlayer()
         {
-            dialogueGroup.interactable = false;
         }
 
         private void UpdatePosition(Vector2 position)

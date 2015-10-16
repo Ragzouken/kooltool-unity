@@ -296,6 +296,9 @@ namespace kooltool.Editor
 
         private void CheckNavigation()
         {
+            CameraController camera = etherCamera.focussed ? etherCamera
+                                                           : worldCamera;
+
             Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
 
             // panning
@@ -312,19 +315,19 @@ namespace kooltool.Editor
                 if (Input.GetKey(KeyCode.LeftShift)
                  || Input.GetKey(KeyCode.RightShift))
                 {
-                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.scaleTarget += WCamera.scaleTarget * dt;
-                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.scaleTarget -= WCamera.scaleTarget * dt;
-                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.rotationTarget += 90 * dt;
-                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.rotationTarget -= 90 * dt;
+                    if (Input.GetKey(KeyCode.UpArrow))    camera.scaleTarget += camera.scaleTarget * dt;
+                    if (Input.GetKey(KeyCode.DownArrow))  camera.scaleTarget -= camera.scaleTarget * dt;
+                    if (Input.GetKey(KeyCode.LeftArrow))  camera.rotationTarget += 90 * dt;
+                    if (Input.GetKey(KeyCode.RightArrow)) camera.rotationTarget -= 90 * dt;
                 }
                 else
                 {
-                    float scale = 1000 / WCamera.scale * dt;
+                    float scale = 1000 / camera.scale * dt;
 
-                    if (Input.GetKey(KeyCode.UpArrow))    WCamera.focusTarget += WCamera.up    * scale;
-                    if (Input.GetKey(KeyCode.DownArrow))  WCamera.focusTarget -= WCamera.up    * scale;
-                    if (Input.GetKey(KeyCode.LeftArrow))  WCamera.focusTarget -= WCamera.right * scale;
-                    if (Input.GetKey(KeyCode.RightArrow)) WCamera.focusTarget += WCamera.right * scale;
+                    if (Input.GetKey(KeyCode.UpArrow))    camera.focusTarget += camera.up    * scale;
+                    if (Input.GetKey(KeyCode.DownArrow))  camera.focusTarget -= camera.up    * scale;
+                    if (Input.GetKey(KeyCode.LeftArrow))  camera.focusTarget -= camera.right * scale;
+                    if (Input.GetKey(KeyCode.RightArrow)) camera.focusTarget += camera.right * scale;
                 }
             }
 
@@ -343,7 +346,7 @@ namespace kooltool.Editor
             float scroll = Input.GetAxis("Mouse ScrollWheel");
 
             if (Input.GetKey(KeyCode.Equals)) scroll += 5 * Time.deltaTime;
-            if (Input.GetKey(KeyCode.Minus)) scroll -= 5 * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Minus))  scroll -= 5 * Time.deltaTime;
 
             if (Mathf.Abs(scroll) > Mathf.Epsilon)
             {
@@ -591,12 +594,7 @@ namespace kooltool.Editor
         {
             Zoom = Mathf.Clamp01(zoom);
 
-            //Debug.Log(focus);
-
-            Vector2 center = new Vector2(Camera.main.pixelWidth  * 0.5f,
-                                         Camera.main.pixelHeight * 0.5f);
-
-            Vector2 screen = focus ?? center;
+            Vector2 screen = focus ?? camera.pixelRect.center;
 
             Vector2 worlda = camera.ScreenToWorld(screen);
             //Zoomer.localScale = (Vector3) (ZoomCurve.Evaluate(Zoom) * Vector2.one);

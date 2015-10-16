@@ -23,7 +23,7 @@ namespace kooltool.Editor
 
         public Modes.Tile mode;
 
-        public Editor editor;
+        [SceneOnly] public Editor editor;
 
         public void Refresh()
         {
