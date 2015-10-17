@@ -520,12 +520,13 @@ namespace kooltool.Editor
 
             UpdateHovered();
 
-            toolIcon.sprite = null;
-
             currentMode.Update();
 
+            var icon = currentMode.CursorIcon;
+
             toolIcon.transform.position = Input.mousePosition;
-            toolIcon.gameObject.SetActive(toolIcon.sprite != null);
+            toolIcon.sprite = IconSettings.Instance.icons[icon];
+            toolIcon.gameObject.SetActive(icon != IconSettings.Icon.None);
 
             if (Input.GetMouseButtonDown(0) && IsPointerOverWorld()) currentMode.CursorInteractStart();
             if (Input.GetMouseButtonUp(0)) currentMode.CursorInteractFinish();

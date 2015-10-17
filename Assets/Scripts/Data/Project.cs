@@ -126,6 +126,7 @@ namespace kooltool.Data
             };
 
             project.tileset.TestTile();
+            project.tileset.TestTile();
 
             project.world.project = project;
             project.world.tileset = project.tileset;
@@ -137,12 +138,16 @@ namespace kooltool.Data
             PixelDraw.Brush.Apply(blank, Point.Zero, icon.texture.FullSprite(), Point.Zero, PixelDraw.Blend.Replace);
             icon.texture.Apply();
 
-            project.regions = new Regions();
-            project.regions.Add(new Region
+            var wall = new Region
             {
                 name = "wall",
                 icon = icon,
-            });
+            };
+
+            project.regions = new Regions();
+            project.regions.Add(wall);
+
+            project.regions.AddDefault(project.tileset.tiles[1], wall);
 
             return project;
         }

@@ -16,10 +16,16 @@ public class IconSettings : ScriptableObjectSingleton<IconSettings>,
 {
     public enum Icon
     {
+        None,
         Missing,
         RemoveObject,
         EditText,
         OpenScript,
+
+        PencilCursor,
+        LineCursor,
+        FillCursor,
+        PickCursor,
     }
 
     [HideInInspector][SerializeField] private List<string> iconsKeys;

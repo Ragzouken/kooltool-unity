@@ -12,6 +12,15 @@ namespace kooltool.Editor.Modes
         public readonly List<RectTransform> highlights
             = new List<RectTransform>();
 
+        public virtual IconSettings.Icon CursorIcon
+        {
+            get
+            {
+                return IconSettings.Icon.None;
+            }
+        }
+
+
         public Mode(Editor editor)
         {
             this.editor = editor;

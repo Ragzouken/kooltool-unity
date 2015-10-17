@@ -34,7 +34,29 @@ namespace kooltool.Editor.Modes
 
         public Sprite brush;
 
-        public bool erase
+        public override IconSettings.Icon CursorIcon
+        {
+            get
+            {
+                if (tool == Tool.Pick || Pick) return IconSettings.Icon.PickCursor;
+                if (tool == Tool.Pencil) return IconSettings.Icon.PencilCursor;
+                if (tool == Tool.Fill)   return IconSettings.Icon.FillCursor;
+                if (tool == Tool.Line)   return IconSettings.Icon.LineCursor;
+
+                return base.CursorIcon;
+            }
+        }
+
+        public bool Pick
+        {
+            get
+            {
+                return Input.GetKey(KeyCode.LeftAlt) 
+                    || Input.GetKey(KeyCode.RightAlt);
+            }
+        }
+
+        public bool Erase
         {
             get
             {
@@ -62,7 +84,7 @@ namespace kooltool.Editor.Modes
         {
             highlights.Clear();
 
-            brush = Brush.Circle(thickness, erase ? Editor.GetFlashColour() : paintColour);
+            brush = Brush.Circle(thickness, Erase ? Editor.GetFlashColour() : paintColour);
             brush.texture.Apply();
 
             hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
@@ -77,11 +99,11 @@ namespace kooltool.Editor.Modes
             rtrans.anchoredPosition = (editor.currCursorWorld - offset).Round();
 
             cursor.correct = tool == Tool.Line;
-            cursor.colour = erase ? Editor.GetFlashColour()
+            cursor.colour = Erase ? Editor.GetFlashColour()
                                   : paintColour; 
             
-            Color color = erase ? Color.white : paintColour;
-            var blend = erase ? Blend.Subtract
+            Color color = Erase ? Color.white : paintColour;
+            var blend = Erase ? Blend.Subtract
                               : Blend.Alpha;
 
             if (tool == Tool.Pencil && drawing != null)
@@ -108,7 +130,7 @@ namespace kooltool.Editor.Modes
         {
             base.CursorInteractStart();
 
-            if (tool == Tool.Pick || Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+            if (tool == Tool.Pick || Pick)
             {
                 if (!hovering.Drawing.Sample(editor.currCursorWorld, out paintColour))
                 {
@@ -134,8 +156,8 @@ namespace kooltool.Editor.Modes
         {
             base.CursorInteractFinish();
 
-            Color color = erase ? Color.white : paintColour;
-            var blend = erase ? Blend.Subtract
+            Color color = Erase ? Color.white : paintColour;
+            var blend = Erase ? Blend.Subtract
                               : Blend.Alpha;
 
             if (tool == Tool.Line && drawing != null)
