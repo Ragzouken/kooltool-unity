@@ -38,7 +38,7 @@ namespace kooltool.Editor.Modes
         {
             get
             {
-                if (tool == Tool.Pick || Pick) return IconSettings.Icon.PickCursor;
+                if (Pick)                return IconSettings.Icon.PickCursor;
                 if (tool == Tool.Pencil) return IconSettings.Icon.PencilCursor;
                 if (tool == Tool.Fill)   return IconSettings.Icon.FillCursor;
                 if (tool == Tool.Line)   return IconSettings.Icon.LineCursor;
@@ -51,7 +51,8 @@ namespace kooltool.Editor.Modes
         {
             get
             {
-                return Input.GetKey(KeyCode.LeftAlt) 
+                return tool == Tool.Pick
+                    || Input.GetKey(KeyCode.LeftAlt) 
                     || Input.GetKey(KeyCode.RightAlt);
             }
         }
@@ -94,9 +95,8 @@ namespace kooltool.Editor.Modes
             if (@object != null) highlights.Add(@object.OverlayParent);
 
             var rtrans = cursor.transform as RectTransform;
-            var offset = Vector2.one * ((thickness % 2 == 1) ? 0.5f : 0);
 
-            rtrans.anchoredPosition = (editor.currCursorWorld - offset).Round();
+            rtrans.anchoredPosition = (editor.currCursorWorld - Vector2.one).Round();
 
             cursor.correct = tool == Tool.Line;
             cursor.colour = Erase ? Editor.GetFlashColour()
@@ -130,7 +130,7 @@ namespace kooltool.Editor.Modes
         {
             base.CursorInteractStart();
 
-            if (tool == Tool.Pick || Pick)
+            if (Pick)
             {
                 if (!hovering.Drawing.Sample(editor.currCursorWorld, out paintColour))
                 {

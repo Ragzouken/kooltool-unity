@@ -40,9 +40,9 @@ namespace kooltool.Editor
                 }
                 else
                 {
-                    Vector2 pos = (Vector2) rtrans.position - preview.pivot + Vector2.one * 0.5f;
+                    Vector2 pos = (Vector2) rtrans.position - preview.pivot + Vector2.one * 1.5f;
 
-                    if (preview.rect.width == 1) pos = rtrans.position;
+                    //if (preview.rect.width == 1) pos = rtrans.position;
 
                     ltrans.position = pos.Round();
                 }
