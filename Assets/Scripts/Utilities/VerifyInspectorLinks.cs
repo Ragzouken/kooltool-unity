@@ -81,11 +81,11 @@ public class VerifyInspectorLinks
 
                         if (!asset)
                         {
-                            Debug.LogErrorFormat(obj, "{0} unlinked on {1} called '{2}'!", field.Name, type.Name, obj.name);
+                            Debug.LogErrorFormat(obj, "'{0}' unlinked on {1} called '{2}'!", field.Name, type.Name, obj.name);
                         }
                         else
                         {
-                            Debug.LogErrorFormat("{0} unlinked on {1} at '{2}'", field.Name, type.Name, AssetDatabase.GetAssetPath(obj));
+                            Debug.LogErrorFormat("'{0}' unlinked on {1} at '{2}'", field.Name, type.Name, AssetDatabase.GetAssetPath(obj));
                         }
                     }
                 }

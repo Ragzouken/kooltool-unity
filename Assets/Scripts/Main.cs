@@ -14,6 +14,12 @@ namespace kooltool
         [SerializeField] private Editor.Editor editor;
         [SerializeField] private Player.Player player;
 
+        [Header("World")]
+        [SerializeField] private Transform worldContainer;
+        [SerializeField] private WorldView worldPrefab;
+
+        private WorldView world; 
+
         private void Start()
         {
             player.gameObject.SetActive(false);
@@ -55,10 +61,23 @@ namespace kooltool
 
         public void SetEditor(Project project)
         {
+            editor.SetProject(project);
             editor.gameObject.SetActive(true);
             player.gameObject.SetActive(false);
+        }
 
-            //editor.Setup(project);
+        public WorldView CreateWorld(World world_)
+        {
+            if (world != null)
+            {
+                Destroy(world.gameObject);
+            }
+
+            world = Instantiate(worldPrefab);
+            world.transform.SetParent(worldContainer, false);
+            world.SetWorld(world_);
+
+            return world;
         }
     }
 }

@@ -27,12 +27,12 @@ public static class JsonWrapper
         return returnObject;
     }
 
-    public static string Serialise(System.Object obj)
+    public static string Serialise<T>(T obj)
     {
         return JsonConvert.SerializeObject(obj, Formatting.Indented, Settings());
     }
 
-    public static T Copy<T>(System.Object obj)
+    public static T Copy<T>(T obj)
     {
         return Deserialise<T>(Serialise(obj));
     }

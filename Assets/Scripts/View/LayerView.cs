@@ -109,7 +109,7 @@ namespace kooltool.Editor
             view.GetComponent<RectTransform>().anchoredPosition = notebox.position;
         }
 
-        public void SetLayer(Data.Layer layer)
+        public void SetLayer(Layer layer)
         {
             this.layer = layer;
 

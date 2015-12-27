@@ -11,7 +11,8 @@ namespace kooltool.Player
     {
         [SerializeField] private Main main;
         [SerializeField] private CameraController Camera;
-        [SerializeField] private WorldView world;
+
+        private WorldView world;
 
         [Header("Speech Test")]
         [SerializeField] protected RectTransform speechContainer;
@@ -27,8 +28,14 @@ namespace kooltool.Player
         private HashSet<Character> speaking
             = new HashSet<Character>();
 
+        private Data.Project original;
+
         public void Setup(Data.Project project)
         {
+            original = JsonWrapper.Copy(project);
+
+            main.CreateWorld(project.world);
+
             Project = project;
 
             if (project.world.layers[0].characters.Count > 0) Player_ = project.world.layers[0].characters.First();
@@ -59,7 +66,12 @@ namespace kooltool.Player
 
         protected void CheckInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape)) main.SetEditor(Project);
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                main.SetEditor(original);
+
+                return;
+            }
 
             if (Player_ != null)
             {

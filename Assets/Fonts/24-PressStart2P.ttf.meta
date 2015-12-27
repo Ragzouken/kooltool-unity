@@ -5,12 +5,15 @@ licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 2
   fontSize: 24
-  forceTextureCase: -1
+  forceTextureCase: -2
   characterSpacing: 1
   characterPadding: 0
   includeFontData: 1
   use2xBehaviour: 0
   fontNames: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 6e1044b368674f84f9c773eb87122fc3, type: 3}
+  - {fileID: 12800000, guid: dbc2824fc468d8546bec117279ee6d05, type: 3}
   customCharacters: 
   fontRenderingMode: 2
   userData: 

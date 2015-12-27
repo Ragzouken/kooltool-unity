@@ -50,5 +50,13 @@ namespace kooltool.Editor
         {
             Character.dialogue = text;
         }
+
+        private void OnDestroy()
+        {
+            if (Character != null)
+            {
+                Character.PositionUpdated -= UpdatePosition;
+            }
+        }
     }
 }

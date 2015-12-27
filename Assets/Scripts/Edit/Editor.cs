@@ -19,23 +19,19 @@ namespace kooltool.Editor
         public Image Debug_;
         public RectTransform Debug2;
 
-        [SerializeField] private WorldView world;
-
         [Header("Camera / Canvas")]
         [SerializeField] private CameraController worldCamera;
         [SerializeField] private CameraController etherCamera;
         [SerializeField] private RectTransform viewportDivider;
-
         [SerializeField] private GraphicRaycaster worldRaycaster; 
 
         [SerializeField] private GameObject browserLayer;
-
-        [SerializeField] private CameraController WCamera;
-        [SerializeField] private Camera Camera_;
         
         [SerializeField] private Main main;
 
         public HighlightGroup Highlights;
+
+        private WorldView world;
 
         [Header("UI")]
         [SerializeField] public Tooltip tooltip;
@@ -120,6 +116,7 @@ namespace kooltool.Editor
         }
 
         public readonly List<Editable> hovered = new List<Editable>();
+        public readonly Dictionary<Editable, Vector2> positions = new Dictionary<Editable, Vector2>();
 
         public bool ShowCursors
         {
@@ -161,9 +158,7 @@ namespace kooltool.Editor
         public void SetProject(Project project)
         {
             project_ = project;
-
-            world.SetWorld(project.world);
-
+            world = main.CreateWorld(project.world);
             Layer = world.layers.Get(project.world.layers[0]);
         }
 
@@ -299,14 +294,14 @@ namespace kooltool.Editor
             CameraController camera = etherCamera.focussed ? etherCamera
                                                            : worldCamera;
 
-            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
+            Vector2 cursor = worldCamera.ScreenToWorld(Input.mousePosition);
 
             // panning
             if (Panning)
             {
                 // camera focus should situate pansite underneath cursor
-                WCamera.focus -= (cursor - pansite);
-                WCamera.Halt();
+                worldCamera.focus -= (cursor - pansite);
+                worldCamera.Halt();
             }
             else
             {
@@ -420,7 +415,8 @@ namespace kooltool.Editor
         private void UpdateHovered()
         {
             hovered.Clear();
-            
+            positions.Clear();
+
             var pointer = new PointerEventData(EventSystem.current);
             pointer.position = Input.mousePosition;
 
@@ -435,7 +431,7 @@ namespace kooltool.Editor
 
         private void UpdateCursors()
         {
-            Vector2 cursor = WCamera.ScreenToWorld(Input.mousePosition);
+            Vector2 cursor = worldCamera.ScreenToWorld(Input.mousePosition);
 
             Point grid, dummy;
 
@@ -514,7 +510,7 @@ namespace kooltool.Editor
             }
 
             prevCursorWorld = currCursorWorld;
-            currCursorWorld = WCamera.ScreenToWorld(Input.mousePosition);
+            currCursorWorld = worldCamera.ScreenToWorld(Input.mousePosition);
 
             CheckKeyboardShortcuts();
 
@@ -554,7 +550,7 @@ namespace kooltool.Editor
             tilt = Mathf.SmoothDamp(tilt, split ? 1 : 0, ref tiltVelocity, .1f);
             sep = Mathf.SmoothDamp(sep, (split & tilt >= 0.5f) ? 50 : 0, ref sepVelocity, .3f);
 
-            WCamera.pivotTarget = tilt * 45;
+            worldCamera.pivotTarget = tilt * 45;
 
             foreach (var layer in world.layers.Instances)
             {
@@ -618,7 +614,7 @@ namespace kooltool.Editor
 
             NoteboxView view = Layer.noteboxes.Get(notebox);
 
-            (view.transform as RectTransform).anchoredPosition = WCamera.ScreenToWorld(Input.mousePosition);
+            (view.transform as RectTransform).anchoredPosition = worldCamera.ScreenToWorld(Input.mousePosition);
 
             StartCoroutine(Delay(delegate
             {
@@ -665,7 +661,7 @@ namespace kooltool.Editor
 
             CharacterDrawing drawing = Layer.Characters.Get(character);
 
-            (drawing.transform as RectTransform).anchoredPosition = WCamera.ScreenToWorld(Input.mousePosition);
+            (drawing.transform as RectTransform).anchoredPosition = worldCamera.ScreenToWorld(Input.mousePosition);
 
             StartCoroutine(Delay(delegate
             {
