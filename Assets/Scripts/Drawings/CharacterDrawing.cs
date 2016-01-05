@@ -12,8 +12,12 @@ namespace kooltool.Editor
     public class CharacterDrawing : MonoDrawing
     {
         [SerializeField] protected Image image;
+        [SerializeField] private PixelBorder.BorderRenderer border;
 
         public Character Character { get; protected set; }
+
+        public int frame = 0;
+        public Data.Flipbook flipbook;
 
         public void SetCharacter(Character character)
         {
@@ -26,11 +30,36 @@ namespace kooltool.Editor
             Character.PositionUpdated += UpdatePosition;
 
             character.costume.TestInit();
-            Drawing = new SpriteDrawing(character.costume.sprite);
-            //dialogueInput.text = character.dialogue;
 
-            image.sprite = character.costume.sprite;
+            SetFlipbook(character.costume.GetFlipbook("idle"));
+
+            //dialogueInput.text = character.dialogue;
+        }
+
+        public void SetFlipbook(Data.Flipbook flipbook)
+        {
+            this.flipbook = flipbook;
+
+            Drawing = new SpriteDrawing(flipbook.frames[0]);
+
+            sprite = flipbook.frames[0];
             image.SetNativeSize();
+        }
+
+        public void SetFrame(int frame)
+        {
+            this.frame = frame % flipbook.frames.Count;
+            sprite = flipbook.frames[frame];
+        }
+
+        private Sprite sprite
+        {
+            set
+            {
+                image.sprite = value;
+                Drawing = new SpriteDrawing(value);
+                border.sourceSprite = value;
+            }
         }
 
         public void SetEditor()
@@ -39,6 +68,14 @@ namespace kooltool.Editor
 
         public void SetPlayer()
         {
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                SetFrame((frame + 1) % flipbook.frames.Count);
+            }
         }
 
         private void UpdatePosition(Vector2 position)

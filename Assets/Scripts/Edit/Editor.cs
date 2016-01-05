@@ -106,11 +106,11 @@ namespace kooltool.Editor
 
         #endregion
 
-        public static Color GetFlashColour(float alpha=1f)
+        public static Color GetFlashColour(float alpha=1f, float mult=2f, float light=0.75f)
         {
-            float hue = (Time.timeSinceLevelLoad / 0.5f) % 1f;
-            
-            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, 75 });
+            float hue = (Time.timeSinceLevelLoad * mult) % 1f;
+
+            IList<double> RGB = HUSL.HUSLPToRGB(new double[] { hue * 360, 100, light * 100 });
             
             return new Color((float) RGB[0], (float) RGB[1], (float) RGB[2], alpha);
         }
@@ -415,7 +415,8 @@ namespace kooltool.Editor
         private void UpdateHovered()
         {
             hovered.Clear();
-            positions.Clear();
+
+            if (!IsPointerOverWorld()) return;
 
             var pointer = new PointerEventData(EventSystem.current);
             pointer.position = Input.mousePosition;

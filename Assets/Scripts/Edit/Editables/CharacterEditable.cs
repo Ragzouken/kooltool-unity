@@ -8,7 +8,7 @@ namespace kooltool.Editor
 {
     public class CharacterEditable : Editable, IObject, IDrawable
     {
-        [SerializeField] private CharacterDrawing drawing;
+        [SerializeField] public CharacterDrawing drawing;
         [SerializeField] private RectTransform highlightParent;
 
         RectTransform IObject.OverlayParent

@@ -10,6 +10,33 @@ using Newtonsoft.Json;
 
 namespace kooltool.Data
 {
+    public class Frame
+    {
+        public Data.Texture texture;
+        public Data.Rect rect;
+        public int pivotX, pivotY;
+
+        public static implicit operator Sprite(Frame frame)
+        {
+            Sprite sprite = Sprite.Create(frame.texture,
+                                          frame.rect,
+                                          new Vector2(frame.pivotX / (float) frame.texture.texture.width, 
+                                                      frame.pivotY / (float) frame.texture.texture.height),
+                                          1,
+                                          0U,
+                                          SpriteMeshType.FullRect);
+
+            return sprite;
+        }
+    }
+
+    public class Flipbook
+    {
+        public string name;
+        public string tag;
+        public List<Frame> frames;
+    }
+
     public class Texture : IResource
     {
         [JsonIgnore]

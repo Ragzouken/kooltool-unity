@@ -22,7 +22,7 @@ namespace kooltool.Editor.Modes
         private ITileable hovering;
         private ITileable dragging;
 
-        public kooltool.Tile paintTile;
+        public kooltool.Data.Tile paintTile;
         public Tool tool;
 
         private TileCursor cursor;

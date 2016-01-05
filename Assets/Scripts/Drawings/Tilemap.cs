@@ -90,7 +90,7 @@ public class Tilemap : MonoDrawing
         }
     }
 
-    public void Set(Point cell, kooltool.Tile tile)
+    public void Set(Point cell, Tile tile)
     {
         if (tile == null)
         {
@@ -118,10 +118,10 @@ public class Tilemap : MonoDrawing
         if (layer.tiles.ContainsKey(cell)) layer.tiles.Remove(cell);
     }
 
-    public void Fill(Point first, kooltool.Tile tile, int limit=128)
+    public void Fill(Point first, Tile tile, int limit=128)
     {
         TileInstance existing;
-        kooltool.Tile original;
+        Tile original;
 
         original = Get(first, out existing) ? existing.tile
                                            : null;

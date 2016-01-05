@@ -92,7 +92,12 @@ namespace kooltool.Editor.Modes
 
             var @object = (drawing ?? hovering) as IObject;
 
-            if (@object != null) highlights.Add(@object.OverlayParent);
+            if (@object != null)
+            {
+                highlights.Add(@object.OverlayParent);
+
+                editor.objectOverlay.SetSubject(@object as CharacterEditable);
+            }
 
             var rtrans = cursor.transform as RectTransform;
 

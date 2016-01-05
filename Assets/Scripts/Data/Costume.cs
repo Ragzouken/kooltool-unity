@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,28 +9,36 @@ using Newtonsoft.Json;
 
 namespace kooltool.Data
 {
-    public class Costume : IResource
+    public class Costume
     {
         public string name;
-        public Data.Texture texture;
 
-        [JsonIgnore]
-        public Sprite sprite;
+        [JsonArray]
+        public class States : Dictionary<string, Flipbook> { }
 
-        void IResource.Load(Index index) { }
-        void IResource.Save(Index index) { }
+        public States flipbooks = new States();
+        
+        public Flipbook GetFlipbook(string id, string tag="")
+        {
+            string full = id + "." + tag;
+
+            var real = flipbooks.Where(p => p.Key == full).Select(p => p.Value);
+            var fall = flipbooks.Where(p => p.Key == id).Select(p => p.Value);
+
+            return real.Count() > 0 ? real.First() : fall.FirstOrDefault();
+        }
+
+        public void SetFlipbook(string id, 
+                                string tag, 
+                                Flipbook flipbook)
+        {
+            string full = tag.Length > 0 ? id + "." + tag : id;
+
+            flipbooks[full] = flipbook;
+        }
 
         public void TestInit()
         {
-            if (sprite == null) 
-            {
-                sprite = Sprite.Create(texture.texture, 
-                                       new UnityEngine.Rect(0, 0, 
-                                                            texture.texture.width,
-                                                            texture.texture.height), 
-                                       Vector2.one * 0.5f, 1);
-                sprite.name = name + " (Costume)";
-            }
         }
     }
 }

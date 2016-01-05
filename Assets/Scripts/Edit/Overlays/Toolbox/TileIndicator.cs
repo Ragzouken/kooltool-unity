@@ -14,11 +14,11 @@ namespace kooltool.Editor
         [SerializeField] protected Image Image;
         public Toggle Toggle;
 
-        public Tile Tile { get; protected set; }
+        public kooltool.Data.Tile Tile { get; protected set; }
 
         private Toolbox toolbox;
 
-        public void SetTile(Tile tile, Toolbox toolbox)
+        public void SetTile(kooltool.Data.Tile tile, Toolbox toolbox)
         {
             this.toolbox = toolbox;
 

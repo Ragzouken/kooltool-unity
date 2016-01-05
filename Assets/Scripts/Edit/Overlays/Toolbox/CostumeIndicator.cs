@@ -35,7 +35,7 @@ namespace kooltool.Editor
             this.action = action;
 
             costume.TestInit();
-            Image.sprite = Costume.sprite;
+            Image.sprite = Costume.GetFlipbook("idle").frames[0];
             Image.SetNativeSize();
         }
 
@@ -46,7 +46,7 @@ namespace kooltool.Editor
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            toolbox.BeginDrag(Costume, Costume.sprite);
+            toolbox.BeginDrag(Costume, Costume.GetFlipbook("idle").frames[0]);
         }
 
         public void OnEndDrag(PointerEventData eventData)

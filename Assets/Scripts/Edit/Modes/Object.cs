@@ -25,7 +25,7 @@ namespace kooltool.Editor.Modes
             hovering = editor.hovered.OfType<IObject>().FirstOrDefault();
 
             if (hovering != null) highlights.Add(hovering.OverlayParent);
-            if (hovering != null) editor.objectOverlay.SetSubject(hovering);
+            if (hovering != null) editor.objectOverlay.SetSubject(hovering as CharacterEditable);
 
             if (dragging != null)
             {

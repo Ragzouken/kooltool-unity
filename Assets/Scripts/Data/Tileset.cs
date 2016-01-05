@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using kooltool.Data;
 
-namespace kooltool
+namespace kooltool.Data
 {
     [JsonObject(IsReference=false)]
     public struct Rect

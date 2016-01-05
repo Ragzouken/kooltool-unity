@@ -14,11 +14,11 @@ public class CycleHue : MonoBehaviour
     [Range(0, 1)]
     public float alpha = 1;
 
-    protected Image Image;
+    protected Graphic Image;
 
     protected void Awake()
     {
-        Image = GetComponent<Image>();
+        Image = GetComponent<Graphic>();
     }
 
     protected void Update()
