@@ -46,6 +46,10 @@ namespace kooltool.Editor
 
                     ltrans.position = pos.Round();
                 }
+
+                var local = ltrans.localPosition;
+                local.z = 0;
+                ltrans.localPosition = local;
             }
 
             rtrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mode.thickness);

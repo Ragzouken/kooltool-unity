@@ -37,6 +37,9 @@ namespace kooltool.Editor.Modes
 
         private HashSet<Editable> obstructions = new HashSet<Editable>();
 
+        private Vector2 currCursor;
+        private Vector2 prevCursor;
+
         public override IconSettings.Icon CursorIcon
         {
             get
@@ -110,14 +113,7 @@ namespace kooltool.Editor.Modes
 
             hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
 
-            if (drawing != null)
-            {
-                cursor.transform.SetParent((drawing as Editable).CursorParent, true);
-            }
-            else if (hovering != null)
-            {
-                cursor.transform.SetParent((hovering as Editable).CursorParent, true);
-            }
+            var rtrans = cursor.transform as RectTransform;
 
             var @object = (drawing ?? hovering) as IObject;
 
@@ -128,9 +124,20 @@ namespace kooltool.Editor.Modes
                 editor.objectOverlay.SetSubject(@object as CharacterEditable);
             }
 
-            var rtrans = cursor.transform as RectTransform;
+            currCursor = editor.currCursorWorld;
 
-            rtrans.position = (editor.currCursorWorld - Vector2.one).Round();
+            var editable = (drawing ?? hovering) as Editable;
+
+            if (editable != null)
+            {
+                currCursor = editor.WorldCursor(editable.transform as RectTransform);
+
+                cursor.transform.SetParent(editable.CursorParent, true);
+                rtrans.position = (currCursor - Vector2.one).Round();
+                var local = rtrans.localPosition;
+                local.z = 0;
+                rtrans.localPosition = local;
+            }
 
             cursor.correct = tool == Tool.Line;
             cursor.colour = Erase ? Editor.GetFlashColour()
@@ -142,15 +149,15 @@ namespace kooltool.Editor.Modes
 
             if (tool == Tool.Pencil && drawing != null)
             {
-                drawing.Drawing.DrawLine(editor.currCursorWorld.Round(), 
-                                         editor.prevCursorWorld.Round(), 
+                drawing.Drawing.DrawLine(currCursor.Round(), 
+                                         prevCursor.Round(), 
                                          thickness, color, blend);
                 drawing.Drawing.Apply();
             }
             else if (tool == Tool.Line && drawing != null)
             {
                 brush = Brush.Line(start.Round(),
-                                   editor.currCursorWorld.Round(),
+                                   currCursor.Round(),
                                    color,
                                    thickness);
                 brush.texture.Apply();
@@ -158,6 +165,8 @@ namespace kooltool.Editor.Modes
 
             cursor.preview = brush;
             cursor.Refresh();
+
+            prevCursor = currCursor;
         }
 
         public override void CursorInteractStart()
@@ -166,7 +175,7 @@ namespace kooltool.Editor.Modes
 
             if (Pick)
             {
-                if (!hovering.Drawing.Sample(editor.currCursorWorld, out paintColour))
+                if (!hovering.Drawing.Sample(currCursor, out paintColour))
                 {
                     paintColour = Color.clear;
                 }
@@ -175,13 +184,13 @@ namespace kooltool.Editor.Modes
             {
                 if (hovering != null)
                 {
-                    start = editor.currCursorWorld;
+                    start = currCursor;
                     drawing = hovering;
                 }
             }
             else if (tool == Tool.Fill)
             {
-                hovering.Drawing.Fill(editor.currCursorWorld, paintColour);
+                hovering.Drawing.Fill(currCursor, paintColour);
                 hovering.Drawing.Apply();
             }
         }  
@@ -197,7 +206,7 @@ namespace kooltool.Editor.Modes
             if (tool == Tool.Line && drawing != null)
             {
                 drawing.Drawing.DrawLine(start.Round(), 
-                                         editor.currCursorWorld.Round(), 
+                                         currCursor.Round(), 
                                          thickness, color, blend);
                 drawing.Drawing.Apply();
             }

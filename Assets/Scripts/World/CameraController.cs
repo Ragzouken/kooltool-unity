@@ -224,5 +224,17 @@ namespace kooltool
 
             return world;
         }
+
+        public Vector3 ScreenToRect(Vector2 screen, RectTransform rtrans)
+        {
+            Vector3 rect;
+
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(rtrans, 
+                                                                    screen, 
+                                                                    Camera, 
+                                                                    out rect);
+
+            return rect;
+        }
     }
 }

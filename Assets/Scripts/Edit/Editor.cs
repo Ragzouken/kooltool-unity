@@ -481,6 +481,11 @@ namespace kooltool.Editor
         private float sep;
         private float sepVelocity;
 
+        public Vector3 WorldCursor(RectTransform rtrans)
+        {
+            return worldCamera.ScreenToRect(Input.mousePosition, rtrans);
+        }
+
         private void Update()
         {
             if (Project == null) return;
