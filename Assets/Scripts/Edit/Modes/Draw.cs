@@ -23,6 +23,7 @@ namespace kooltool.Editor.Modes
         }
 
         private readonly PixelCursor cursor;
+        private readonly Transform originalCursor;
 
         private IDrawable hovering;
         public IDrawable drawing;
@@ -33,6 +34,8 @@ namespace kooltool.Editor.Modes
         public int thickness = 1;
 
         public Sprite brush;
+
+        private HashSet<Editable> obstructions = new HashSet<Editable>();
 
         public override IconSettings.Icon CursorIcon
         {
@@ -83,12 +86,38 @@ namespace kooltool.Editor.Modes
 
         public override void Update()
         {
+            foreach (Editable obstruction in obstructions)
+            {
+                obstruction.targetAlpha = 1f;
+            }
+
+            obstructions.Clear();
+
+            if (drawing != null)
+            { 
+                obstructions.UnionWith(editor.hovered.TakeWhile(e => e != drawing));
+            }
+
+            foreach (Editable obstruction in obstructions)
+            {
+                obstruction.targetAlpha = 0.125f;
+            }
+
             highlights.Clear();
 
             brush = Brush.Circle(thickness, Erase ? Editor.GetFlashColour() : paintColour);
             brush.texture.Apply();
 
             hovering = editor.hovered.OfType<IDrawable>().FirstOrDefault();
+
+            if (drawing != null)
+            {
+                cursor.transform.SetParent((drawing as Editable).CursorParent, true);
+            }
+            else if (hovering != null)
+            {
+                cursor.transform.SetParent((hovering as Editable).CursorParent, true);
+            }
 
             var @object = (drawing ?? hovering) as IObject;
 
@@ -101,7 +130,7 @@ namespace kooltool.Editor.Modes
 
             var rtrans = cursor.transform as RectTransform;
 
-            rtrans.anchoredPosition = (editor.currCursorWorld - Vector2.one).Round();
+            rtrans.position = (editor.currCursorWorld - Vector2.one).Round();
 
             cursor.correct = tool == Tool.Line;
             cursor.colour = Erase ? Editor.GetFlashColour()
