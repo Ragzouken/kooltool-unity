@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+using System.Linq;
+
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Image))]
 public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
 {
     [SerializeField] private Image _image;
+    [SerializeField]
+    [Range(0, 3)]
+    private int border;
+
     private Sprite _sprite;
 
     public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)
@@ -76,10 +82,31 @@ public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
                 break;
         }
 
+        int xMin = Mathf.Clamp(x - this.border, 0, _sprite.texture.width  - 1);
+        int yMin = Mathf.Clamp(y - this.border, 0, _sprite.texture.height - 1);
+        int xMax = Mathf.Clamp(x + this.border, 0, _sprite.texture.width  - 1);
+        int yMax = Mathf.Clamp(y + this.border, 0, _sprite.texture.height - 1);
+
+        int width = xMax - xMin + 1;
+        int height = yMax - yMin + 1;
+
         // destroy component if texture import settings are wrong
         try
         {
-            return _sprite.texture.GetPixel(x, y).a > 0;
+            Color[] pixels;
+
+            try
+            {
+                pixels = _sprite.texture.GetPixels(xMin, yMin, width, height);
+            }
+            catch (System.OverflowException)
+            {
+                Debug.LogErrorFormat("{0}, {1}, {2}, {3}", xMin, yMin, xMax, yMax);
+
+                return false;
+            }
+
+            return pixels.Any(c => c.a > 0);
         }
         catch (UnityException e)
         {

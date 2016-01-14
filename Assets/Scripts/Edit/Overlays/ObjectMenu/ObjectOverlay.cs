@@ -14,11 +14,21 @@ namespace kooltool.Editor
         [SerializeField] private RectTransform actionContainer;
         [SerializeField] private ObjectActionButton actionPrefab;
 
+        [SerializeField] private Button removeButton;
+        [SerializeField] private InputField characterNameInput;
+
         [Header("Costume")]
         [SerializeField] private Text flipbookNameText;
         [SerializeField] private Slider frameSlider;
         [SerializeField] private Button rotateCWButton;
         [SerializeField] private Button rotateACWButton;
+        [SerializeField] private Toggle animateToggle;
+        [SerializeField] private Toggle onionSkinToggle;
+
+        [Header("Frames")]
+        [SerializeField] private Button deleteFrameButton;
+        [SerializeField] private Button insertFrameAfterButton;
+        [SerializeField] private Button insertFrameBeforeButton;
 
         private CharacterEditable subject;
 
@@ -33,6 +43,15 @@ namespace kooltool.Editor
             frameSlider.onValueChanged.AddListener(OnFrameChanged);
             rotateCWButton.onClick.AddListener(OnRotateCWClicked);
             rotateACWButton.onClick.AddListener(OnRotateACWClicked);
+            animateToggle.onValueChanged.AddListener(OnAnimateToggled);
+            onionSkinToggle.onValueChanged.AddListener(OnOnionSkinToggled);
+            characterNameInput.onEndEdit.AddListener(OnRename);
+
+            removeButton.onClick.AddListener(OnClickedRemove);
+
+            deleteFrameButton.onClick.AddListener(OnClickedDeleteFrame);
+            insertFrameAfterButton.onClick.AddListener(OnClickedInsertFrameAfter);
+            insertFrameBeforeButton.onClick.AddListener(OnClickedInsertFrameBefore);
         }
 
         private void InitialiseAction(ObjectAction action, 
@@ -53,6 +72,12 @@ namespace kooltool.Editor
 
             if (subject != null)
             {
+
+                var character = subject.GetComponent<CharacterDrawing>().Character;
+
+                characterNameInput.text = character.name;
+
+
                 frameSlider.value = subject.drawing.frame;
                 frameSlider.minValue = 0;
                 frameSlider.maxValue = subject.drawing.flipbook.frames.Count - 1;
@@ -82,6 +107,73 @@ namespace kooltool.Editor
             var d = subject.drawing;
             int i = (dirs.IndexOf(d.flipbook.tag) + 3) % 4;
             d.SetFlipbook(d.Character.costume.GetFlipbook(d.flipbook.name, dirs[i]));
+            SetSubject(subject);
+        }
+
+        private void OnAnimateToggled(bool animate)
+        {
+            subject.GetComponent<CharacterDrawing>().preview = animate;
+        }
+
+        private void OnOnionSkinToggled(bool show)
+        {
+            subject.GetComponent<CharacterDrawing>().onionSkin = show;
+        }
+
+        private void OnClickedRemove()
+        {
+            Editor.Instance.RemoveCharacter(subject.GetComponent<CharacterDrawing>().Character);
+        }
+
+        private void OnRename(string name)
+        {
+            name = name.Replace("\n", "");
+            name = name.Trim();
+            name = name.Substring(0, Mathf.Min(name.Length - 1, 16));
+
+            subject.GetComponent<CharacterDrawing>().Character.name = name;
+            characterNameInput.text = name;
+        }
+
+        private CharacterDrawing drawing
+        {
+            get
+            {
+                return subject.GetComponent<CharacterDrawing>();
+            }
+        }
+
+        private void CopyFrame(int source, int dest)
+        {
+            Data.Frame original = drawing.flipbook.frames[source];
+            Data.Frame copy     = original.BadClone(Editor.Instance.project_.index.CreateTexture(original.texture.texture.width,
+                                                                                                 original.texture.texture.height));
+            
+            if (dest == drawing.flipbook.frames.Count)
+            {
+                drawing.flipbook.frames.Add(copy);
+            }            
+            else
+            {
+                drawing.flipbook.frames.Insert(dest, copy);
+            }
+        }
+
+        private void OnClickedDeleteFrame()
+        {
+            drawing.flipbook.frames.RemoveAt(drawing.frame);
+            SetSubject(subject);
+        }
+
+        private void OnClickedInsertFrameAfter()
+        {
+            CopyFrame(drawing.frame, drawing.frame + 1);
+            SetSubject(subject);
+        }
+
+        private void OnClickedInsertFrameBefore()
+        {
+            CopyFrame(drawing.frame, drawing.frame);
             SetSubject(subject);
         }
     }

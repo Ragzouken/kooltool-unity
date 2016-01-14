@@ -40,6 +40,8 @@ namespace kooltool.Editor.Modes
         private Vector2 currCursor;
         private Vector2 prevCursor;
 
+        private CharacterEditable highlighted;
+
         public override IconSettings.Icon CursorIcon
         {
             get
@@ -85,6 +87,7 @@ namespace kooltool.Editor.Modes
         public override void Exit()
         {
             cursor.gameObject.SetActive(false);
+            if (highlighted != null) highlighted.ShowBorder = false;
         }
 
         public override void Update()
@@ -137,6 +140,22 @@ namespace kooltool.Editor.Modes
                 var local = rtrans.localPosition;
                 local.z = 0;
                 rtrans.localPosition = local;
+            }
+
+            var character = (drawing ?? hovering) as CharacterEditable;
+
+            if (character != null
+             && character != highlighted)
+            {
+                if (highlighted != null) highlighted.ShowBorder = false;
+                highlighted = character;
+                highlighted.ShowBorder = true;
+            }
+            else if (character == null
+                  && highlighted != null)
+            {
+                highlighted.ShowBorder = false;
+                highlighted = null;
             }
 
             cursor.correct = tool == Tool.Line;

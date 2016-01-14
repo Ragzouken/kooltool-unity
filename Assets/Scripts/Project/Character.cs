@@ -18,6 +18,7 @@ namespace kooltool
         public Point _position;
         public Costume costume;
 
+        public string name = "unnamed character";
         public string dialogue = "";
 
         public Character() { }

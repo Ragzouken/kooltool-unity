@@ -14,10 +14,17 @@ namespace kooltool.Editor
         [SerializeField] protected Image image;
         [SerializeField] private PixelBorder.BorderRenderer border;
 
+        [Header("Onion Skinning")]
+        [SerializeField] private Image prevFrame;
+        [SerializeField] private Image nextFrame;
+
         public Character Character { get; protected set; }
 
         public int frame = 0;
         public Data.Flipbook flipbook;
+        public bool preview;
+
+        private float previewTimer;
 
         public void SetCharacter(Character character)
         {
@@ -34,22 +41,31 @@ namespace kooltool.Editor
             SetFlipbook(character.costume.GetFlipbook("idle"));
 
             //dialogueInput.text = character.dialogue;
+
+            onionSkin = false;
         }
 
         public void SetFlipbook(Data.Flipbook flipbook)
         {
             this.flipbook = flipbook;
 
-            Drawing = new SpriteDrawing(flipbook.frames[0]);
-
-            sprite = flipbook.frames[0];
-            image.SetNativeSize();
+            SetFrame(0);
         }
 
         public void SetFrame(int frame)
         {
             this.frame = frame % flipbook.frames.Count;
-            sprite = flipbook.frames[frame];
+            sprite = flipbook.frames[this.frame];
+
+            int prev = (frame + flipbook.frames.Count - 1) % flipbook.frames.Count;
+            int next = (frame + flipbook.frames.Count + 1) % flipbook.frames.Count;
+
+            prevFrame.sprite = flipbook.frames[prev];
+            nextFrame.sprite = flipbook.frames[next];
+
+            image.SetNativeSize();
+            prevFrame.SetNativeSize();
+            nextFrame.SetNativeSize();
         }
 
         private Sprite sprite
@@ -59,6 +75,15 @@ namespace kooltool.Editor
                 image.sprite = value;
                 Drawing = new SpriteDrawing(value);
                 border.sourceSprite = value;
+            }
+        }
+
+        public bool onionSkin
+        {
+            set
+            {
+                prevFrame.gameObject.SetActive(value);
+                nextFrame.gameObject.SetActive(value);
             }
         }
 
@@ -72,9 +97,21 @@ namespace kooltool.Editor
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (preview)
             {
-                SetFrame((frame + 1) % flipbook.frames.Count);
+                previewTimer += Time.deltaTime;
+
+                float freq = flipbook.period / flipbook.frames.Count;
+
+                while (previewTimer > freq)
+                {
+                    SetFrame(frame + 1);
+                    previewTimer -= freq;
+                }
+            }
+            else
+            {
+                previewTimer = 0;
             }
         }
 
@@ -94,6 +131,14 @@ namespace kooltool.Editor
             {
                 Character.PositionUpdated -= UpdatePosition;
             }
+        }
+
+        public override bool Sample(Point pixel, out Color color)
+        {
+            pixel -= Character.position;
+            pixel -= image.sprite.pivot;
+
+            return Drawing.Sample(pixel, out color);
         }
     }
 }

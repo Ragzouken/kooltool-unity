@@ -12,8 +12,8 @@ namespace kooltool.Data
 {
     public class Frame
     {
-        public Data.Texture texture;
-        public Data.Rect rect;
+        public Texture texture;
+        public Rect rect;
         public int pivotX, pivotY;
 
         public static implicit operator Sprite(Frame frame)
@@ -28,12 +28,27 @@ namespace kooltool.Data
 
             return sprite;
         }
+
+        public Frame BadClone(Texture texture)
+        {
+            texture.texture.SetPixels32(this.texture.texture.GetPixels32());
+            texture.texture.Apply();
+
+            return new Frame
+            {
+                texture = texture,
+                rect = rect,
+                pivotX = pivotX,
+                pivotY = pivotY,
+            };
+        }
     }
 
     public class Flipbook
     {
         public string name;
         public string tag;
+        public float period = 0.5f;
         public List<Frame> frames;
     }
 

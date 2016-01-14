@@ -10,6 +10,39 @@ namespace kooltool.Editor
     {
         [SerializeField] public CharacterDrawing drawing;
         [SerializeField] private RectTransform highlightParent;
+        [SerializeField] private GameObject borderDisableObject;
+        [SerializeField] private CanvasGroup borderCanvasGroup;
+
+        private float borderTargetAlpha = 1f;
+        private float borderAlphaVelocity;
+
+        public bool ShowBorder
+        {
+            set
+            {
+                if (value)
+                {
+                    borderDisableObject.SetActive(true);
+                    borderTargetAlpha = 1f;
+                }
+                else
+                {
+                    borderTargetAlpha = 0f;
+                }
+            }
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            borderCanvasGroup.alpha = Mathf.SmoothDamp(borderCanvasGroup.alpha, borderTargetAlpha, ref borderAlphaVelocity, 0.125f);
+
+            if (borderTargetAlpha == 0 && borderCanvasGroup.alpha == 0)
+            {
+                borderDisableObject.SetActive(false);
+            }
+        }
 
         RectTransform IObject.OverlayParent
         {

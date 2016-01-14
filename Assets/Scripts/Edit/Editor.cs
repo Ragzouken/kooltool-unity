@@ -662,6 +662,8 @@ namespace kooltool.Editor
         {
             var character = new Character(Point.Zero, costume);
 
+            character.name = "some character " + Random.Range(0, 33);
+
             project_.world.layers[0].characters.Add(character);
             project_.index.Add(character);
 
