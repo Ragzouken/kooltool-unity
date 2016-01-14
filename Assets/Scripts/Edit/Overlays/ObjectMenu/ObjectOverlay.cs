@@ -19,13 +19,13 @@ namespace kooltool.Editor
 
         [Header("Costume")]
         [SerializeField] private Text flipbookNameText;
-        [SerializeField] private Slider frameSlider;
         [SerializeField] private Button rotateCWButton;
         [SerializeField] private Button rotateACWButton;
         [SerializeField] private Toggle animateToggle;
         [SerializeField] private Toggle onionSkinToggle;
 
         [Header("Frames")]
+        [SerializeField] private Scrollbar frameScrollbar;
         [SerializeField] private Button deleteFrameButton;
         [SerializeField] private Button insertFrameAfterButton;
         [SerializeField] private Button insertFrameBeforeButton;
@@ -40,7 +40,6 @@ namespace kooltool.Editor
                                                                                 actionContainer,
                                                                                 InitialiseAction);
 
-            frameSlider.onValueChanged.AddListener(OnFrameChanged);
             rotateCWButton.onClick.AddListener(OnRotateCWClicked);
             rotateACWButton.onClick.AddListener(OnRotateACWClicked);
             animateToggle.onValueChanged.AddListener(OnAnimateToggled);
@@ -49,6 +48,7 @@ namespace kooltool.Editor
 
             removeButton.onClick.AddListener(OnClickedRemove);
 
+            frameScrollbar.onValueChanged.AddListener(OnFrameChanged);
             deleteFrameButton.onClick.AddListener(OnClickedDeleteFrame);
             insertFrameAfterButton.onClick.AddListener(OnClickedInsertFrameAfter);
             insertFrameBeforeButton.onClick.AddListener(OnClickedInsertFrameBefore);
@@ -77,11 +77,11 @@ namespace kooltool.Editor
 
                 characterNameInput.text = character.name;
 
-
-                frameSlider.value = subject.drawing.frame;
-                frameSlider.minValue = 0;
-                frameSlider.maxValue = subject.drawing.flipbook.frames.Count - 1;
                 flipbookNameText.text = subject.drawing.flipbook.name + " (" + subject.drawing.flipbook.tag + ")";
+
+                frameScrollbar.size = 1f / drawing.flipbook.frames.Count;
+                frameScrollbar.value = drawing.frame / (drawing.flipbook.frames.Count - 1);
+                frameScrollbar.numberOfSteps = drawing.flipbook.frames.Count;
             }
 
             if (subject != null) actions.SetActive(editable.Actions);
@@ -89,7 +89,7 @@ namespace kooltool.Editor
 
         private void OnFrameChanged(float value)
         {
-            subject.drawing.SetFrame(Mathf.FloorToInt(value));
+            subject.drawing.SetFrame(Mathf.RoundToInt(value * (drawing.flipbook.frames.Count - 1)));
         }
 
         private static List<string> dirs = new List<string> { "n", "e", "s", "w" };
