@@ -1,0 +1,74 @@
+fileFormatVersion: 2
+guid: ac27e1c0496c4c2439a769399339789f
+timeCreated: 1452863482
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Press_Cursor
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 1
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 32
+  textureSettings:
+    filterMode: 0
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 10, z: 13, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 7
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Press_Cursor
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5144834, y: 0.32641593}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2.4634686, y: 20.554691}
+        - {x: -2.4634686, y: -2.4453096}
+        - {x: 0.53653145, y: -2.4453096}
+        - {x: 13.536531, y: 8.55469}
+        - {x: 13.536531, y: 20.554691}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

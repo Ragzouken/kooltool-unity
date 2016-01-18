@@ -44,7 +44,7 @@ namespace kooltool.Editor
         [SerializeField] public Image toolIcon;
 
         [Header("Overlays")]
-        [SerializeField] public ObjectOverlay objectOverlay;
+        [SerializeField] public CharacterToolbox objectOverlay;
         [SerializeField] private RectTransform overlaysContainer;
         [SerializeField] private GameObject noteboxEditDisable;
         [SerializeField] private InputField noteboxEditField;
@@ -157,9 +157,16 @@ namespace kooltool.Editor
 
         public void SetProject(Project project)
         {
+            Cleanup();
+
             project_ = project;
             world = main.CreateWorld(project.world);
             Layer = world.layers.Get(project.world.layers[0]);
+        }
+
+        private void Cleanup()
+        {
+            PixelCursor.transform.SetParent(null, false);
         }
 
         public void RefreshTilemap()
@@ -172,6 +179,8 @@ namespace kooltool.Editor
         protected override void Awake()
         {
             base.Awake();
+
+            global::Cursors.Set(global::Cursors.Type.Press);
 
             toolbox = Instantiate<Toolbox>(toolboxPrefab);
             toolbox.transform.SetParent(transform, false);
@@ -229,6 +238,8 @@ namespace kooltool.Editor
             }
 
             toolbox.Hide();
+
+            Cleanup();
 
             main.SetPlayer(project_);
         }

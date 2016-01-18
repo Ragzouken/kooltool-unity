@@ -120,10 +120,12 @@ namespace kooltool.Data
             {
                 resource.Save(this);
 
-                yield return null;
+                //yield return null;
             }
 
             File.WriteAllText(path + "/project.json", JsonWrapper.Serialise(data));
+
+            yield break;
         }
 
         public void Load()

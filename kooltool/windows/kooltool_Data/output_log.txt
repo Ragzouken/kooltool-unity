@@ -1,4 +1,4 @@
-Initialize engine version: 5.2.1f1 (44735ea161b3)
+Initialize engine version: 5.3.1f1 (cc9cbbcc37b4)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
@@ -36,13 +36,14 @@ Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll into Unity Child Domain
+- Completed reload, in  0.309 seconds
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.331 seconds
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
 <RI> Initialized touch support.
-Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.dll (this message is harmless)
+UnloadTime: 0.643908 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 10f4 -> priority: 1 
-  Thread -> id: 39a4 -> priority: 1 
+  Thread -> id: 24c8 -> priority: 1 
+  Thread -> id: 32ac -> priority: 1 

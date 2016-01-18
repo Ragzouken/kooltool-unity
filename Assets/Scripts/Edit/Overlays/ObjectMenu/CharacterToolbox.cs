@@ -6,40 +6,45 @@ using System.Collections.Generic;
 
 namespace kooltool.Editor
 {
-    public class ObjectOverlay : MonoBehaviour 
+    public class CharacterToolbox : MonoBehaviour 
     {
         [SerializeField] private UIRectFollowRect follow;
 
-        [Header("Actions")]
-        [SerializeField] private RectTransform actionContainer;
-        [SerializeField] private ObjectActionButton actionPrefab;
-
+        [Header("Character")]
         [SerializeField] private Button removeButton;
         [SerializeField] private InputField characterNameInput;
 
-        [Header("Costume")]
+        [Header("Costume States")]
         [SerializeField] private Text flipbookNameText;
         [SerializeField] private Button rotateCWButton;
         [SerializeField] private Button rotateACWButton;
+
+        [Header("Costume Animation")]
         [SerializeField] private Toggle animateToggle;
         [SerializeField] private Toggle onionSkinToggle;
-
-        [Header("Frames")]
         [SerializeField] private Scrollbar frameScrollbar;
         [SerializeField] private Button deleteFrameButton;
         [SerializeField] private Button insertFrameAfterButton;
         [SerializeField] private Button insertFrameBeforeButton;
 
         private CharacterEditable subject;
-
-        private MonoBehaviourPooler<ObjectAction, ObjectActionButton> actions;
+        private CharacterDrawing drawing
+        {
+            get
+            {
+                return subject.drawing;
+            }
+        }
+        private Character character
+        {
+            get
+            {
+                return subject.drawing.Character;
+            }
+        }
 
         private void Awake()
         {
-            actions = new MonoBehaviourPooler<ObjectAction, ObjectActionButton>(actionPrefab,
-                                                                                actionContainer,
-                                                                                InitialiseAction);
-
             rotateCWButton.onClick.AddListener(OnRotateCWClicked);
             rotateACWButton.onClick.AddListener(OnRotateACWClicked);
             animateToggle.onValueChanged.AddListener(OnAnimateToggled);
@@ -54,12 +59,6 @@ namespace kooltool.Editor
             insertFrameBeforeButton.onClick.AddListener(OnClickedInsertFrameBefore);
         }
 
-        private void InitialiseAction(ObjectAction action, 
-                                      ObjectActionButton button)
-        {
-            button.Setup(action);
-        }
-
         public void SetSubject(CharacterEditable subject)
         {
             this.subject = subject;
@@ -72,9 +71,6 @@ namespace kooltool.Editor
 
             if (subject != null)
             {
-
-                var character = subject.GetComponent<CharacterDrawing>().Character;
-
                 characterNameInput.text = character.name;
 
                 flipbookNameText.text = subject.drawing.flipbook.name + " (" + subject.drawing.flipbook.tag + ")";
@@ -83,8 +79,6 @@ namespace kooltool.Editor
                 frameScrollbar.value = drawing.frame / (drawing.flipbook.frames.Count - 1);
                 frameScrollbar.numberOfSteps = drawing.flipbook.frames.Count;
             }
-
-            if (subject != null) actions.SetActive(editable.Actions);
         }
 
         private void OnFrameChanged(float value)
@@ -112,17 +106,17 @@ namespace kooltool.Editor
 
         private void OnAnimateToggled(bool animate)
         {
-            subject.GetComponent<CharacterDrawing>().preview = animate;
+            drawing.preview = animate;
         }
 
         private void OnOnionSkinToggled(bool show)
         {
-            subject.GetComponent<CharacterDrawing>().onionSkin = show;
+            drawing.onionSkin = show;
         }
 
         private void OnClickedRemove()
         {
-            Editor.Instance.RemoveCharacter(subject.GetComponent<CharacterDrawing>().Character);
+            Editor.Instance.RemoveCharacter(character);
         }
 
         private void OnRename(string name)
@@ -131,16 +125,8 @@ namespace kooltool.Editor
             name = name.Trim();
             name = name.Substring(0, Mathf.Min(name.Length - 1, 16));
 
-            subject.GetComponent<CharacterDrawing>().Character.name = name;
+            character.name = name;
             characterNameInput.text = name;
-        }
-
-        private CharacterDrawing drawing
-        {
-            get
-            {
-                return subject.GetComponent<CharacterDrawing>();
-            }
         }
 
         private void CopyFrame(int source, int dest)

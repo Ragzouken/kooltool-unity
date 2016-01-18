@@ -83,7 +83,7 @@ public class IconSettingsEditor : Editor
 
             settings.icons[icon] = EditorGUILayout.ObjectField(icon.ToString(),
                                                                settings.icons[icon],
-                                                               typeof(Sprite), 
+                                                               typeof(Sprite),
                                                                false) as Sprite;
         }
 

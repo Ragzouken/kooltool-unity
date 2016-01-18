@@ -32,7 +32,8 @@ namespace kooltool.Player
 
         public void Setup(Data.Project project)
         {
-            original = JsonWrapper.Copy(project);
+            original = project;
+            project = Data.ProjectTools.BadAndWrongCopy(original);
 
             main.CreateWorld(project.world);
 
