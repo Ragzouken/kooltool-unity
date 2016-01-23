@@ -33,7 +33,7 @@ namespace kooltool.Player
         public void Setup(Data.Project project)
         {
             original = project;
-            project = Data.ProjectTools.BadAndWrongCopy(original);
+            project = original.index.context.Clone().project;
 
             main.CreateWorld(project.world);
 

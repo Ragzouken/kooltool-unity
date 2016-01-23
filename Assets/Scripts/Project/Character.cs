@@ -8,14 +8,11 @@ using Newtonsoft.Json;
 
 namespace kooltool
 {
-    public class Character : IResource
+    public class Character
     {
         public event System.Action<Vector2> PositionUpdated;
 
-        [JsonIgnore]
         public Vector2 position;
-
-        public Point _position;
         public Costume costume;
 
         public string name = "unnamed character";
@@ -35,16 +32,6 @@ namespace kooltool
             this.position = position;
 
             PositionUpdated(position);
-        }
-
-        void IResource.Load(Index index)
-        {
-            position = _position;
-        }
-
-        void IResource.Save(Index index)
-        {
-            _position = position;
         }
     }
 }

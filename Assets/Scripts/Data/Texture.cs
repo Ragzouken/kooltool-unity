@@ -88,6 +88,11 @@ namespace kooltool.Data
             file = index.MFile_("texture.png");
         }
 
+        void IResource.Initialise(Context.IResourceIndex index)
+        {
+            texture = index.GetResource<Texture2DResource>(file.path).texture;
+        }
+
         void IResource.Save(Index index)
         {
             file.Write(data);

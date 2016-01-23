@@ -29,8 +29,6 @@ namespace kooltool.Editor
         
         [SerializeField] private Main main;
 
-        public HighlightGroup Highlights;
-
         private WorldView world;
 
         [Header("UI")]
@@ -176,6 +174,29 @@ namespace kooltool.Editor
 
         public Browser browser;
 
+        private Context context1;
+        private Context context2;
+
+        private void TestSplitControls()
+        {
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                context2 = context1.Clone();
+
+                SetProject(context2.project);
+            }
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                SetProject(context1.project);
+            }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                Cleanup();
+            }
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -190,8 +211,10 @@ namespace kooltool.Editor
             characterDetails.gameObject.SetActive(false);
 
             Project = new ProjectOld(new Point(32, 32));
-                 
-            SetProject(Data.ProjectTools.Blank());
+
+            context1 = ProjectTools.LoadProject2("test");
+            SetProject(context1.project);
+            //SetProject(Data.ProjectTools.Blank());
             project_.tileset.TestTile();
             //SetProject(LoadProject("test"));
 
@@ -409,11 +432,6 @@ namespace kooltool.Editor
             }
         }
 
-        private void CheckHighlights()
-        {
-            Highlights.Highlights.SetActive(currentMode.highlights);
-        }
-
         private void LoadFiles(Dictionary<string, string> files)
         {
             string encoding = files["tileset.png"];
@@ -453,8 +471,6 @@ namespace kooltool.Editor
 
             Cursors.SetActive(ShowCursors);
             toolIcon.enabled = toolIcon.sprite != null && ShowCursors;
-
-            CheckHighlights();
         }
 
         public void UpdateCameras()
@@ -500,6 +516,8 @@ namespace kooltool.Editor
         private void Update()
         {
             if (Project == null) return;
+
+            TestSplitControls();
 
             var ptrans = viewportDivider.parent as RectTransform;
             viewportDivider.anchoredPosition = Vector2.right * divide * ptrans.rect.width;
@@ -676,7 +694,6 @@ namespace kooltool.Editor
             character.name = "some character " + Random.Range(0, 33);
 
             project_.world.layers[0].characters.Add(character);
-            project_.index.Add(character);
 
             CharacterDrawing drawing = Layer.Characters.Get(character);
 
@@ -692,7 +709,6 @@ namespace kooltool.Editor
         public void RemoveCharacter(Character character)
         {
             project_.world.layers[0].characters.Remove(character);
-            project_.index.Remove(character);
 
             Layer.Characters.Discard(character);
 

@@ -135,7 +135,7 @@ namespace kooltool.Editor.Modes
             {
                 currCursor = editor.WorldCursor(editable.transform as RectTransform);
 
-                cursor.transform.SetParent(editable.CursorParent, true);
+                //cursor.transform.SetParent(editable.CursorParent, true);
                 rtrans.position = (currCursor - Vector2.one).Round();
                 var local = rtrans.localPosition;
                 local.z = 0;

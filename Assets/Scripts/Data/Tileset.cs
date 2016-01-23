@@ -61,13 +61,10 @@ namespace kooltool.Data
         }
     }
 
-    public class Tileset : IResource
+    public class Tileset
     {
         public Data.Texture texture;
         public List<Tile> tiles = new List<Tile>();
-
-        void IResource.Load(Index index) { }
-        void IResource.Save(Index index) { }
 
         public Tile TestTile()
         {

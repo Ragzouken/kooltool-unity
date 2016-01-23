@@ -106,62 +106,24 @@ namespace kooltool.Data
             return project;
         }
 
-        #region Bad And Wrong
-
-        private static Character BadAndWrongCopy(Character character)
+        public static Context LoadProject2(string name)
         {
-            return new Character
-            {
-                costume = character.costume,
-                dialogue = character.dialogue,
-                name = character.name,
-                position = character.position,
-                _position = character.position,
-            };
+            string path = Application.persistentDataPath + "/" + name;
+
+            var context = new Context();
+            context.Read(path);
+            context.project.index.folder = name;
+            context.project.index.root = Application.persistentDataPath;
+
+            return context;
         }
-
-        private static Layer BadAndWrongCopy(Layer layer)
-        {
-            return new Layer
-            {
-                annotations = layer.annotations,
-                drawing = layer.drawing,
-                noteboxes = layer.noteboxes,
-                tiles = layer.tiles,
-                tileset = layer.tileset,
-                world = layer.world,
-                characters = new HashSet<Character>(layer.characters.Select(c => BadAndWrongCopy(c))),
-            };
-        }
-
-        private static World BadAndWrongCopy(World world, Project project)
-        {
-            return new World
-            {
-                tileset = world.tileset,
-                project = project,
-                layers = world.layers.Select(l => BadAndWrongCopy(l)).ToList(),
-            };
-        }
-
-        public static Project BadAndWrongCopy(Project project)
-        {
-            var copy = new Project();
-
-            copy.icon = project.icon;
-            copy.costumes = project.costumes;
-            copy.regions = project.regions;
-            copy.tileset = project.tileset;
-            copy.world = BadAndWrongCopy(project.world, copy);
-
-            return copy;
-        }
-
-        #endregion
 
         public static Project Blank()
         {
+            var context = new Context();
+
             var index = new Index();
+            index.context = context;
 
             index.folder = "test";
 

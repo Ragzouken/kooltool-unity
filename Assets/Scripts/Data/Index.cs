@@ -12,6 +12,8 @@ namespace kooltool.Data
 {
     public interface IResource
     {
+        void Initialise(Context.IResourceIndex index);
+
         void Save(Index index);
         void Load(Index index);
     }
@@ -19,6 +21,7 @@ namespace kooltool.Data
     public class Index
     {
         public int id;
+        public Context context;
 
         public class File_
         {
@@ -66,25 +69,9 @@ namespace kooltool.Data
             texture.texture = BlankTexture.New(width, height, new Color(0, 0, 0, 0));
 
             Add(texture);
+            context.SetResource(texture.file.path, new Texture2DResource { texture = texture.texture, });
 
             return texture;
-        }
-
-        public Texture RefTexture(Texture2D texture, string suggestion)
-        {
-            if (textures.ContainsKey(texture))
-            {
-                return textures[texture];
-            }
-            else
-            {
-                var t = new Texture(this);
-                t.texture = texture;
-
-                textures.Add(texture, t);
-
-                return t;
-            }
         }
 
         [JsonIgnore]
