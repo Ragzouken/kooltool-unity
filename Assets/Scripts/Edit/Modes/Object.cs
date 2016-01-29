@@ -66,6 +66,8 @@ namespace kooltool.Editor.Modes
         public override void CursorInteractFinish()
         {
             dragging = null;
+
+            Editor.Instance.Do();
         }
     }
 }

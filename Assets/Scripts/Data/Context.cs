@@ -5,9 +5,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using kooltool.Data;
 
-public interface IResource
+public interface IResource : IDisposable
 {
     byte[] Data { get; set; }
 
@@ -49,6 +50,11 @@ public class Texture2DResource : IResource
             texture = texture,
         };
     }
+
+    void IDisposable.Dispose()
+    {
+        UnityEngine.Object.Destroy(texture);
+    }
 }
 
 public class Resource<T>
@@ -62,7 +68,7 @@ public class Resource<T>
     }
 }
 
-public class Context
+public class Context : IDisposable
 {
     public Project project;
     public string source;
@@ -138,12 +144,16 @@ public class Context
 
     // TODO: work out how to remember which things were already saved??
     // ALT: tracker dirty and fully dirty when not writing to the origin
-    public void Write(DirectoryInfo destination)
+    public void Write(string dest)
     {
+        Directory.CreateDirectory(dest);
+
         foreach (var pair in resources)
         {
-            byte[] data = pair.Value.Data;
+            File.WriteAllBytes(dest + "/" + pair.Key, pair.Value.Data);
         }
+
+        File.WriteAllText(dest + "/project.json", JsonWrapper.Serialise(project));
     }
 
     // TODO: this.MemberwiseClone() is a thing hmm
@@ -159,5 +169,13 @@ public class Context
         clone.Initialise("");
 
         return clone;
+    }
+
+    public void Dispose()
+    {
+        foreach (var pair in resources)
+        {
+            pair.Value.Dispose();
+        }
     }
 }

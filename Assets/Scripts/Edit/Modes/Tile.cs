@@ -34,7 +34,6 @@ namespace kooltool.Editor.Modes
 
         public Tile(Editor editor, TileCursor cursor) : base(editor)
         {
-            paintTile = editor.project_.tileset.tiles[0];
             this.cursor = cursor;
         }
 
@@ -53,7 +52,7 @@ namespace kooltool.Editor.Modes
         {
             get
             {
-                editor.hovered.OfType<ITileable>().FirstOrDefault();
+                if (hovering == null) return null;
 
                 Data.TileInstance tile;
 
@@ -188,6 +187,8 @@ namespace kooltool.Editor.Modes
         public override void CursorInteractFinish()
         {
             dragging = null;
+
+            Editor.Instance.Do();
         }
     }
 }

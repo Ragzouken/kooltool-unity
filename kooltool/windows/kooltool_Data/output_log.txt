@@ -36,14 +36,16 @@ Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.Rare.dll into Unity Child Domain
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll (this message is harmless)
 Loading C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\I18N.West.dll into Unity Child Domain
-- Completed reload, in  0.309 seconds
+- Completed reload, in  0.079 seconds
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
 <RI> Initialized touch support.
-UnloadTime: 0.643908 ms
+UnloadTime: 4.942876 ms
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Xml.dll (this message is harmless)
+Platform assembly: C:\Users\ragzouken\Documents\kooltool-unity\kooltool\windows\kooltool_Data\Managed\System.Data.dll (this message is harmless)
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 24c8 -> priority: 1 
-  Thread -> id: 32ac -> priority: 1 
+  Thread -> id: 4bb4 -> priority: 1 
+  Thread -> id: 4268 -> priority: 1 

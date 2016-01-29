@@ -195,6 +195,28 @@ namespace kooltool.Editor
             {
                 Cleanup();
             }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                Undo();
+            }
+        }
+
+        private Stack<Context> history = new Stack<Context>();
+
+        public void Do()
+        {
+            history.Push(project_.index.context.Clone());
+        }
+
+        public void Undo()
+        {
+            if (history.Count >= 2)
+            {
+                history.Peek().Dispose();
+                history.Pop();
+                SetProject(history.Peek().project);
+            }
         }
 
         protected override void Awake()
@@ -211,12 +233,6 @@ namespace kooltool.Editor
             characterDetails.gameObject.SetActive(false);
 
             Project = new ProjectOld(new Point(32, 32));
-
-            context1 = ProjectTools.LoadProject2("test");
-            SetProject(context1.project);
-            //SetProject(Data.ProjectTools.Blank());
-            project_.tileset.TestTile();
-            //SetProject(LoadProject("test"));
 
             objectMode = new Modes.Object(this);
             drawMode = new Modes.Draw(this, PixelCursor);
@@ -248,7 +264,7 @@ namespace kooltool.Editor
             browser.Refresh();
             */
 
-            FindObjectOfType<MapGenerator>().Go(project_, Layer.Tilemap);
+            //FindObjectOfType<MapGenerator>().Go(project_, Layer.Tilemap);
         }
 
         public void Play()
@@ -269,7 +285,9 @@ namespace kooltool.Editor
 
         public void Save()
         {
-            StartCoroutine(project_.index.SaveCO(project_));
+            project_.index.context.Write(Application.persistentDataPath + "/temp");
+
+            //StartCoroutine(project_.index.SaveCO(project_));
 
             var summary = new Data.Summary
             {

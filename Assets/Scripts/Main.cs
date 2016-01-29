@@ -13,6 +13,7 @@ namespace kooltool
     {
         [SerializeField] private Editor.Editor editor;
         [SerializeField] private Player.Player player;
+        [SceneOnly][SerializeField] private MainMenu menu;
 
         [Header("World")]
         [SerializeField] private Transform worldContainer;
@@ -24,6 +25,7 @@ namespace kooltool
         {
             player.gameObject.SetActive(false);
             editor.gameObject.SetActive(false);
+            menu.gameObject.SetActive(false);
 
             Project auto;
 
@@ -33,7 +35,7 @@ namespace kooltool
             }
             else
             {
-                editor.gameObject.SetActive(true);
+                OpenMenu();
             }
         }
 
@@ -78,6 +80,58 @@ namespace kooltool
             world.SetWorld(world_);
 
             return world;
+        }
+
+        public void OpenMenu()
+        {
+            menu.gameObject.SetActive(true);
+        }
+
+        public void CloseMenu()
+        {
+            menu.gameObject.SetActive(false);
+        }
+
+        public void Blank()
+        {
+            CloseMenu();
+
+            editor.gameObject.SetActive(true);
+            editor.SetProject(ProjectTools.Blank());
+            editor.Do();
+        }
+
+        public void Generate()
+        {
+            CloseMenu();
+
+            editor.gameObject.SetActive(true);
+            editor.SetProject(ProjectTools.Blank());
+            editor.Do();
+
+            FindObjectOfType<MapGenerator>().Go(editor.project_, FindObjectOfType<Tilemap>());
+        }
+
+        public void Load(string name)
+        {
+            CloseMenu();
+
+            editor.gameObject.SetActive(true);
+            editor.SetProject(ProjectTools.LoadProject2(name).project);
+            editor.Do();
+        }
+
+        public void Browse()
+        {
+        }
+
+        public void Exit()
+        {
+            // TODO: check for saves etc
+
+            CloseMenu();
+
+            Application.Quit();
         }
     }
 }

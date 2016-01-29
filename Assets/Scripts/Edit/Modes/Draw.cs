@@ -231,6 +231,8 @@ namespace kooltool.Editor.Modes
             }
 
             drawing = null;
+
+            Editor.Instance.Do();
         }
 
         public void SetTool(Tool tool)

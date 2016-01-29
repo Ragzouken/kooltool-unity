@@ -118,6 +118,27 @@ namespace kooltool.Data
             return context;
         }
 
+        public static IEnumerable<Summary> GetSummaries()
+        {
+            var directory = new System.IO.DirectoryInfo(Application.persistentDataPath);
+
+            foreach (var project in directory.GetDirectories())
+            {
+                Summary summary = null;
+
+                try
+                {
+                    summary = LoadSummary(project.Name);
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    continue;
+                }
+
+                yield return summary;
+            }
+        }
+
         public static Project Blank()
         {
             var context = new Context();
@@ -140,6 +161,8 @@ namespace kooltool.Data
 
                 world = new World(),
             };
+
+            context.project = project;
 
             project.tileset.TestTile();
             project.tileset.TestTile();
